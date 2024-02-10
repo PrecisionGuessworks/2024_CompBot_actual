@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.commands.IntakePiece;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -39,6 +40,9 @@ public class RobotContainer {
 
   private Command runAuto = drivetrain.getAutoPath("Test");
 
+  private final Trigger rightTrigger = new Trigger(() -> joystick.getRightTriggerAxis() > 0.2);
+  private final Trigger leftTrigger = new Trigger(() -> joystick.getLeftTriggerAxis() > 0.2);
+
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -54,7 +58,9 @@ public class RobotContainer {
 
     // reset the field-centric heading on left bumper press
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    joystick.rightTrigger().onTrue(new IntakePiece(intake));
+
+
+    rightTrigger.onTrue(new IntakePiece(intake));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));

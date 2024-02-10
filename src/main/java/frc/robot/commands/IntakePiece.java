@@ -17,12 +17,19 @@ public class IntakePiece extends Command{
 
     @Override
   public void initialize() {
+    m_intakeSubsystem.startRollerSpin();
     // Called when the command is initially scheduled.
   }
 
   @Override
   public void execute() {
     m_intakeSubsystem.startRollerSpin();
+    if (m_intakeSubsystem.isRollerStalled() == true) {
+      
+      m_intakeSubsystem.stopRoller();
+      
+    }
+    
     // Called every time Command is scheduled
   }
 
@@ -34,6 +41,13 @@ public class IntakePiece extends Command{
 
   @Override
   public boolean isFinished() {
+    if (m_intakeSubsystem.isRollerStalled() == true) {
+      
+      m_intakeSubsystem.stopRoller();
+      return true;
+      
+    }
+    
     //Called when Command is finished
     return false;
   }

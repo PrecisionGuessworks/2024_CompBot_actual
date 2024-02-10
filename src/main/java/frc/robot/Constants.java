@@ -13,6 +13,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class Constants {
     public static final String kCanivoreName = "canivore";
+    public static final String kRioName = "rio";
     public static final class Swerve {
         public class TunerConstants {
     // Both sets of gains need to be tuned to your individual robot
@@ -130,11 +131,11 @@ public class Constants {
 
     public static final class Intake {
         public static final class Roller {
-                public static final CANDeviceID rollerMotorID = new CANDeviceID(21, kCanivoreName);
+                public static final CANDeviceID rollerMotorID = new CANDeviceID(19, kRioName);
                 public static final MechanismRatio rollerMotorRatio = new MechanismRatio(1,3);
                 public static final boolean rollerMotorInverted = false;
 
-                public static final double rollerIntakePower = 0.50;
+                public static final double rollerIntakePower = 0.10;
                 public static final double reverseRollerIntakePower = -0.50;
                 public static final double rollerSlowPower = 0.25;
 
