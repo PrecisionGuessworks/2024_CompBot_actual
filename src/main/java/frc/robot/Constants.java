@@ -44,7 +44,7 @@ public class Constants {
     private static final double kWheelRadiusInches = 2; //may mean diameter
 
     private static final boolean kSteerMotorReversed = true;
-    private static final boolean kInvertLeftSide = false;
+    private static final boolean kInvertLeftSide = true;
     private static final boolean kInvertRightSide = true;
 
     private static final String kCANbusName = kCanivoreName;
@@ -130,10 +130,11 @@ public class Constants {
     public static final class Intake {
         public static final class Roller {
                 public static final CANDeviceID rollerMotorID = new CANDeviceID(21, kCanivoreName);
-                public static final MechanismRatio rollerMotorRatio = new MechanismRatio(0,0,0);
+                public static final MechanismRatio rollerMotorRatio = new MechanismRatio(3,1);
                 public static final boolean rollerMotorInverted = false;
 
                 public static final double rollerIntakePower = 0.50;
+                public static final double reverseRollerIntakePower = -0.50;
                 public static final double rollerSlowPower = 0.25;
 
                 public static final double rollerStallSpeed = Math.PI * (1.0 / 8.0);
