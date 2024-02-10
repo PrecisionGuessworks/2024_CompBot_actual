@@ -33,7 +33,7 @@ public class Constants {
 
     // Theoretical free speed (m/s) at 12v applied output;
     // This needs to be tuned to your individual robot
-    private static final double kSpeedAt12VoltsMps = 5.0292;
+    public static final double kSpeedAt12VoltsMps = 5.0292;
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot
@@ -46,6 +46,7 @@ public class Constants {
     private static final boolean kSteerMotorReversed = true;
     private static final boolean kInvertLeftSide = false;
     private static final boolean kInvertRightSide = true;
+    private static final boolean kDriveMotorReversed = true;
 
     private static final String kCANbusName = kCanivoreName;
     private static final int kPigeonId = 2;
@@ -130,10 +131,11 @@ public class Constants {
     public static final class Intake {
         public static final class Roller {
                 public static final CANDeviceID rollerMotorID = new CANDeviceID(21, kCanivoreName);
-                public static final MechanismRatio rollerMotorRatio = new MechanismRatio(0,0,0);
+                public static final MechanismRatio rollerMotorRatio = new MechanismRatio(1,3);
                 public static final boolean rollerMotorInverted = false;
 
                 public static final double rollerIntakePower = 0.50;
+                public static final double reverseRollerIntakePower = -0.50;
                 public static final double rollerSlowPower = 0.25;
 
                 public static final double rollerStallSpeed = Math.PI * (1.0 / 8.0);

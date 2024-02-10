@@ -33,7 +33,7 @@ public class IntakeSubsystem  extends SubsystemBase{
     }
 
     public void stopRoller() {
-        m_rollerMotor.setCurrentLimit(20.0);
+        m_rollerMotor.setCurrentLimit(30.0);
         m_rollerMotor.setPercentOutput(0.0);
         m_rollerTimer.reset();
       }
@@ -41,6 +41,12 @@ public class IntakeSubsystem  extends SubsystemBase{
       public void spinRollerSlow() {
         m_rollerMotor.setCurrentLimit(20.0);
         m_rollerMotor.setPercentOutput(Constants.Intake.Roller.rollerSlowPower);
+        m_rollerTimer.reset();
+      }
+
+      public void reverseRollerSpin() {
+        m_rollerMotor.setCurrentLimit(30.0);
+        m_rollerMotor.setPercentOutput(Constants.Intake.Roller.reverseRollerIntakePower);
         m_rollerTimer.reset();
       }
 
