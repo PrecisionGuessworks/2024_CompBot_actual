@@ -60,7 +60,7 @@ public class RobotContainer {
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
 
-    rightTrigger.onTrue(new IntakePiece(intake));
+    rightTrigger.whileTrue(new IntakePiece(intake));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));

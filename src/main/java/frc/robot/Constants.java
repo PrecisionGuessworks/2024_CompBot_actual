@@ -131,7 +131,7 @@ public class Constants {
 
     public static final class Intake {
         public static final class Roller {
-                public static final CANDeviceID rollerMotorID = new CANDeviceID(19, kRioName);
+                public static final CANDeviceID rollerMotorID = new CANDeviceID(21, kRioName);
                 public static final MechanismRatio rollerMotorRatio = new MechanismRatio(1,3);
                 public static final boolean rollerMotorInverted = false;
 
