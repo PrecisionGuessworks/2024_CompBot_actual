@@ -7,6 +7,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackTy
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.CAN;
 import frc.robot.motorcontrol.MechanismRatio;
 import frc.robot.motorcontrol.devices.CANDeviceID;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -144,6 +145,41 @@ public class Constants {
 
         }
         
+    }
+
+    public static final class Shooter {
+        public static final class TopRoller {
+                public static final CANDeviceID topRollerID = new CANDeviceID(19, kRioName);
+                public static final MechanismRatio topRollerMotorRatio = new MechanismRatio(1,1);
+                public static final boolean topRollerMotorInverted = false;
+        }
+
+        public static final class BottomRoller {
+                public static final CANDeviceID bottomRollerID = new CANDeviceID(20, kRioName);
+                public static final MechanismRatio bottomRollerMotorRatio = new MechanismRatio(1,1);
+                public static final boolean bottomRollerMotorInverted = false;
+        }
+
+        public static final class Conveyer {
+                public static final CANDeviceID conveyerID = new CANDeviceID(17, kRioName);
+                public static final MechanismRatio conveyerMotorRatio = new MechanismRatio(1,1);
+                public static final boolean conveyerMotorInverted = false;
+        }
+    }
+
+    public static final class Arm {
+        public static final class RightPivot {
+                public static final CANDeviceID rightPivotID = new CANDeviceID(16, kRioName);
+                public static final MechanismRatio rightPivotMotorRatio = new MechanismRatio(1,1);
+                public static final boolean rightPivotMotorInverted = false;
+                
+        }
+        
+        public static final class LeftPivot {
+                public static final CANDeviceID leftPivotID = new CANDeviceID(15, kRioName);
+                public static final MechanismRatio leftPivotMotorRatio = new MechanismRatio(1,1);
+                public static final boolean leftPivotMotorInverted = false;
+        }
     }
 }
 
