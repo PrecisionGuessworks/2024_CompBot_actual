@@ -9,6 +9,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.CAN;
 import frc.robot.motorcontrol.MechanismRatio;
+import frc.robot.motorcontrol.PIDConfig;
 import frc.robot.motorcontrol.devices.CANDeviceID;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -152,18 +153,24 @@ public class Constants {
                 public static final CANDeviceID topRollerID = new CANDeviceID(19, kRioName);
                 public static final MechanismRatio topRollerMotorRatio = new MechanismRatio(1,1);
                 public static final boolean topRollerMotorInverted = false;
+                public static final int topRollerMotorSlot = 0;
+                public static final PIDConfig topMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
         }
 
         public static final class BottomRoller {
                 public static final CANDeviceID bottomRollerID = new CANDeviceID(20, kRioName);
                 public static final MechanismRatio bottomRollerMotorRatio = new MechanismRatio(1,1);
                 public static final boolean bottomRollerMotorInverted = false;
+                public static final int bottomRollerMotorSlot = 0;
+                public static final PIDConfig bottomMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
         }
 
         public static final class Conveyer {
                 public static final CANDeviceID conveyerID = new CANDeviceID(17, kRioName);
                 public static final MechanismRatio conveyerMotorRatio = new MechanismRatio(1,1);
                 public static final boolean conveyerMotorInverted = false;
+                public static final int conveyerRollerMotorSlot = 0;
+                public static final PIDConfig conveyerMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
         }
     }
 
