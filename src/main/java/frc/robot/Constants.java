@@ -160,7 +160,7 @@ public class Constants {
         public static final class BottomRoller {
                 public static final CANDeviceID bottomRollerID = new CANDeviceID(20, kRioName);
                 public static final MechanismRatio bottomRollerMotorRatio = new MechanismRatio(1,1);
-                public static final boolean bottomRollerMotorInverted = false;
+                public static final boolean bottomRollerMotorInverted = true;
                 public static final int bottomRollerMotorSlot = 0;
                 public static final PIDConfig bottomMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
         }
@@ -172,21 +172,59 @@ public class Constants {
                 public static final int conveyerRollerMotorSlot = 0;
                 public static final PIDConfig conveyerMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
         }
+
+        public static final class Amp {
+                public static final CANDeviceID ampID = new CANDeviceID(18, kRioName);
+                public static final MechanismRatio ampMotorRatio = new MechanismRatio(1,1);
+                public static final boolean ampMotorInverted = true;
+                public static final int ampRollerMotorSlot = 0;
+                public static final PIDConfig ampMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+
+        }
+       
+        public static final double launchVelocity = 200.0; // rads/s
+        public static final double launchVelocityTolerance = 10.0; // rads/s
+
+        
+
+        public static final double intakeFeedVelocity = 100; // rad/s
+        public static final double scoreAmpFeedVelocity = 300; // rad/s
+        public static final double scoreSpeakerFeedVelocity = 300; // rad/s
     }
 
     public static final class Arm {
         public static final class RightPivot {
                 public static final CANDeviceID rightPivotID = new CANDeviceID(16, kRioName);
-                public static final MechanismRatio rightPivotMotorRatio = new MechanismRatio(1,1);
-                public static final boolean rightPivotMotorInverted = false;
+                public static final int rightPivotMotorSlot = 0;
+                public static final PIDConfig rightPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+                // TODO: Check ratio
+                public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 125);
+                public static final boolean rightPivotInvert = false;
                 
         }
         
         public static final class LeftPivot {
                 public static final CANDeviceID leftPivotID = new CANDeviceID(15, kRioName);
-                public static final MechanismRatio leftPivotMotorRatio = new MechanismRatio(1,1);
-                public static final boolean leftPivotMotorInverted = false;
+                public static final int leftPivotMotorSlot = 0;
+                public static final PIDConfig leftPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+                // TODO: Check ratio
+                public static final MechanismRatio leftPivotRatio = new MechanismRatio(1, 125);
+                public static final boolean leftPivotInvert = true;
         }
+
+        public static final class ArmEnconder {
+                public static final CANDeviceID encoderID = new CANDeviceID(22, kRioName);
+                public static final MechanismRatio armRatio = new MechanismRatio(1,125);
+        }
+
+        public static final double minAngle = Units.degreesToRadians(0);
+        public static final double maxAngle = Units.degreesToRadians(90);
+        public static final double startingAngle = minAngle;
+
+         public static final double launchAngle = Units.degreesToRadians(-20);
+        public static final double launchAngleTolerance = Units.degreesToRadians(5);
+        public static final double scoreAmpArmAngle = Units.degreesToRadians(100); // rads
+        public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
     }
 }
 

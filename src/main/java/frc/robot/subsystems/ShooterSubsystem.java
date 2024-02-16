@@ -32,6 +32,13 @@ public class ShooterSubsystem  extends SubsystemBase{
       .setPIDConfig(Constants.Shooter.Conveyer.conveyerRollerMotorSlot,Constants.Shooter.Conveyer.conveyerMotorPIDConfig)
     );
 
+    private final TalonFx m_ampMotor = new TalonFx(
+      Constants.Shooter.Amp.ampID, Constants.Shooter.Amp.ampMotorRatio, 
+      TalonFx.makeDefaultConfig().setInverted(Constants.Shooter.Amp.ampMotorInverted).setSupplyCurrentLimit(40.0)
+      .setStatorCurrentLimit(40.0)
+      .setPIDConfig(Constants.Shooter.Amp.ampRollerMotorSlot,Constants.Shooter.Amp.ampMotorPIDConfig)
+    );
+
     public ShooterSubsystem() {
       //Body
       //Show scheduler status in SmartDashboard.
