@@ -19,8 +19,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.commands.IntakePiece;
+import frc.robot.commands.ShootNote;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 
 public class RobotContainer {
@@ -36,7 +39,11 @@ public class RobotContainer {
   SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   Telemetry logger = new Telemetry(MaxSpeed);
+
+  //Subsystems
   IntakeSubsystem intake = new IntakeSubsystem();
+  ShooterSubsystem shooter = new ShooterSubsystem();
+  //ArmSubsystem arm = new ArmSubsystem();
 
   private Command runAuto = drivetrain.getAutoPath("Test");
 
@@ -59,8 +66,8 @@ public class RobotContainer {
     // reset the field-centric heading on left bumper press
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
-
-    rightTrigger.whileTrue(new IntakePiece(intake));
+    //shoot da note
+    rightTrigger.whileTrue(new ShootNote(shooter));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
