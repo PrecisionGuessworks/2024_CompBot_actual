@@ -66,9 +66,10 @@ public class ArmSubsystem  extends SubsystemBase{
     @Override
     public void periodic() {
       // This method will be called once per scheduler run
-
-      m_rightMotor.setPositionSetpoint(Constants.Arm.RightPivot.rightPivotMotorSlot, m_targetArmAngle);
-      m_leftMotor.setPositionSetpoint(Constants.Arm.LeftPivot.leftPivotMotorSlot, m_targetArmAngle);
+      m_rightMotor.setVelocitySetpoint(Constants.Arm.RightPivot.rightPivotMotorSlot, Constants.Arm.maxVelocity, Constants.Arm.RightPivot.Kv);
+      m_leftMotor.setVelocitySetpoint(Constants.Arm.LeftPivot.leftPivotMotorSlot, Constants.Arm.maxVelocity, Constants.Arm.LeftPivot.Kv);
+      m_rightMotor.setPositionSetpoint(Constants.Arm.RightPivot.rightPivotMotorSlot, m_targetArmAngle, Constants.Arm.RightPivot.Kp);
+      m_leftMotor.setPositionSetpoint(Constants.Arm.LeftPivot.leftPivotMotorSlot, m_targetArmAngle, Constants.Arm.LeftPivot.Kp);
 
       SmartDashboard.putNumber(
         "Launcher: Current Arm Angle (deg)",

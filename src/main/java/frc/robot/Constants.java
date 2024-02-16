@@ -6,6 +6,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.CAN;
 import frc.robot.motorcontrol.MechanismRatio;
@@ -152,9 +153,12 @@ public class Constants {
         public static final class TopRoller {
                 public static final CANDeviceID topRollerID = new CANDeviceID(19, kRioName);
                 public static final MechanismRatio topRollerMotorRatio = new MechanismRatio(1,1);
-                public static final boolean topRollerMotorInverted = false;
+                public static final boolean topRollerMotorInverted = true;
                 public static final int topRollerMotorSlot = 0;
                 public static final PIDConfig topMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+
+                public static final SimpleMotorFeedforward topRollerFeedforward =
+        new SimpleMotorFeedforward(0, 0.019);
         }
 
         public static final class BottomRoller {
@@ -163,26 +167,33 @@ public class Constants {
                 public static final boolean bottomRollerMotorInverted = true;
                 public static final int bottomRollerMotorSlot = 0;
                 public static final PIDConfig bottomMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+
+                public static final SimpleMotorFeedforward bottomRollerFeedforward =
+        new SimpleMotorFeedforward(0, 0.019);
         }
 
         public static final class Conveyer {
                 public static final CANDeviceID conveyerID = new CANDeviceID(17, kRioName);
                 public static final MechanismRatio conveyerMotorRatio = new MechanismRatio(1,1);
-                public static final boolean conveyerMotorInverted = false;
+                public static final boolean conveyerMotorInverted = true;
                 public static final int conveyerRollerMotorSlot = 0;
                 public static final PIDConfig conveyerMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+                public static final SimpleMotorFeedforward feedFeedforward =
+        new SimpleMotorFeedforward(0, 0.019);
         }
 
         public static final class Amp {
                 public static final CANDeviceID ampID = new CANDeviceID(18, kRioName);
                 public static final MechanismRatio ampMotorRatio = new MechanismRatio(1,1);
-                public static final boolean ampMotorInverted = true;
+                public static final boolean ampMotorInverted = false;
                 public static final int ampRollerMotorSlot = 0;
                 public static final PIDConfig ampMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+                public static final SimpleMotorFeedforward ampFeedforward =
+        new SimpleMotorFeedforward(0, 0.019);
 
         }
        
-        public static final double launchVelocity = 200.0; // rads/s
+        public static final double launchVelocity = 500.0; // rads/s
         public static final double launchVelocityTolerance = 10.0; // rads/s
 
         
@@ -200,6 +211,8 @@ public class Constants {
                 // TODO: Check ratio
                 public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean rightPivotInvert = false;
+                public static final double Kp = 0.1;
+                public static final double Kv = 0.1;
                 
         }
         
@@ -210,6 +223,8 @@ public class Constants {
                 // TODO: Check ratio
                 public static final MechanismRatio leftPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean leftPivotInvert = true;
+                public static final double Kp = 0.1;
+                public static final double Kv = 0.1;
         }
 
         public static final class ArmEnconder {
@@ -221,10 +236,14 @@ public class Constants {
         public static final double maxAngle = Units.degreesToRadians(90);
         public static final double startingAngle = minAngle;
 
-         public static final double launchAngle = Units.degreesToRadians(-20);
+        public static final double launchAngle = Units.degreesToRadians(-20);
         public static final double launchAngleTolerance = Units.degreesToRadians(5);
         public static final double scoreAmpArmAngle = Units.degreesToRadians(100); // rads
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
+
+        public static final double maxVelocity = 30.0; //rad/s
+
+
     }
 }
 

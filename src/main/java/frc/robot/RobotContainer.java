@@ -43,7 +43,7 @@ public class RobotContainer {
   //Subsystems
   IntakeSubsystem intake = new IntakeSubsystem();
   ShooterSubsystem shooter = new ShooterSubsystem();
-  ArmSubsystem arm = new ArmSubsystem();
+  //ArmSubsystem arm = new ArmSubsystem();
 
   private Command runAuto = drivetrain.getAutoPath("Test");
 
@@ -67,7 +67,7 @@ public class RobotContainer {
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     //shoot da note
-    rightTrigger.whileTrue(new ShootNote(shooter, arm));
+    rightTrigger.whileTrue(new ShootNote(shooter));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));

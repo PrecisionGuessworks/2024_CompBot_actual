@@ -8,13 +8,13 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootNote extends Command{
     private final ShooterSubsystem m_shooterSubsystem;
-    private final ArmSubsystem m_armSubsystem;
+    //private final ArmSubsystem m_armSubsystem;
 
-    public ShootNote(ShooterSubsystem shooterSubsystem, ArmSubsystem armSubsystem) {
+    public ShootNote(ShooterSubsystem shooterSubsystem) {
         m_shooterSubsystem = shooterSubsystem;
-        m_armSubsystem = armSubsystem;
+        //m_armSubsystem = armSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(shooterSubsystem, armSubsystem);
+        addRequirements(shooterSubsystem);
 
     }
 
