@@ -22,6 +22,10 @@ public class PIDConfig {
     this(kP, kI, kD, 0.0, 0.0, 0.0, 0.0);
   }
 
+  public PIDConfig(final double kP, final double kI, final double kD, final double kS, final double kV) {
+    this(kP, kI, kD, kS, kV, 0.0, 0.0);
+  }
+
   public PIDConfig(
       final double kP,
       final double kI,

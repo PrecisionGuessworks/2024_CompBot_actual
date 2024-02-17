@@ -12,13 +12,16 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.commands.IntakePiece;
+import frc.robot.commands.MoveArm;
 import frc.robot.commands.ShootNote;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -43,12 +46,13 @@ public class RobotContainer {
   //Subsystems
   IntakeSubsystem intake = new IntakeSubsystem();
   ShooterSubsystem shooter = new ShooterSubsystem();
-  //ArmSubsystem arm = new ArmSubsystem();
+  ArmSubsystem arm = new ArmSubsystem();
 
   private Command runAuto = drivetrain.getAutoPath("Test");
 
   private final Trigger rightTrigger = new Trigger(() -> joystick.getRightTriggerAxis() > 0.2);
   private final Trigger leftTrigger = new Trigger(() -> joystick.getLeftTriggerAxis() > 0.2);
+ 
 
 
   private void configureBindings() {
@@ -63,11 +67,20 @@ public class RobotContainer {
     joystick.a().whileTrue(drivetrain
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
+    
+
     // reset the field-centric heading on left bumper press
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     //shoot da note
     rightTrigger.whileTrue(new ShootNote(shooter));
+
+    //intake piece
+    leftTrigger.whileTrue(new IntakePiece(intake));
+
+    //move arm
+    joystick.x().whileTrue(new MoveArm(arm));
+
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));

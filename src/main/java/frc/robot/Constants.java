@@ -6,6 +6,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -209,34 +210,30 @@ public class Constants {
         public static final class RightPivot {
                 public static final CANDeviceID rightPivotID = new CANDeviceID(16, kRioName);
                 public static final int rightPivotMotorSlot = 0;
-                public static final PIDConfig rightPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+                public static final PIDConfig rightPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0, 0.2, 0.12);
                 // TODO: Check ratio
                 public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean rightPivotInvert = false;
-                public static final double rightPivotAccelerationConstraint = 0.75 * Math.PI; // rad/s
-                public static final double rightPivotVelocityConstraint = 0.2 * Math.PI; // rad/s
+                public static final double rightPivotAccelerationConstraint = 0.01; // rad/s
+                public static final double rightPivotVelocityConstraint = 0.01; // rad/s
 
                 public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
-
-   
                 
         }
         
         public static final class LeftPivot {
                 public static final CANDeviceID leftPivotID = new CANDeviceID(15, kRioName);
                 public static final int leftPivotMotorSlot = 0;
-                public static final PIDConfig leftPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+                public static final PIDConfig leftPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0, 0.2, 0.12);
                 // TODO: Check ratio
                 public static final MechanismRatio leftPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean leftPivotInvert = true;
 
-                public static final double leftPivotAccelerationConstraint = 0.75 * Math.PI; // rad/s
-                public static final double leftPivotVelocityConstraint = 0.2 * Math.PI; // rad/s
+                public static final double leftPivotAccelerationConstraint = 0.01; // rad/s
+                public static final double leftPivotVelocityConstraint = 0.01; // rad/s
 
                 public static final Constraints leftPivotTrapConstraints = new Constraints(leftPivotVelocityConstraint, leftPivotAccelerationConstraint);
-
-                
-                
+             
         }
 
         public static final class ArmEnconder {

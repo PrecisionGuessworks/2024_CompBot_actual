@@ -3,7 +3,10 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,8 +24,8 @@ public class ArmSubsystem  extends SubsystemBase{
           .setInverted(Constants.Arm.RightPivot.rightPivotInvert)
           .setBrakeMode()
           .setPIDConfig(Constants.Arm.RightPivot.rightPivotMotorSlot, Constants.Arm.RightPivot.rightPivotPIDConfig)
-          .setSupplyCurrentLimit(40.0)
-          .setStatorCurrentLimit(40.0)
+          .setSupplyCurrentLimit(10.0)
+          .setStatorCurrentLimit(10.0)
     );
 
     private final TalonFx m_leftMotor =
@@ -33,8 +36,8 @@ public class ArmSubsystem  extends SubsystemBase{
           .setInverted(Constants.Arm.LeftPivot.leftPivotInvert)
           .setBrakeMode()
           .setPIDConfig(Constants.Arm.LeftPivot.leftPivotMotorSlot, Constants.Arm.LeftPivot.leftPivotPIDConfig)
-          .setSupplyCurrentLimit(40.0)
-          .setStatorCurrentLimit(40.0)
+          .setSupplyCurrentLimit(10.0)
+          .setStatorCurrentLimit(10.0)
     );
 
     private final CANencoder m_armEncoder  = new CANencoder(Constants.Arm.ArmEnconder.encoderID, Constants.Arm.ArmEnconder.armRatio);
@@ -46,11 +49,14 @@ public class ArmSubsystem  extends SubsystemBase{
 
     private double m_targetArmAngle = Constants.Arm.startingAngle;
 
-    private TrapezoidProfile.State m_rightMotorSetpoint = new TrapezoidProfile.State();
-    private TrapezoidProfile.State m_leftMotorSetpoint = new TrapezoidProfile.State();
+    private TrapezoidProfile.State m_rightMotorSetpoint = new State(m_armEncoder.getPosition(), 0.0);
+    private TrapezoidProfile.State m_leftMotorSetpoint = new State(m_armEncoder.getPosition(), 0.0);
+
+    private final Timer m_armTrapTimer = new Timer();
 
 
     public ArmSubsystem() {
+      m_armTrapTimer.start();
       //Body
       //Show scheduler status in SmartDashboard.
       m_armEncoder.setPosition(Constants.Arm.startingAngle);
@@ -68,14 +74,28 @@ public class ArmSubsystem  extends SubsystemBase{
     }
 
     public void setArmAngle(double targetArmAngle) {
-     // m_rightMotorSetpoint = m_rightProfile.calculate()
+      TrapezoidProfile.State m_goal = new TrapezoidProfile.State(targetArmAngle, 0);
+      
+      m_rightMotorSetpoint = m_rightProfile.calculate(m_armTrapTimer.get(), m_rightMotorSetpoint, m_goal);
+      m_leftMotorSetpoint = m_leftProfile.calculate(m_armTrapTimer.get(), m_leftMotorSetpoint, m_goal);
+      m_armTrapTimer.reset();
     }
 
     @Override
     public void periodic() {
+      if (DriverStation.isDisabled()) {
+      // Update state to sensor state when disabled to prevent jumps on enable.
+      m_rightMotorSetpoint = new State(getArmAngle(), 0.0);
+      m_leftMotorSetpoint = new State(getArmAngle(), 0.0);
+    }
+
       m_rightMotorRequest.Position = m_rightMotorSetpoint.position;
       m_rightMotorRequest.Velocity = m_rightMotorSetpoint.velocity;
+      m_leftMotorRequest.Position = m_leftMotorSetpoint.position;
+      m_leftMotorRequest.Velocity = m_leftMotorSetpoint.velocity;
+
       m_rightMotor.m_controller.setControl(m_rightMotorRequest);
+      m_leftMotor.m_controller.setControl(m_leftMotorRequest);
       // This method will be called once per scheduler run
       
 
