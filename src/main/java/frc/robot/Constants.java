@@ -214,8 +214,8 @@ public class Constants {
                 // TODO: Check ratio
                 public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean rightPivotInvert = false;
-                public static final double rightPivotAccelerationConstraint = 0.01; // rad/s
-                public static final double rightPivotVelocityConstraint = 0.01; // rad/s
+                public static final double rightPivotAccelerationConstraint = 0.1; // rad/s
+                public static final double rightPivotVelocityConstraint = 0.1; // rad/s
 
                 public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
                 
@@ -229,15 +229,15 @@ public class Constants {
                 public static final MechanismRatio leftPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean leftPivotInvert = true;
 
-                public static final double leftPivotAccelerationConstraint = 0.01; // rad/s
-                public static final double leftPivotVelocityConstraint = 0.01; // rad/s
+                public static final double leftPivotAccelerationConstraint = 0.1; // rad/s
+                public static final double leftPivotVelocityConstraint = 0.1; // rad/s
 
                 public static final Constraints leftPivotTrapConstraints = new Constraints(leftPivotVelocityConstraint, leftPivotAccelerationConstraint);
              
         }
 
         public static final class ArmEnconder {
-                public static final CANDeviceID encoderID = new CANDeviceID(22, kRioName);
+                public static final CANDeviceID encoderID = new CANDeviceID(24, kRioName);
                 public static final MechanismRatio armRatio = new MechanismRatio(1,125);
         }
 
@@ -245,8 +245,8 @@ public class Constants {
         public static final double maxAngle = Units.degreesToRadians(90);
         public static final double startingAngle = minAngle;
 
-        public static final double launchAngle = Units.degreesToRadians(-20);
-        public static final double launchAngleTolerance = Units.degreesToRadians(5);
+        public static final double launchAngle = Units.degreesToRadians(30);
+        public static final double launchAngleTolerance = Units.degreesToRadians(3);
         public static final double scoreAmpArmAngle = Units.degreesToRadians(100); // rads
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
 

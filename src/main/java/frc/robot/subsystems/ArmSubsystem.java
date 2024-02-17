@@ -24,8 +24,8 @@ public class ArmSubsystem  extends SubsystemBase{
           .setInverted(Constants.Arm.RightPivot.rightPivotInvert)
           .setBrakeMode()
           .setPIDConfig(Constants.Arm.RightPivot.rightPivotMotorSlot, Constants.Arm.RightPivot.rightPivotPIDConfig)
-          .setSupplyCurrentLimit(10.0)
-          .setStatorCurrentLimit(10.0)
+          .setSupplyCurrentLimit(20.0)
+          .setStatorCurrentLimit(20.0)
     );
 
     private final TalonFx m_leftMotor =
@@ -36,8 +36,8 @@ public class ArmSubsystem  extends SubsystemBase{
           .setInverted(Constants.Arm.LeftPivot.leftPivotInvert)
           .setBrakeMode()
           .setPIDConfig(Constants.Arm.LeftPivot.leftPivotMotorSlot, Constants.Arm.LeftPivot.leftPivotPIDConfig)
-          .setSupplyCurrentLimit(10.0)
-          .setStatorCurrentLimit(10.0)
+          .setSupplyCurrentLimit(20.0)
+          .setStatorCurrentLimit(20.0)
     );
 
     private final CANencoder m_armEncoder  = new CANencoder(Constants.Arm.ArmEnconder.encoderID, Constants.Arm.ArmEnconder.armRatio);
