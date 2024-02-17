@@ -73,10 +73,10 @@ public class RobotContainer {
     joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     //shoot da note
-    rightTrigger.whileTrue(new ShootNote(shooter));
+    leftTrigger.whileTrue(new ShootNote(shooter));
 
     //intake piece
-    leftTrigger.whileTrue(new IntakePiece(intake));
+    rightTrigger.whileTrue(new IntakePiece(intake));
 
     //move arm
     joystick.x().whileTrue(new MoveArm(arm));

@@ -7,6 +7,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackTy
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -210,12 +211,12 @@ public class Constants {
         public static final class RightPivot {
                 public static final CANDeviceID rightPivotID = new CANDeviceID(16, kRioName);
                 public static final int rightPivotMotorSlot = 0;
-                public static final PIDConfig rightPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0, 0.2, 0.12);
+                public static final PIDConfig rightPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0, 0.2, 0.5);
                 // TODO: Check ratio
                 public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean rightPivotInvert = false;
-                public static final double rightPivotAccelerationConstraint = 0.1; // rad/s
-                public static final double rightPivotVelocityConstraint = 0.1; // rad/s
+                public static final double rightPivotAccelerationConstraint = 0.4; // rad/s
+                public static final double rightPivotVelocityConstraint = 1; // rad/s
 
                 public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
                 
@@ -224,13 +225,13 @@ public class Constants {
         public static final class LeftPivot {
                 public static final CANDeviceID leftPivotID = new CANDeviceID(15, kRioName);
                 public static final int leftPivotMotorSlot = 0;
-                public static final PIDConfig leftPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0, 0.2, 0.12);
+                public static final PIDConfig leftPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0, 0.2, 0.5);
                 // TODO: Check ratio
                 public static final MechanismRatio leftPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean leftPivotInvert = true;
 
-                public static final double leftPivotAccelerationConstraint = 0.1; // rad/s
-                public static final double leftPivotVelocityConstraint = 0.1; // rad/s
+                public static final double leftPivotAccelerationConstraint = 0.4; // rad/s
+                public static final double leftPivotVelocityConstraint = 1; // rad/s
 
                 public static final Constraints leftPivotTrapConstraints = new Constraints(leftPivotVelocityConstraint, leftPivotAccelerationConstraint);
              
@@ -245,7 +246,7 @@ public class Constants {
         public static final double maxAngle = Units.degreesToRadians(90);
         public static final double startingAngle = minAngle;
 
-        public static final double launchAngle = Units.degreesToRadians(30);
+        public static final double launchAngle = Units.degreesToRadians(20);
         public static final double launchAngleTolerance = Units.degreesToRadians(3);
         public static final double scoreAmpArmAngle = Units.degreesToRadians(100); // rads
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
@@ -253,6 +254,35 @@ public class Constants {
         public static final TrapezoidProfile.State m_goal = new TrapezoidProfile.State(100, 0);
 
 
+    }
+
+    public static final class Climber {
+        public static final class rightClimber {
+                public static final CANDeviceID rightClimberID = new CANDeviceID(23, kRioName);
+                public static final int rightClimberMotorSlot = 0;
+                public static final PIDConfig rightClimberPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+                // TODO: Check ratio
+                public static final MechanismRatio rightClimberRatio = new MechanismRatio(1, 20);
+                public static final boolean rightClimberInvert = false;
+
+                public static final ElevatorFeedforward rightFF = new ElevatorFeedforward(0, 0.01, 0.02, 0.012);
+
+        }
+
+        public static final class leftClimber {
+                public static final CANDeviceID leftClimberID = new CANDeviceID(22, kRioName);
+                public static final int leftClimberMotorSlot = 0;
+                public static final PIDConfig leftClimberPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+                // TODO: Check ratio
+                public static final MechanismRatio leftClimberRatio = new MechanismRatio(1, 20);
+                public static final boolean leftClimberInvert = true;
+
+                public static final ElevatorFeedforward leftFF = new ElevatorFeedforward(0, 0.01, 0.02, 0.012);
+
+        }
+
+        public static final double maxPosition = 1.0;
+        public static final double minPosition = 0.0;
     }
 }
 
