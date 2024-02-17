@@ -27,7 +27,7 @@ public class TalonFx {
   private static final double kCANTimeoutS = 0.1;
   private static final double kDefaultUpdateFreqHz = 100.0;
   private final CANDeviceID m_canID;
-  private final TalonFX m_controller;
+  public final TalonFX m_controller;
   //private final TalonFXSimState m_simState;
   //ToDo: sim stuff
   private final MechanismRatio m_ratio;

@@ -7,6 +7,8 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackTy
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.CAN;
 import frc.robot.motorcontrol.MechanismRatio;
@@ -174,7 +176,7 @@ public class Constants {
 
         public static final class Conveyer {
                 public static final CANDeviceID conveyerID = new CANDeviceID(17, kRioName);
-                public static final MechanismRatio conveyerMotorRatio = new MechanismRatio(1,1);
+                public static final MechanismRatio conveyerMotorRatio = new MechanismRatio(1,4);
                 public static final boolean conveyerMotorInverted = true;
                 public static final int conveyerRollerMotorSlot = 0;
                 public static final PIDConfig conveyerMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
@@ -184,7 +186,7 @@ public class Constants {
 
         public static final class Amp {
                 public static final CANDeviceID ampID = new CANDeviceID(18, kRioName);
-                public static final MechanismRatio ampMotorRatio = new MechanismRatio(1,1);
+                public static final MechanismRatio ampMotorRatio = new MechanismRatio(1,4);
                 public static final boolean ampMotorInverted = false;
                 public static final int ampRollerMotorSlot = 0;
                 public static final PIDConfig ampMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
@@ -193,14 +195,14 @@ public class Constants {
 
         }
        
-        public static final double launchVelocity = 500.0; // rads/s
+        public static final double launchVelocity = 600.0; // rads/s
         public static final double launchVelocityTolerance = 10.0; // rads/s
 
         
 
         public static final double intakeFeedVelocity = 100; // rad/s
         public static final double scoreAmpFeedVelocity = 300; // rad/s
-        public static final double scoreSpeakerFeedVelocity = 300; // rad/s
+        public static final double scoreSpeakerFeedVelocity = 335; // rad/s
     }
 
     public static final class Arm {
@@ -211,8 +213,12 @@ public class Constants {
                 // TODO: Check ratio
                 public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean rightPivotInvert = false;
-                public static final double Kp = 0.1;
-                public static final double Kv = 0.1;
+                public static final double rightPivotAccelerationConstraint = 0.75 * Math.PI; // rad/s
+                public static final double rightPivotVelocityConstraint = 0.2 * Math.PI; // rad/s
+
+                public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
+
+   
                 
         }
         
@@ -223,8 +229,14 @@ public class Constants {
                 // TODO: Check ratio
                 public static final MechanismRatio leftPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean leftPivotInvert = true;
-                public static final double Kp = 0.1;
-                public static final double Kv = 0.1;
+
+                public static final double leftPivotAccelerationConstraint = 0.75 * Math.PI; // rad/s
+                public static final double leftPivotVelocityConstraint = 0.2 * Math.PI; // rad/s
+
+                public static final Constraints leftPivotTrapConstraints = new Constraints(leftPivotVelocityConstraint, leftPivotAccelerationConstraint);
+
+                
+                
         }
 
         public static final class ArmEnconder {
@@ -241,7 +253,7 @@ public class Constants {
         public static final double scoreAmpArmAngle = Units.degreesToRadians(100); // rads
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
 
-        public static final double maxVelocity = 30.0; //rad/s
+        public static final TrapezoidProfile.State m_goal = new TrapezoidProfile.State(100, 0);
 
 
     }
