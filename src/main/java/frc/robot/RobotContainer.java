@@ -46,12 +46,13 @@ public class RobotContainer {
   //Subsystems
   IntakeSubsystem intake = new IntakeSubsystem();
   ShooterSubsystem shooter = new ShooterSubsystem();
-  ArmSubsystem arm = new ArmSubsystem();
+  //ArmSubsystem arm = new ArmSubsystem();
 
   private Command runAuto = drivetrain.getAutoPath("Test");
 
   private final Trigger rightTrigger = new Trigger(() -> joystick.getRightTriggerAxis() > 0.2);
   private final Trigger leftTrigger = new Trigger(() -> joystick.getLeftTriggerAxis() > 0.2);
+  
  
 
 
@@ -79,7 +80,7 @@ public class RobotContainer {
     rightTrigger.whileTrue(new IntakePiece(intake));
 
     //move arm
-    joystick.x().whileTrue(new MoveArm(arm));
+    //joystick.x().whileTrue(new MoveArm(arm));
 
 
     if (Utils.isSimulation()) {

@@ -11,6 +11,7 @@ import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -41,6 +42,8 @@ public class TalonFxConfiguration {
     public PIDConfig slot1Config = new PIDConfig();
     public PIDConfig slot2Config = new PIDConfig();
     public double sensorUpdateFrequencyHz = 100.0;
+    public boolean fusedCANcoder = false;
+    public int fusedCANcodeID = 99;
 
     public TalonFxConfiguration setBrakeMode() {
       NEUTRAL_MODE = NeutralModeValue.Brake;
@@ -89,6 +92,16 @@ public class TalonFxConfiguration {
         return this;
       }
 
+      /*public TalonFxConfiguration setFusedCANCoder(canCoder) {
+        fusedCANcoder = true;
+        fusedCANcodeID = canCoder.getDeviceID();
+
+
+        return this;
+
+
+      } */
+
       public TalonFXConfiguration toTalonFXConfiguration(
         final Function<Double, Double> toNativeSensorPosition) {
       final TalonFXConfiguration config = new TalonFXConfiguration();
@@ -121,6 +134,8 @@ public class TalonFxConfiguration {
       config.Slot0 = slot0Config.fillCTRE(new Slot0Configs());
       config.Slot1 = slot1Config.fillCTRE(new Slot1Configs());
       config.Slot2 = slot2Config.fillCTRE(new Slot2Configs());
+      //config.Feedback.FeedbackRemoteSensorID = ;
+      //config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
       return config;
     }
 

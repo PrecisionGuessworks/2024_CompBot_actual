@@ -24,8 +24,8 @@ public class ArmSubsystem  extends SubsystemBase{
           .setInverted(Constants.Arm.RightPivot.rightPivotInvert)
           .setBrakeMode()
           .setPIDConfig(Constants.Arm.RightPivot.rightPivotMotorSlot, Constants.Arm.RightPivot.rightPivotPIDConfig)
-          .setSupplyCurrentLimit(25.0)
-          .setStatorCurrentLimit(25.0)
+          .setSupplyCurrentLimit(10)
+          .setStatorCurrentLimit(10)
     );
 
     private final TalonFx m_leftMotor =
@@ -36,8 +36,8 @@ public class ArmSubsystem  extends SubsystemBase{
           .setInverted(Constants.Arm.LeftPivot.leftPivotInvert)
           .setBrakeMode()
           .setPIDConfig(Constants.Arm.LeftPivot.leftPivotMotorSlot, Constants.Arm.LeftPivot.leftPivotPIDConfig)
-          .setSupplyCurrentLimit(25.0)
-          .setStatorCurrentLimit(25.0)
+          .setSupplyCurrentLimit(10)
+          .setStatorCurrentLimit(10)
     );
 
     private final CANencoder m_armEncoder  = new CANencoder(Constants.Arm.ArmEnconder.encoderID, Constants.Arm.ArmEnconder.armRatio);
@@ -49,8 +49,8 @@ public class ArmSubsystem  extends SubsystemBase{
 
     private double m_targetArmAngle = Constants.Arm.startingAngle;
 
-    private TrapezoidProfile.State m_rightMotorSetpoint = new State(m_armEncoder.getPosition(), 0.0);
-    private TrapezoidProfile.State m_leftMotorSetpoint = new State(m_armEncoder.getPosition(), 0.0);
+    private TrapezoidProfile.State m_rightMotorSetpoint = new State(m_armEncoder.getAbsPosition(), 0.0);
+    private TrapezoidProfile.State m_leftMotorSetpoint = new State(m_armEncoder.getAbsPosition(), 0.0);
 
     private final Timer m_armTrapTimer = new Timer();
 
@@ -59,14 +59,14 @@ public class ArmSubsystem  extends SubsystemBase{
       m_armTrapTimer.start();
       //Body
       //Show scheduler status in SmartDashboard.
-      m_armEncoder.setPosition(Constants.Arm.startingAngle);
+      //m_armEncoder.setPosition(Constants.Arm.startingAngle);
 
       SmartDashboard.putData(this);
 
     }
     //Absolute encoder position
     public double getArmAngle() {
-      return m_armEncoder.getPosition();
+      return m_armEncoder.getAbsPosition();
     }
 
     public boolean isAtAngle(double angle, double tolerance) {
@@ -75,6 +75,7 @@ public class ArmSubsystem  extends SubsystemBase{
 
     public void setArmAngle(double targetArmAngle) {
       TrapezoidProfile.State m_goal = new TrapezoidProfile.State(targetArmAngle, 0);
+      m_targetArmAngle = targetArmAngle;
       
       m_rightMotorSetpoint = m_rightProfile.calculate(m_armTrapTimer.get(), m_rightMotorSetpoint, m_goal);
       m_leftMotorSetpoint = m_leftProfile.calculate(m_armTrapTimer.get(), m_leftMotorSetpoint, m_goal);
@@ -87,6 +88,8 @@ public class ArmSubsystem  extends SubsystemBase{
       // Update state to sensor state when disabled to prevent jumps on enable.
       m_rightMotorSetpoint = new State(getArmAngle(), 0.0);
       m_leftMotorSetpoint = new State(getArmAngle(), 0.0);
+      System.out.println("Launcher: Current Arm Angle (deg) " + m_armEncoder.getAbsPosition());
+      System.out.println("Launcher: Target Arm Angle (deg) " + m_targetArmAngle);
     }
 
       m_rightMotorRequest.Position = m_rightMotorSetpoint.position;
@@ -101,12 +104,12 @@ public class ArmSubsystem  extends SubsystemBase{
 
       SmartDashboard.putNumber(
         "Launcher: Current Arm Angle (deg)",
-        Units.radiansToDegrees(m_armEncoder.getPosition()));
+        Units.radiansToDegrees(m_armEncoder.getAbsPosition()));
       SmartDashboard.putNumber(
         "Launcher: Target Arm Angle (deg)", Units.radiansToDegrees(m_targetArmAngle));
 
-        System.out.println("Launcher: Current Arm Angle (deg) " + Units.radiansToDegrees(m_armEncoder.getPosition()));
-        System.out.println("Launcher: Target Arm Angle (deg) " + Units.radiansToDegrees(m_targetArmAngle));
+        System.out.println("Launcher: Current Arm Angle (deg) " + m_armEncoder.getAbsPosition());
+        System.out.println("Launcher: Target Arm Angle (deg) " + m_targetArmAngle);
     }
   
     // --- BEGIN STUFF FOR SIMULATION ---
