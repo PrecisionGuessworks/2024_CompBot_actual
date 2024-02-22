@@ -51,7 +51,7 @@ public class ClimberSubsystem  extends SubsystemBase{
         double position = Constants.Climber.maxPosition;
         
         double leftFFVolts = m_leftFF.calculate(position);
-        m_rightClimberMotor.setPositionSetpoint(Constants.Climber.rightClimber.rightClimberMotorSlot,leftFFVolts);
+        m_leftClimberMotor.setPositionSetpoint(Constants.Climber.leftClimber.leftClimberMotorSlot,leftFFVolts);
 
     }
 
@@ -67,7 +67,7 @@ public class ClimberSubsystem  extends SubsystemBase{
         double position = Constants.Climber.minPosition;
         
         double leftFFVolts = m_leftFF.calculate(position);
-        m_rightClimberMotor.setPositionSetpoint(Constants.Climber.rightClimber.rightClimberMotorSlot,leftFFVolts);
+        m_leftClimberMotor.setPositionSetpoint(Constants.Climber.leftClimber.leftClimberMotorSlot,leftFFVolts);
 
     }
 

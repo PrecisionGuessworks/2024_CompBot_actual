@@ -83,8 +83,8 @@ public class ArmSubsystem  extends SubsystemBase{
       TrapezoidProfile.State m_goal = new TrapezoidProfile.State(targetArmAngle, 0);
       m_targetArmAngle = targetArmAngle;
       
-      m_rightArmState = m_rightProfile.calculate(m_armTrapTimer.get(), m_goal, m_rightArmState);
-      m_leftArmState = m_leftProfile.calculate(m_armTrapTimer.get(), m_goal, m_leftArmState);
+      m_rightArmState = m_rightProfile.calculate(m_armTrapTimer.get(), m_rightArmState, m_goal);
+      m_leftArmState = m_leftProfile.calculate(m_armTrapTimer.get(),  m_leftArmState, m_goal);
       m_armTrapTimer.reset();
     }
 
