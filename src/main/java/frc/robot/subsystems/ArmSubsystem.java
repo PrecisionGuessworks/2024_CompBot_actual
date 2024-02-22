@@ -16,6 +16,8 @@ import frc.robot.motorcontrol.devices.CANencoder;
 
 public class ArmSubsystem  extends SubsystemBase{
 
+  private final CANencoder m_armEncoder  = new CANencoder(Constants.Arm.ArmEnconder.encoderID, Constants.Arm.ArmEnconder.armRatio);
+
   private final TalonFx m_rightMotor =
   new TalonFx(
       Constants.Arm.RightPivot.rightPivotID,
@@ -26,6 +28,9 @@ public class ArmSubsystem  extends SubsystemBase{
           .setPIDConfig(Constants.Arm.RightPivot.rightPivotMotorSlot, Constants.Arm.RightPivot.rightPivotPIDConfig)
           .setSupplyCurrentLimit(10)
           .setStatorCurrentLimit(10)
+          .setFusedCANCoder(m_armEncoder, Constants.Arm.ArmEnconder.armRatio, Constants.Arm.ArmEnconder.encoderToMotorRatio)
+          .setReverseSoftLimit(Constants.Arm.minAngle)
+          .setForwardSoftLimit(Constants.Arm.maxAngle)
     );
 
     private final TalonFx m_leftMotor =
@@ -38,19 +43,20 @@ public class ArmSubsystem  extends SubsystemBase{
           .setPIDConfig(Constants.Arm.LeftPivot.leftPivotMotorSlot, Constants.Arm.LeftPivot.leftPivotPIDConfig)
           .setSupplyCurrentLimit(10)
           .setStatorCurrentLimit(10)
+          .setFusedCANCoder(m_armEncoder, Constants.Arm.ArmEnconder.armRatio, Constants.Arm.ArmEnconder.encoderToMotorRatio)
+          .setReverseSoftLimit(Constants.Arm.minAngle)
+          .setForwardSoftLimit(Constants.Arm.maxAngle)
     );
 
-    private final CANencoder m_armEncoder  = new CANencoder(Constants.Arm.ArmEnconder.encoderID, Constants.Arm.ArmEnconder.armRatio);
+    
     private final TrapezoidProfile m_rightProfile = new TrapezoidProfile(Constants.Arm.RightPivot.rightPivotTrapConstraints);
     private final TrapezoidProfile m_leftProfile = new TrapezoidProfile(Constants.Arm.LeftPivot.leftPivotTrapConstraints);
 
-    private final PositionVoltage m_rightMotorRequest = new PositionVoltage(0).withSlot(Constants.Arm.RightPivot.rightPivotMotorSlot);
-    private final PositionVoltage m_leftMotorRequest = new PositionVoltage(0).withSlot(Constants.Arm.RightPivot.rightPivotMotorSlot);
-
+   
     private double m_targetArmAngle = Constants.Arm.startingAngle;
 
-    private TrapezoidProfile.State m_rightMotorSetpoint = new State(m_armEncoder.getAbsPosition(), 0.0);
-    private TrapezoidProfile.State m_leftMotorSetpoint = new State(m_armEncoder.getAbsPosition(), 0.0);
+    private TrapezoidProfile.State m_rightArmState = new State(m_armEncoder.getAbsPosition(), 0.0);
+    private TrapezoidProfile.State m_leftArmState = new State(m_armEncoder.getAbsPosition(), 0.0);
 
     private final Timer m_armTrapTimer = new Timer();
 
@@ -77,8 +83,8 @@ public class ArmSubsystem  extends SubsystemBase{
       TrapezoidProfile.State m_goal = new TrapezoidProfile.State(targetArmAngle, 0);
       m_targetArmAngle = targetArmAngle;
       
-      m_rightMotorSetpoint = m_rightProfile.calculate(m_armTrapTimer.get(), m_rightMotorSetpoint, m_goal);
-      m_leftMotorSetpoint = m_leftProfile.calculate(m_armTrapTimer.get(), m_leftMotorSetpoint, m_goal);
+      m_rightArmState = m_rightProfile.calculate(m_armTrapTimer.get(), m_goal, m_rightArmState);
+      m_leftArmState = m_leftProfile.calculate(m_armTrapTimer.get(), m_goal, m_leftArmState);
       m_armTrapTimer.reset();
     }
 
@@ -86,19 +92,27 @@ public class ArmSubsystem  extends SubsystemBase{
     public void periodic() {
       if (DriverStation.isDisabled()) {
       // Update state to sensor state when disabled to prevent jumps on enable.
-      m_rightMotorSetpoint = new State(getArmAngle(), 0.0);
-      m_leftMotorSetpoint = new State(getArmAngle(), 0.0);
+      m_rightArmState = new State(getArmAngle(), 0.0);
+      m_leftArmState = new State(getArmAngle(), 0.0);
       System.out.println("Launcher: Current Arm Angle (deg) " + m_armEncoder.getAbsPosition());
       System.out.println("Launcher: Target Arm Angle (deg) " + m_targetArmAngle);
     }
 
-      m_rightMotorRequest.Position = m_rightMotorSetpoint.position;
+    m_rightMotor.setPositionSetpoint(Constants.Arm.RightPivot.rightPivotMotorSlot, m_rightArmState.position, Constants.Arm.RightPivot.rightFeedForward.calculate(
+      m_rightArmState.position, m_rightArmState.velocity));
+
+    m_leftMotor.setPositionSetpoint(Constants.Arm.LeftPivot.leftPivotMotorSlot, m_leftArmState.position, Constants.Arm.LeftPivot.leftFeedForward.calculate(
+      m_leftArmState.position, m_leftArmState.velocity));
+
+      /*m_rightMotorRequest.Position = m_rightMotorSetpoint.position;
       m_rightMotorRequest.Velocity = m_rightMotorSetpoint.velocity;
       m_leftMotorRequest.Position = m_leftMotorSetpoint.position;
       m_leftMotorRequest.Velocity = m_leftMotorSetpoint.velocity;
 
       m_rightMotor.m_controller.setControl(m_rightMotorRequest);
-      m_leftMotor.m_controller.setControl(m_leftMotorRequest);
+      m_leftMotor.m_controller.setControl(m_leftMotorRequest); */
+
+
       // This method will be called once per scheduler run
       
 

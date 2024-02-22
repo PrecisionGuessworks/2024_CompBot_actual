@@ -15,13 +15,13 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.motorcontrol.devices.CANencoder;
 import frc.robot.motorcontrol.devices.EasyStatusSignal;
 import frc.robot.motorcontrol.configurations.phoenix.PhoenixUtils;
 import frc.robot.Robot;
 import java.util.function.Function;
 
-
-
+import frc.robot.motorcontrol.MechanismRatio;
 import frc.robot.motorcontrol.PIDConfig;
 
 public class TalonFxConfiguration {
@@ -44,6 +44,8 @@ public class TalonFxConfiguration {
     public double sensorUpdateFrequencyHz = 100.0;
     public boolean fusedCANcoder = false;
     public int fusedCANcodeID = 99;
+    public double FUSEDCANcoder_MECHANISM_RATIO = 1.0;
+    public double FUSEDCANcoder_MOTOR_MECHANISM_RATIO = 1.0;
 
     public TalonFxConfiguration setBrakeMode() {
       NEUTRAL_MODE = NeutralModeValue.Brake;
@@ -92,15 +94,14 @@ public class TalonFxConfiguration {
         return this;
       }
 
-      /*public TalonFxConfiguration setFusedCANCoder(canCoder) {
+      public TalonFxConfiguration setFusedCANCoder(CANencoder canCoder, MechanismRatio CANcoderRatio, MechanismRatio CANcoderMotorRatio) {
         fusedCANcoder = true;
         fusedCANcodeID = canCoder.getDeviceID();
-
+        FUSEDCANcoder_MECHANISM_RATIO = CANcoderRatio.reduction();
+        FUSEDCANcoder_MOTOR_MECHANISM_RATIO = CANcoderMotorRatio.reduction();
 
         return this;
-
-
-      } */
+      } 
 
       public TalonFXConfiguration toTalonFXConfiguration(
         final Function<Double, Double> toNativeSensorPosition) {
@@ -134,8 +135,14 @@ public class TalonFxConfiguration {
       config.Slot0 = slot0Config.fillCTRE(new Slot0Configs());
       config.Slot1 = slot1Config.fillCTRE(new Slot1Configs());
       config.Slot2 = slot2Config.fillCTRE(new Slot2Configs());
-      //config.Feedback.FeedbackRemoteSensorID = ;
-      //config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+
+      if (fusedCANcoder) {
+          config.Feedback.FeedbackRemoteSensorID = fusedCANcodeID;
+          config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+          config.Feedback.SensorToMechanismRatio = FUSEDCANcoder_MECHANISM_RATIO;
+          config.Feedback.RotorToSensorRatio = FUSEDCANcoder_MOTOR_MECHANISM_RATIO;
+      }
+      
       return config;
     }
 
