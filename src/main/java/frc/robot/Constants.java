@@ -33,7 +33,7 @@ public class Constants {
     // - VelocityTorqueCurrentFOC, if DrivetrainConstants.SupportsPro is true
     private static final Slot0Configs driveGains = new Slot0Configs()
         .withKP(3).withKI(0).withKD(0)
-        .withKS(0).withKV(0).withKA(0);
+        .withKS(0.48665 / 12).withKV(2.4132 / 12).withKA(0.06921 / 12);
 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
@@ -138,7 +138,7 @@ public class Constants {
 
     public static final class Intake {
         public static final class Roller {
-                public static final CANDeviceID rollerMotorID = new CANDeviceID(21, kCanivoreName);
+                public static final CANDeviceID rollerMotorID = new CANDeviceID(21, kRioName);
                 public static final MechanismRatio rollerMotorRatio = new MechanismRatio(1,3);
                 public static final boolean rollerMotorInverted = false;
 
@@ -155,7 +155,7 @@ public class Constants {
 
     public static final class Shooter {
         public static final class TopRoller {
-                public static final CANDeviceID topRollerID = new CANDeviceID(19, kCanivoreName);
+                public static final CANDeviceID topRollerID = new CANDeviceID(19, kRioName);
                 public static final MechanismRatio topRollerMotorRatio = new MechanismRatio(1,1);
                 public static final boolean topRollerMotorInverted = true;
                 public static final int topRollerMotorSlot = 0;
@@ -166,7 +166,7 @@ public class Constants {
         }
 
         public static final class BottomRoller {
-                public static final CANDeviceID bottomRollerID = new CANDeviceID(20, kCanivoreName);
+                public static final CANDeviceID bottomRollerID = new CANDeviceID(20, kRioName);
                 public static final MechanismRatio bottomRollerMotorRatio = new MechanismRatio(1,1);
                 public static final boolean bottomRollerMotorInverted = true;
                 public static final int bottomRollerMotorSlot = 0;
@@ -177,7 +177,7 @@ public class Constants {
         }
 
         public static final class Conveyer {
-                public static final CANDeviceID conveyerID = new CANDeviceID(17, kCanivoreName);
+                public static final CANDeviceID conveyerID = new CANDeviceID(17, kRioName);
                 public static final MechanismRatio conveyerMotorRatio = new MechanismRatio(1,4);
                 public static final boolean conveyerMotorInverted = true;
                 public static final int conveyerRollerMotorSlot = 0;
@@ -187,7 +187,7 @@ public class Constants {
         }
 
         public static final class Amp {
-                public static final CANDeviceID ampID = new CANDeviceID(18, kCanivoreName);
+                public static final CANDeviceID ampID = new CANDeviceID(18, kRioName);
                 public static final MechanismRatio ampMotorRatio = new MechanismRatio(1,4);
                 public static final boolean ampMotorInverted = false;
                 public static final int ampRollerMotorSlot = 0;
@@ -209,7 +209,7 @@ public class Constants {
 
     public static final class Arm {
         public static final class RightPivot {
-                public static final CANDeviceID rightPivotID = new CANDeviceID(16, kCanivoreName);
+                public static final CANDeviceID rightPivotID = new CANDeviceID(16, kRioName);
                 public static final int rightPivotMotorSlot = 0;
                 public static final PIDConfig rightPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
                 // TODO: Check ratio
@@ -226,7 +226,7 @@ public class Constants {
         }
         
         public static final class LeftPivot {
-                public static final CANDeviceID leftPivotID = new CANDeviceID(15, kCanivoreName);
+                public static final CANDeviceID leftPivotID = new CANDeviceID(15, kRioName);
                 public static final int leftPivotMotorSlot = 0;
                 public static final PIDConfig leftPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
                 // TODO: Check ratio
@@ -243,7 +243,7 @@ public class Constants {
         }
 
         public static final class ArmEnconder {
-                public static final CANDeviceID encoderID = new CANDeviceID(24, kCanivoreName);
+                public static final CANDeviceID encoderID = new CANDeviceID(24, kRioName);
                 public static final MechanismRatio armRatio = new MechanismRatio(1,1);
                 public static final MechanismRatio encoderToMotorRatio = new MechanismRatio(1,125);
                 
@@ -257,7 +257,7 @@ public class Constants {
 
         public static final double launchAngle = Units.degreesToRadians(40);;
         public static final double launchAngleTolerance = Units.degreesToRadians(3);
-        public static final double scoreAmpArmAngle = Units.degreesToRadians(100); // rads
+        public static final double scoreAmpArmAngle = Units.degreesToRadians(90); // rads
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
 
         //public static final TrapezoidProfile.State m_goal = new TrapezoidProfile.State(100, 0);
@@ -267,7 +267,7 @@ public class Constants {
 
     public static final class Climber {
         public static final class rightClimber {
-                public static final CANDeviceID rightClimberID = new CANDeviceID(23, kCanivoreName);
+                public static final CANDeviceID rightClimberID = new CANDeviceID(23, kRioName);
                 public static final int rightClimberMotorSlot = 0;
                 public static final PIDConfig rightClimberPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
                 // TODO: Check ratio
@@ -279,7 +279,7 @@ public class Constants {
         }
 
         public static final class leftClimber {
-                public static final CANDeviceID leftClimberID = new CANDeviceID(22, kCanivoreName);
+                public static final CANDeviceID leftClimberID = new CANDeviceID(22, kRioName);
                 public static final int leftClimberMotorSlot = 0;
                 public static final PIDConfig leftClimberPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
                 // TODO: Check ratio
@@ -290,7 +290,7 @@ public class Constants {
 
         }
 
-        public static final double maxPosition = 1.0;
+        public static final double maxPosition = 0.5;
         public static final double minPosition = 0.0;
     }
 }

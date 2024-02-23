@@ -18,6 +18,8 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setPIDConfig(Constants.Climber.rightClimber.rightClimberMotorSlot, Constants.Climber.rightClimber.rightClimberPIDConfig)
     .setSupplyCurrentLimit(20.0)
     .setStatorCurrentLimit(20.0)
+    .setReverseSoftLimit(Constants.Climber.maxPosition)
+          .setForwardSoftLimit(Constants.Climber.minPosition)
     );
 
     private final TalonFx m_leftClimberMotor = new TalonFx(Constants.Climber.leftClimber.leftClimberID, 
@@ -27,6 +29,8 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setPIDConfig(Constants.Climber.leftClimber.leftClimberMotorSlot, Constants.Climber.leftClimber.leftClimberPIDConfig)
     .setSupplyCurrentLimit(20.0)
     .setStatorCurrentLimit(20.0)
+    .setReverseSoftLimit(Constants.Climber.minPosition)
+    .setForwardSoftLimit(Constants.Climber.maxPosition)
     );
 
     private final ElevatorFeedforward m_rightFF = Constants.Climber.rightClimber.rightFF;
@@ -69,6 +73,14 @@ public class ClimberSubsystem  extends SubsystemBase{
         double leftFFVolts = m_leftFF.calculate(position);
         m_leftClimberMotor.setPositionSetpoint(Constants.Climber.leftClimber.leftClimberMotorSlot,leftFFVolts);
 
+    }
+
+    public void moveClimber(double position) {
+        double rightFFVolts = m_rightFF.calculate(position);
+        double leftFFVolts = m_leftFF.calculate(position);
+
+        m_rightClimberMotor.setPositionSetpoint(Constants.Climber.rightClimber.rightClimberMotorSlot, rightFFVolts);
+        m_leftClimberMotor.setPositionSetpoint(Constants.Climber.leftClimber.leftClimberMotorSlot,leftFFVolts);
     }
 
     public boolean isRightClimberPositionGood(double position) {
