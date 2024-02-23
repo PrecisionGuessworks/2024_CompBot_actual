@@ -17,6 +17,7 @@ public class CANencoder {
     private final EasyStatusSignal m_positionSignal;
     private final EasyStatusSignal m_absolutePositionSignal;
     private final EasyStatusSignal m_velocitySignal;
+    public CANcoderConfiguration m_config;
 
     public CANencoder(final CANDeviceID canID, final MechanismRatio ratio) {
         m_cancoder = new CANcoder(canID.deviceNumber, canID.CANbusName);
@@ -28,17 +29,17 @@ public class CANencoder {
 
         m_velocitySignal = new EasyStatusSignal(m_cancoder.getVelocity(), this::fromNativeSensorVelocity);
 
-        CANcoderConfiguration config = new CANcoderConfiguration();
-        config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        config.MagnetSensor.MagnetOffset = 0.0;
-        config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+        m_config = new CANcoderConfiguration();
+        m_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        m_config.MagnetSensor.MagnetOffset = 0.0;
+        m_config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
 
         PhoenixUtils.retryUntilSuccess(
-        () -> m_cancoder.getConfigurator().apply(config, kCANTimeoutS),
+        () -> m_cancoder.getConfigurator().apply(m_config, kCANTimeoutS),
         () -> {
           CANcoderConfiguration readConfig = new CANcoderConfiguration();
           m_cancoder.getConfigurator().refresh(readConfig, kCANTimeoutS);
-          return PhoenixUtils.CANcoderConfigsEqual(config, readConfig);
+          return PhoenixUtils.CANcoderConfigsEqual(m_config, readConfig);
         },
         "CANCoder " + canID + ": applyConfiguration");
 
@@ -80,6 +81,10 @@ public class CANencoder {
     // Expose status signals for timesync
     public EasyStatusSignal positionSignal() {
         return m_positionSignal;
+    }
+    
+    public int getDeviceID() {
+      return m_cancoder.getDeviceID();
     }
 
     public EasyStatusSignal absolutePositionSignal() {

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -45,7 +46,10 @@ public class ShooterSubsystem  extends SubsystemBase{
     private final SimpleMotorFeedforward m_feedFF = Constants.Shooter.Conveyer.feedFeedforward;
     private final SimpleMotorFeedforward m_ampFF = Constants.Shooter.Amp.ampFeedforward;
 
+    private final Timer m_rollerTimer = new Timer();
+
     public ShooterSubsystem() {
+      m_rollerTimer.start();
       //Body
       //Show scheduler status in SmartDashboard.
       SmartDashboard.putData(this);
@@ -82,6 +86,30 @@ public class ShooterSubsystem  extends SubsystemBase{
       return Math.abs(launchVelocity - m_topMotor.getSensorVelocity()) <= tolerance
           && Math.abs(launchVelocity - m_bottomMotor.getSensorVelocity()) <= tolerance;
     }
+
+    public void Intake() {
+      m_topMotor.setCurrentLimit(40.0);
+      m_bottomMotor.setCurrentLimit(40.0);
+      m_topMotor.setPercentOutput(-0.2);
+      m_bottomMotor.setPercentOutput(-0.2);
+      m_ampMotor.setCurrentLimit(40.0);
+      m_feedMotor.setCurrentLimit(40.0);
+      m_feedMotor.setPercentOutput(-0.5);
+      m_ampMotor.setPercentOutput(-0.5);
+      m_rollerTimer.reset();
+
+
+
+  }
+
+  public void stopRoller() {
+      m_feedMotor.setPercentOutput(0.0);
+      m_ampMotor.setPercentOutput(0.0);
+      m_topMotor.setPercentOutput(0.0);
+      m_bottomMotor.setPercentOutput(0.0);
+      m_rollerTimer.reset();
+    }
+
     
 
     @Override

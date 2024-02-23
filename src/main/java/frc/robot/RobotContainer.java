@@ -12,13 +12,16 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.commands.IntakePiece;
+import frc.robot.commands.MoveArm;
 import frc.robot.commands.ShootNote;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -32,7 +35,7 @@ public class RobotContainer {
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   //CommandPS4Controller joystick = new CommandPS4Controller(0);
-  CommandXboxController joystick = new CommandXboxController(0); // My joystick
+  public final XboxController joystick = new XboxController(0); // My joystick
   CommandSwerveDrivetrain drivetrain = Constants.Swerve.TunerConstants.DriveTrain; // My drivetrain
   SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                                             // driving in open loop
@@ -43,12 +46,29 @@ public class RobotContainer {
   //Subsystems
   IntakeSubsystem intake = new IntakeSubsystem();
   ShooterSubsystem shooter = new ShooterSubsystem();
-  //ArmSubsystem arm = new ArmSubsystem();
+  ArmSubsystem arm = new ArmSubsystem();
 
   private Command runAuto = drivetrain.getAutoPath("Test");
 
   private final Trigger rightTrigger = new Trigger(() -> joystick.getRightTriggerAxis() > 0.2);
   private final Trigger leftTrigger = new Trigger(() -> joystick.getLeftTriggerAxis() > 0.2);
+
+  private final JoystickButton buttonA =
+      new JoystickButton(joystick, XboxController.Button.kA.value);
+  private final JoystickButton buttonB =
+      new JoystickButton(joystick, XboxController.Button.kB.value);
+  private final JoystickButton buttonX =
+      new JoystickButton(joystick, XboxController.Button.kX.value);
+  private final JoystickButton buttonY =
+      new JoystickButton(joystick, XboxController.Button.kY.value);
+
+  private final JoystickButton bumperLeft =
+      new JoystickButton(joystick, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton bumperRight =
+      new JoystickButton(joystick, XboxController.Button.kRightBumper.value);
+
+  
+ 
 
 
   private void configureBindings() {
@@ -59,15 +79,24 @@ public class RobotContainer {
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
 
-    joystick.y().whileTrue(drivetrain.applyRequest(() -> brake));
-    joystick.a().whileTrue(drivetrain
+    buttonY.whileTrue(drivetrain.applyRequest(() -> brake));
+    buttonA.whileTrue(drivetrain
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
 
+    
+
     // reset the field-centric heading on left bumper press
-    joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    bumperLeft.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     //shoot da note
-    rightTrigger.whileTrue(new ShootNote(shooter));
+    leftTrigger.whileTrue(new ShootNote(shooter));
+
+    //intake piece
+    rightTrigger.whileTrue(new IntakePiece(intake, shooter));
+
+    //move arm
+    buttonX.whileTrue(new MoveArm(arm));
+
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));

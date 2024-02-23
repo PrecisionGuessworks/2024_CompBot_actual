@@ -1,15 +1,14 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 
 
-public class MoveArm extends Command{
-    private final ArmSubsystem m_armSubsystem;
+public class MoveClimber extends Command{
+    private final ClimberSubsystem m_climber;
 
-    public MoveArm(ArmSubsystem subsystem) {
-        m_armSubsystem = subsystem;
+    public MoveClimber(ClimberSubsystem subsystem) {
+        m_climber = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(subsystem);
 
@@ -17,16 +16,13 @@ public class MoveArm extends Command{
 
     @Override
   public void initialize() {
-    m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
     // Called when the command is initially scheduled.
   }
 
   @Override
   public void execute() {
-   if (m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance) != true) {
-        m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
-
-   }
+    m_climber.moveRightClimberUp();
+    m_climber.moveLeftClimberUp();
     // Called every time Command is scheduled
   }
 

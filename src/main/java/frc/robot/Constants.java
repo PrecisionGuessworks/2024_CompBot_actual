@@ -6,7 +6,11 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstantsFactory;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.CAN;
 import frc.robot.motorcontrol.MechanismRatio;
@@ -29,7 +33,7 @@ public class Constants {
     // - VelocityTorqueCurrentFOC, if DrivetrainConstants.SupportsPro is true
     private static final Slot0Configs driveGains = new Slot0Configs()
         .withKP(3).withKI(0).withKD(0)
-        .withKS(0).withKV(0).withKA(0);
+        .withKS(0.48665 / 12).withKV(2.4132 / 12).withKA(0.06921 / 12);
 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
@@ -174,7 +178,7 @@ public class Constants {
 
         public static final class Conveyer {
                 public static final CANDeviceID conveyerID = new CANDeviceID(17, kRioName);
-                public static final MechanismRatio conveyerMotorRatio = new MechanismRatio(1,1);
+                public static final MechanismRatio conveyerMotorRatio = new MechanismRatio(1,4);
                 public static final boolean conveyerMotorInverted = true;
                 public static final int conveyerRollerMotorSlot = 0;
                 public static final PIDConfig conveyerMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
@@ -184,7 +188,7 @@ public class Constants {
 
         public static final class Amp {
                 public static final CANDeviceID ampID = new CANDeviceID(18, kRioName);
-                public static final MechanismRatio ampMotorRatio = new MechanismRatio(1,1);
+                public static final MechanismRatio ampMotorRatio = new MechanismRatio(1,4);
                 public static final boolean ampMotorInverted = false;
                 public static final int ampRollerMotorSlot = 0;
                 public static final PIDConfig ampMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
@@ -193,14 +197,14 @@ public class Constants {
 
         }
        
-        public static final double launchVelocity = 500.0; // rads/s
+        public static final double launchVelocity = 600.0; // rads/s
         public static final double launchVelocityTolerance = 10.0; // rads/s
 
         
 
         public static final double intakeFeedVelocity = 100; // rad/s
         public static final double scoreAmpFeedVelocity = 300; // rad/s
-        public static final double scoreSpeakerFeedVelocity = 300; // rad/s
+        public static final double scoreSpeakerFeedVelocity = 335; // rad/s
     }
 
     public static final class Arm {
@@ -210,9 +214,14 @@ public class Constants {
                 public static final PIDConfig rightPivotPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
                 // TODO: Check ratio
                 public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 125);
+                
                 public static final boolean rightPivotInvert = false;
-                public static final double Kp = 0.1;
-                public static final double Kv = 0.1;
+                public static final double rightPivotAccelerationConstraint = 0.1; // rad/s
+                public static final double rightPivotVelocityConstraint = 0.1; // rad/s
+
+                public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
+
+                public static final ArmFeedforward rightFeedForward = new ArmFeedforward(0.03, 0.46, 2.25);
                 
         }
         
@@ -223,27 +232,66 @@ public class Constants {
                 // TODO: Check ratio
                 public static final MechanismRatio leftPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean leftPivotInvert = true;
-                public static final double Kp = 0.1;
-                public static final double Kv = 0.1;
+
+                public static final double leftPivotAccelerationConstraint = 0.1; // rad/s
+                public static final double leftPivotVelocityConstraint = 0.1; // rad/s
+
+                public static final Constraints leftPivotTrapConstraints = new Constraints(leftPivotVelocityConstraint, leftPivotAccelerationConstraint);
+
+                public static final ArmFeedforward leftFeedForward = new ArmFeedforward(0.03, 0.46, 2.25);
+             
         }
 
         public static final class ArmEnconder {
-                public static final CANDeviceID encoderID = new CANDeviceID(22, kRioName);
-                public static final MechanismRatio armRatio = new MechanismRatio(1,125);
+                public static final CANDeviceID encoderID = new CANDeviceID(24, kRioName);
+                public static final MechanismRatio armRatio = new MechanismRatio(1,1);
+                public static final MechanismRatio encoderToMotorRatio = new MechanismRatio(1,125);
+                
         }
+
+        
 
         public static final double minAngle = Units.degreesToRadians(0);
         public static final double maxAngle = Units.degreesToRadians(90);
         public static final double startingAngle = minAngle;
 
-        public static final double launchAngle = Units.degreesToRadians(-20);
-        public static final double launchAngleTolerance = Units.degreesToRadians(5);
-        public static final double scoreAmpArmAngle = Units.degreesToRadians(100); // rads
+        public static final double launchAngle = Units.degreesToRadians(32.5);;
+        public static final double launchAngleTolerance = Units.degreesToRadians(3);
+        public static final double scoreAmpArmAngle = Units.degreesToRadians(90); // rads
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
 
-        public static final double maxVelocity = 30.0; //rad/s
+        //public static final TrapezoidProfile.State m_goal = new TrapezoidProfile.State(100, 0);
 
 
+    }
+
+    public static final class Climber {
+        public static final class rightClimber {
+                public static final CANDeviceID rightClimberID = new CANDeviceID(23, kRioName);
+                public static final int rightClimberMotorSlot = 0;
+                public static final PIDConfig rightClimberPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+                // TODO: Check ratio
+                public static final MechanismRatio rightClimberRatio = new MechanismRatio(1, 20);
+                public static final boolean rightClimberInvert = false;
+
+                public static final ElevatorFeedforward rightFF = new ElevatorFeedforward(0, 0.01, 0.02, 0.012);
+
+        }
+
+        public static final class leftClimber {
+                public static final CANDeviceID leftClimberID = new CANDeviceID(22, kRioName);
+                public static final int leftClimberMotorSlot = 0;
+                public static final PIDConfig leftClimberPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+                // TODO: Check ratio
+                public static final MechanismRatio leftClimberRatio = new MechanismRatio(1, 20);
+                public static final boolean leftClimberInvert = true;
+
+                public static final ElevatorFeedforward leftFF = new ElevatorFeedforward(0, 0.01, 0.02, 0.012);
+
+        }
+
+        public static final double maxPosition = 0.5;
+        public static final double minPosition = 0.0;
     }
 }
 
