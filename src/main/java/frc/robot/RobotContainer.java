@@ -15,14 +15,16 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.commands.IntakePiece;
-import frc.robot.commands.MoveArm;
-import frc.robot.commands.ShootNote;
+import frc.robot.commands.MoveArmSpeaker;
+import frc.robot.commands.MoveArmIntake;
+import frc.robot.commands.ShootNoteSpeaker;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -89,13 +91,13 @@ public class RobotContainer {
     bumperLeft.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     //shoot da note
-    leftTrigger.whileTrue(new ShootNote(shooter));
+    leftTrigger.whileTrue(new SequentialCommandGroup(new MoveArmSpeaker(arm), new ShootNoteSpeaker(shooter, arm)));
 
     //intake piece
-    rightTrigger.whileTrue(new IntakePiece(intake, shooter));
+    rightTrigger.whileTrue(new SequentialCommandGroup(new MoveArmIntake(arm), new IntakePiece(intake, shooter)));
 
     //move arm
-    buttonX.whileTrue(new MoveArm(arm));
+    //buttonX.whileTrue();
 
 
     if (Utils.isSimulation()) {

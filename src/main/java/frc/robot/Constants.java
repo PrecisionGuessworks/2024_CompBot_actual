@@ -249,13 +249,13 @@ public class Constants {
                 
         }
 
-        
-
         public static final double minAngle = Units.degreesToRadians(0);
-        public static final double maxAngle = Units.degreesToRadians(90);
+        public static final double maxAngle = Units.degreesToRadians(110);
         public static final double startingAngle = minAngle;
+        public static final double intakeAngle = minAngle;
+        public static final double intakeAngleTolerance = Units.degreesToRadians(3);
 
-        public static final double launchAngle = Units.degreesToRadians(32.5);;
+        public static final double launchAngle = Units.degreesToRadians(60);;
         public static final double launchAngleTolerance = Units.degreesToRadians(3);
         public static final double scoreAmpArmAngle = Units.degreesToRadians(90); // rads
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads

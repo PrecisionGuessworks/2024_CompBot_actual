@@ -6,12 +6,13 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 
-public class ShootNote extends Command{
+public class ShootNoteSpeaker extends Command{
     private final ShooterSubsystem m_shooterSubsystem;
-    //private final ArmSubsystem m_armSubsystem;
+    private final ArmSubsystem m_armSubsystem;
 
-    public ShootNote(ShooterSubsystem shooterSubsystem) {
+    public ShootNoteSpeaker(ShooterSubsystem shooterSubsystem, ArmSubsystem armSubsystem) {
         m_shooterSubsystem = shooterSubsystem;
+        m_armSubsystem = armSubsystem;
         //m_armSubsystem = armSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(shooterSubsystem);
@@ -40,6 +41,8 @@ public class ShootNote extends Command{
   public void end(boolean interrupted) {
     m_shooterSubsystem.setFeedVelocity(0);
     m_shooterSubsystem.setLaunchVelocity(0);
+    m_armSubsystem.setArmAngle((Constants.Arm.intakeAngle));
+
     //Called when command ends or is interrupted
   }
 

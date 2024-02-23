@@ -2,13 +2,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 
-
-public class MoveArm extends Command{
+public class MoveArmSpeaker extends Command{
     private final ArmSubsystem m_armSubsystem;
 
-    public MoveArm(ArmSubsystem subsystem) {
+    public MoveArmSpeaker(ArmSubsystem subsystem) {
         m_armSubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(subsystem);
