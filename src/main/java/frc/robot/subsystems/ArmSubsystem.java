@@ -26,12 +26,12 @@ public class ArmSubsystem  extends SubsystemBase{
           .setInverted(Constants.Arm.RightPivot.rightPivotInvert)
           .setBrakeMode()
           .setPIDConfig(Constants.Arm.RightPivot.rightPivotMotorSlot, Constants.Arm.RightPivot.rightPivotPIDConfig)
-          .setSupplyCurrentLimit(10)
-          .setStatorCurrentLimit(10)
-          .setFusedCANCoder(m_armEncoder, Constants.Arm.ArmEnconder.armRatio, Constants.Arm.ArmEnconder.encoderToMotorRatio)
+          .setSupplyCurrentLimit(15)
+          .setStatorCurrentLimit(15)
           .setReverseSoftLimit(Constants.Arm.minAngle)
           .setForwardSoftLimit(Constants.Arm.maxAngle)
     );
+    //.setFusedCANCoder(m_armEncoder, Constants.Arm.ArmEnconder.armRatio, Constants.Arm.ArmEnconder.encoderToMotorRatio)
 
     private final TalonFx m_leftMotor =
   new TalonFx(
@@ -43,10 +43,10 @@ public class ArmSubsystem  extends SubsystemBase{
           .setPIDConfig(Constants.Arm.LeftPivot.leftPivotMotorSlot, Constants.Arm.LeftPivot.leftPivotPIDConfig)
           .setSupplyCurrentLimit(10)
           .setStatorCurrentLimit(10)
-          .setFusedCANCoder(m_armEncoder, Constants.Arm.ArmEnconder.armRatio, Constants.Arm.ArmEnconder.encoderToMotorRatio)
           .setReverseSoftLimit(Constants.Arm.minAngle)
           .setForwardSoftLimit(Constants.Arm.maxAngle)
     );
+    //.setFusedCANCoder(m_armEncoder, Constants.Arm.ArmEnconder.armRatio, Constants.Arm.ArmEnconder.encoderToMotorRatio)
 
     
     private final TrapezoidProfile m_rightProfile = new TrapezoidProfile(Constants.Arm.RightPivot.rightPivotTrapConstraints);
@@ -55,8 +55,10 @@ public class ArmSubsystem  extends SubsystemBase{
    
     private double m_targetArmAngle = Constants.Arm.startingAngle;
 
-    private TrapezoidProfile.State m_rightArmState = new State(m_armEncoder.getAbsPosition(), 0.0);
-    private TrapezoidProfile.State m_leftArmState = new State(m_armEncoder.getAbsPosition(), 0.0);
+    
+
+    private TrapezoidProfile.State m_rightArmState = new State(m_rightMotor.getSensorPosition(), 0.0);
+    private TrapezoidProfile.State m_leftArmState = new State(m_leftMotor.getSensorPosition(), 0.0);
 
     private final Timer m_armTrapTimer = new Timer();
 
@@ -67,12 +69,14 @@ public class ArmSubsystem  extends SubsystemBase{
       //Show scheduler status in SmartDashboard.
       //m_armEncoder.setPosition(Constants.Arm.startingAngle);
 
+      
+
       SmartDashboard.putData(this);
 
     }
     //Absolute encoder position
     public double getArmAngle() {
-      return m_armEncoder.getAbsPosition();
+      return m_rightMotor.getSensorPosition();
     }
 
     public boolean isAtAngle(double angle, double tolerance) {
@@ -122,8 +126,8 @@ public class ArmSubsystem  extends SubsystemBase{
       SmartDashboard.putNumber(
         "Launcher: Target Arm Angle (deg)", Units.radiansToDegrees(m_targetArmAngle));
 
-        System.out.println("Launcher: Current Arm Angle (deg) " + m_armEncoder.getAbsPosition());
-        System.out.println("Launcher: Target Arm Angle (deg) " + m_targetArmAngle);
+        System.out.println("Launcher: Current Arm Angle  " + m_armEncoder.getAbsPosition());
+        System.out.println("Launcher: Target Arm Angle  " + m_targetArmAngle);
     }
   
     // --- BEGIN STUFF FOR SIMULATION ---

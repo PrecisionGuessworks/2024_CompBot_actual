@@ -23,10 +23,10 @@ public class MoveArm extends Command{
 
   @Override
   public void execute() {
-    if (m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance) != true) {
+   if (m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance) != true) {
         m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
 
-    }
+   }
     // Called every time Command is scheduled
   }
 

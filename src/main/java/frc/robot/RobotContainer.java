@@ -92,7 +92,7 @@ public class RobotContainer {
     leftTrigger.whileTrue(new ShootNote(shooter));
 
     //intake piece
-    rightTrigger.whileTrue(new IntakePiece(intake));
+    rightTrigger.whileTrue(new IntakePiece(intake, shooter));
 
     //move arm
     buttonX.whileTrue(new MoveArm(arm));

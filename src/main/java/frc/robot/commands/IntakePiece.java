@@ -3,30 +3,37 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 
 public class IntakePiece extends Command{
     private final IntakeSubsystem m_intakeSubsystem;
+    private final ShooterSubsystem m_shooter;
 
-    public IntakePiece(IntakeSubsystem subsystem) {
-        m_intakeSubsystem = subsystem;
+    public IntakePiece(IntakeSubsystem intake, ShooterSubsystem shooter) {
+        m_intakeSubsystem = intake;
+        m_shooter = shooter;
     // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(subsystem);
+        addRequirements(intake, shooter);
 
     }
 
     @Override
   public void initialize() {
     m_intakeSubsystem.startRollerSpin();
+    m_shooter.Intake();
+
     // Called when the command is initially scheduled.
   }
 
   @Override
   public void execute() {
     m_intakeSubsystem.startRollerSpin();
+    m_shooter.Intake();
     if (m_intakeSubsystem.isRollerStalled() == true) {
       
       m_intakeSubsystem.stopRoller();
+      m_shooter.stopRoller();
       
     }
     
@@ -36,6 +43,7 @@ public class IntakePiece extends Command{
   @Override
   public void end(boolean interrupted) {
     m_intakeSubsystem.stopRoller();
+    m_shooter.stopRoller();
     //Called when command ends or is interrupted
   }
 
