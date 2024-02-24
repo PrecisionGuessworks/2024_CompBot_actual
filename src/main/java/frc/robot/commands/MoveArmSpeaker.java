@@ -36,7 +36,8 @@ public class MoveArmSpeaker extends Command{
   @Override
   public boolean isFinished() {
     //Called when Command is finished
-    return false;
+    return m_armSubsystem.isArmMotionFinished();
+    
   }
     
 

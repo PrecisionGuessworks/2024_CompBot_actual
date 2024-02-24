@@ -70,7 +70,7 @@ public class IntakeSubsystem  extends SubsystemBase{
     public boolean isBeakBreakTriggered() {
       boolean beamBreakInput = m_intakeBeamBreakInput.get();
 
-      return beamBreakInput;
+      return !beamBreakInput;
 
     }
 

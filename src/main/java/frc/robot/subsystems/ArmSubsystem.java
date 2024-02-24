@@ -26,8 +26,8 @@ public class ArmSubsystem  extends SubsystemBase{
           .setInverted(Constants.Arm.RightPivot.rightPivotInvert)
           .setBrakeMode()
           .setPIDConfig(Constants.Arm.RightPivot.rightPivotMotorSlot, Constants.Arm.RightPivot.rightPivotPIDConfig)
-          .setSupplyCurrentLimit(15)
-          .setStatorCurrentLimit(15)
+          .setSupplyCurrentLimit(25)
+          .setStatorCurrentLimit(25)
           .setReverseSoftLimit(Constants.Arm.minAngle)
           .setForwardSoftLimit(Constants.Arm.maxAngle)
     );
@@ -41,8 +41,8 @@ public class ArmSubsystem  extends SubsystemBase{
           .setInverted(Constants.Arm.LeftPivot.leftPivotInvert)
           .setBrakeMode()
           .setPIDConfig(Constants.Arm.LeftPivot.leftPivotMotorSlot, Constants.Arm.LeftPivot.leftPivotPIDConfig)
-          .setSupplyCurrentLimit(10)
-          .setStatorCurrentLimit(10)
+          .setSupplyCurrentLimit(25)
+          .setStatorCurrentLimit(25)
           .setReverseSoftLimit(Constants.Arm.minAngle)
           .setForwardSoftLimit(Constants.Arm.maxAngle)
     );
@@ -51,6 +51,8 @@ public class ArmSubsystem  extends SubsystemBase{
     
     private final TrapezoidProfile m_rightProfile = new TrapezoidProfile(Constants.Arm.RightPivot.rightPivotTrapConstraints);
     private final TrapezoidProfile m_leftProfile = new TrapezoidProfile(Constants.Arm.LeftPivot.leftPivotTrapConstraints);
+    //private final TrapezoidProfile m_rightProfileDown = new TrapezoidProfile(Constants.Arm.RightPivot.rightPivotTrapConstraintsDown);
+    //private final TrapezoidProfile m_leftProfileDown = new TrapezoidProfile(Constants.Arm.LeftPivot.leftPivotTrapConstraintsDown);
 
    
     private double m_targetArmAngle = Constants.Arm.startingAngle;
@@ -90,6 +92,19 @@ public class ArmSubsystem  extends SubsystemBase{
       m_rightArmState = m_rightProfile.calculate(m_armTrapTimer.get(), m_rightArmState, m_goal);
       m_leftArmState = m_leftProfile.calculate(m_armTrapTimer.get(),  m_leftArmState, m_goal);
       m_armTrapTimer.reset();
+    }
+
+    /*public void setArmAngleDown(double targetArmAngle) {
+      TrapezoidProfile.State m_goal = new TrapezoidProfile.State(targetArmAngle, 0);
+      m_targetArmAngle = targetArmAngle;
+      
+      m_rightArmState = m_rightProfileDown.calculate(m_armTrapTimer.get(), m_rightArmState, m_goal);
+      m_leftArmState = m_leftProfileDown.calculate(m_armTrapTimer.get(),  m_leftArmState, m_goal);
+      m_armTrapTimer.reset();
+    }*/
+
+    public boolean isArmMotionFinished() {
+      return ((m_armTrapTimer.get() > m_rightProfile.totalTime()) && (m_armTrapTimer.get() > m_leftProfile.totalTime()));
     }
 
     @Override

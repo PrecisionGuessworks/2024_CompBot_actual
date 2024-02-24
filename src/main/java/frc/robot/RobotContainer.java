@@ -59,7 +59,7 @@ public class RobotContainer {
   IntakeSubsystem intake = new IntakeSubsystem();
   ShooterSubsystem shooter = new ShooterSubsystem();
   ArmSubsystem arm = new ArmSubsystem();
-  ClimberSubsystem climber = new ClimberSubsystem();
+  //ClimberSubsystem climber = new ClimberSubsystem();
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
@@ -106,15 +106,17 @@ public class RobotContainer {
     bumperLeft.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     //shoot da note
-    leftTrigger.whileTrue(new SequentialCommandGroup(new MoveArmSpeaker(arm), new ShootNoteSpeaker(shooter, arm)));
+    leftTrigger.whileTrue(new MoveArmSpeaker(arm));
+
+    bumperRight.whileTrue(new ShootNoteSpeaker(shooter, arm));
 
     //intake piece
     rightTrigger.whileTrue(new SequentialCommandGroup(new MoveArmIntake(arm), new IntakePiece(intake, shooter)));
 
     //move arm
-    buttonX.whileTrue(new SequentialCommandGroup(new MoveArmAmp(arm), new ScoreAmp(shooter)));
+    buttonX.whileTrue(new ScoreAmp(shooter, arm));
 
-    climber.setDefaultCommand(new MoveClimber(climber, operator.getRightY(), operator.getLeftY()));
+    //climber.setDefaultCommand(new MoveClimber(climber, operator.getRightY(), operator.getLeftY()));
 
 
     if (Utils.isSimulation()) {
@@ -127,6 +129,7 @@ public class RobotContainer {
     robotCommands.put("IntakePiece", new IntakePiece(intake, shooter));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm));
+    robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
     NamedCommands.registerCommands(robotCommands);
     configureBindings();
   }

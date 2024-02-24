@@ -69,18 +69,25 @@ public class ShooterSubsystem  extends SubsystemBase{
       }
     }
 
-    public void setAmpVelocity(double velocity) {
-      final double topFFVolts = m_topFF.calculate(-velocity);
+    /*public void setAmpVelocity(double velocity) {
+      final double topFFVolts = m_topFF.calculate(velocity);
       final double bottomFFVolts = m_bottomFF.calculate(velocity);
 
       if (velocity == 0.0) {
         m_topMotor.setPercentOutput(0.0);
         m_bottomMotor.setPercentOutput(0.0);
       } else {
-        m_topMotor.setVelocitySetpoint(Constants.Shooter.TopRoller.topRollerMotorSlot, velocity, topFFVolts);
+        m_topMotor.setVelocitySetpoint(Constants.Shooter.TopRoller.topRollerMotorSlot, -velocity, topFFVolts);
         m_bottomMotor.setVelocitySetpoint(Constants.Shooter.BottomRoller.bottomRollerMotorSlot, velocity, bottomFFVolts);
       }
     }
+*/
+
+    public void spinAmp(double output) {
+      m_topMotor.setPercentOutput(-output);
+      m_bottomMotor.setPercentOutput(output);
+    }
+
 
     public void setFeedVelocity(double velocity) {
       final double feedFFVolts = m_feedFF.calculate(velocity);

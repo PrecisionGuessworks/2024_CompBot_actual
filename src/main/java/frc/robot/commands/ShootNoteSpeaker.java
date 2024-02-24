@@ -1,4 +1,5 @@
 package frc.robot.commands;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -15,12 +16,13 @@ public class ShootNoteSpeaker extends Command{
         m_armSubsystem = armSubsystem;
         //m_armSubsystem = armSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(shooterSubsystem);
+        addRequirements(shooterSubsystem, armSubsystem);
 
     }
 
     @Override
   public void initialize() {
+    //m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
     m_shooterSubsystem.setFeedVelocity(0);
     m_shooterSubsystem.setLaunchVelocity(Constants.Shooter.launchVelocity);
 
@@ -29,9 +31,14 @@ public class ShootNoteSpeaker extends Command{
 
   @Override
   public void execute() {
+    m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
 
-    if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance)) {
+    if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance)) {
+        Timer timer = new Timer();
         m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
+        timer.advanceIfElapsed(3);
+        m_armSubsystem.setArmAngle((Constants.Arm.intakeAngle));
+        
     }
 
     // Called every time Command is scheduled
