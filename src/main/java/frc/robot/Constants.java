@@ -149,6 +149,8 @@ public class Constants {
                 public static final double rollerStallSpeed = Math.PI * (1.0 / 8.0);
                 public static final double rollerStallTime = 0.1;
 
+                public static final int intakeBeamBreakInputChannel = 0;
+
         }
         
     }
@@ -292,6 +294,7 @@ public class Constants {
 
         public static final double maxPosition = 0.5;
         public static final double minPosition = 0.0;
+        public static final double maxSpeed = 0.4; //speed gain
     }
 }
 

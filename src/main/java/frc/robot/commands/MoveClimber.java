@@ -6,9 +6,13 @@ import frc.robot.subsystems.ExampleSubsystem;
 
 public class MoveClimber extends Command{
     private final ClimberSubsystem m_climber;
+    private final double m_rightOut;
+    private final double m_leftOut;
 
-    public MoveClimber(ClimberSubsystem subsystem) {
+    public MoveClimber(ClimberSubsystem subsystem, double rightOut, double leftOut) {
         m_climber = subsystem;
+        m_rightOut = rightOut;
+        m_leftOut = leftOut;
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(subsystem);
 
@@ -21,8 +25,8 @@ public class MoveClimber extends Command{
 
   @Override
   public void execute() {
-    m_climber.moveRightClimberUp();
-    m_climber.moveLeftClimberUp();
+    
+    m_climber.moveClimber(m_rightOut, m_leftOut);
     // Called every time Command is scheduled
   }
 

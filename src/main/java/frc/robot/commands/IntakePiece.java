@@ -30,7 +30,7 @@ public class IntakePiece extends Command{
   public void execute() {
     m_intakeSubsystem.startRollerSpin();
     m_shooter.Intake();
-    if (m_intakeSubsystem.isRollerStalled() == true) {
+    if (m_intakeSubsystem.isRollerStalled() || m_intakeSubsystem.isBeakBreakTriggered()) {
       
       m_intakeSubsystem.stopRoller();
       m_shooter.stopRoller();
@@ -49,9 +49,10 @@ public class IntakePiece extends Command{
 
   @Override
   public boolean isFinished() {
-    if (m_intakeSubsystem.isRollerStalled() == true) {
-      
+    if (m_intakeSubsystem.isRollerStalled() || m_intakeSubsystem.isBeakBreakTriggered()) {
       m_intakeSubsystem.stopRoller();
+      m_shooter.stopRoller();
+      
       return true;
       
     }

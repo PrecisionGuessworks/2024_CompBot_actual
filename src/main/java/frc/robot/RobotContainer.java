@@ -23,9 +23,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.commands.IntakePiece;
 import frc.robot.commands.MoveArmSpeaker;
+import frc.robot.commands.MoveClimber;
 import frc.robot.commands.MoveArmIntake;
 import frc.robot.commands.ShootNoteSpeaker;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -38,6 +40,8 @@ public class RobotContainer {
   /* Setting up bindings for necessary control of the swerve drive platform */
   //CommandPS4Controller joystick = new CommandPS4Controller(0);
   public final XboxController joystick = new XboxController(0); // My joystick
+  public final XboxController operator = new XboxController(1); //operator
+
   CommandSwerveDrivetrain drivetrain = Constants.Swerve.TunerConstants.DriveTrain; // My drivetrain
   SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                                             // driving in open loop
@@ -49,6 +53,7 @@ public class RobotContainer {
   IntakeSubsystem intake = new IntakeSubsystem();
   ShooterSubsystem shooter = new ShooterSubsystem();
   ArmSubsystem arm = new ArmSubsystem();
+  ClimberSubsystem climber = new ClimberSubsystem();
 
   private Command runAuto = drivetrain.getAutoPath("Test");
 
@@ -98,6 +103,8 @@ public class RobotContainer {
 
     //move arm
     //buttonX.whileTrue();
+
+    climber.setDefaultCommand(new MoveClimber(climber, operator.getRightY(), operator.getLeftY()));
 
 
     if (Utils.isSimulation()) {

@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.math.filter.MedianFilter;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -15,6 +18,10 @@ public class IntakeSubsystem  extends SubsystemBase{
       Constants.Intake.Roller.rollerMotorRatio,
       TalonFx.makeDefaultConfig().setInverted(Constants.Intake.Roller.rollerMotorInverted)
     );
+
+    private final DigitalInput m_intakeBeamBreakInput =
+      new DigitalInput(Constants.Intake.Roller.intakeBeamBreakInputChannel);
+  //private final MedianFilter m_intakeDistanceFilter = new MedianFilter(3);
 
     private final Timer m_rollerTimer = new Timer();
 
@@ -60,8 +67,12 @@ public class IntakeSubsystem  extends SubsystemBase{
           return m_rollerTimer.get() > Constants.Intake.Roller.rollerStallTime;
     }
 
-    
-    
+    public boolean isBeakBreakTriggered() {
+      boolean beamBreakInput = m_intakeBeamBreakInput.get();
+
+      return beamBreakInput;
+
+    }
 
     @Override
     public void periodic() {
