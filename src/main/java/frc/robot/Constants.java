@@ -165,6 +165,8 @@ public class Constants {
 
                 public static final SimpleMotorFeedforward topRollerFeedforward =
         new SimpleMotorFeedforward(0, 0.019);
+
+                public static final double topIntakePower = -0.2;
         }
 
         public static final class BottomRoller {
@@ -176,6 +178,8 @@ public class Constants {
 
                 public static final SimpleMotorFeedforward bottomRollerFeedforward =
         new SimpleMotorFeedforward(0, 0.019);
+
+                public static final double bottomIntakePower = -0.2;
         }
 
         public static final class Conveyer {
@@ -186,6 +190,7 @@ public class Constants {
                 public static final PIDConfig conveyerMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
                 public static final SimpleMotorFeedforward feedFeedforward =
         new SimpleMotorFeedforward(0, 0.019);
+                public static final double conveyerIntakePower = -0.5;
         }
 
         public static final class Amp {
@@ -196,17 +201,20 @@ public class Constants {
                 public static final PIDConfig ampMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
                 public static final SimpleMotorFeedforward ampFeedforward =
         new SimpleMotorFeedforward(0, 0.019);
+                public static final double ampIntakePower = -0.5;
 
         }
        
         public static final double launchVelocity = 600.0; // rads/s
         public static final double launchVelocityTolerance = 10.0; // rads/s
-
-        
+        public static final double ScoreAmpVelocity = 300.0;
+        public static final double AmpVelocityTolerance = 10.0; // rads/s
 
         public static final double intakeFeedVelocity = 100; // rad/s
         public static final double scoreAmpFeedVelocity = 300; // rad/s
         public static final double scoreSpeakerFeedVelocity = 335; // rad/s
+        
+        
     }
 
     public static final class Arm {

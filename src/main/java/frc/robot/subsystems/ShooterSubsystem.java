@@ -69,6 +69,19 @@ public class ShooterSubsystem  extends SubsystemBase{
       }
     }
 
+    public void setAmpVelocity(double velocity) {
+      final double topFFVolts = m_topFF.calculate(-velocity);
+      final double bottomFFVolts = m_bottomFF.calculate(velocity);
+
+      if (velocity == 0.0) {
+        m_topMotor.setPercentOutput(0.0);
+        m_bottomMotor.setPercentOutput(0.0);
+      } else {
+        m_topMotor.setVelocitySetpoint(Constants.Shooter.TopRoller.topRollerMotorSlot, velocity, topFFVolts);
+        m_bottomMotor.setVelocitySetpoint(Constants.Shooter.BottomRoller.bottomRollerMotorSlot, velocity, bottomFFVolts);
+      }
+    }
+
     public void setFeedVelocity(double velocity) {
       final double feedFFVolts = m_feedFF.calculate(velocity);
       final double ampFFVolts = m_ampFF.calculate(velocity);
@@ -87,15 +100,20 @@ public class ShooterSubsystem  extends SubsystemBase{
           && Math.abs(launchVelocity - m_bottomMotor.getSensorVelocity()) <= tolerance;
     }
 
+    public boolean isAtAmpVelocity(double launchVelocity, double tolerance) {
+      return Math.abs(launchVelocity - Math.abs(m_topMotor.getSensorVelocity())) <= tolerance
+          && Math.abs(launchVelocity - Math.abs(m_bottomMotor.getSensorVelocity())) <= tolerance;
+    }
+
     public void Intake() {
       m_topMotor.setCurrentLimit(40.0);
       m_bottomMotor.setCurrentLimit(40.0);
-      m_topMotor.setPercentOutput(-0.2);
-      m_bottomMotor.setPercentOutput(-0.2);
+      m_topMotor.setPercentOutput(Constants.Shooter.TopRoller.topIntakePower);
+      m_bottomMotor.setPercentOutput(Constants.Shooter.BottomRoller.bottomIntakePower);
       m_ampMotor.setCurrentLimit(40.0);
       m_feedMotor.setCurrentLimit(40.0);
-      m_feedMotor.setPercentOutput(-0.5);
-      m_ampMotor.setPercentOutput(-0.5);
+      m_feedMotor.setPercentOutput(Constants.Shooter.Conveyer.conveyerIntakePower);
+      m_ampMotor.setPercentOutput(Constants.Shooter.Amp.ampIntakePower);
       m_rollerTimer.reset();
 
 

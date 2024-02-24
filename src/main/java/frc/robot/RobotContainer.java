@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -22,8 +26,10 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.commands.IntakePiece;
+import frc.robot.commands.MoveArmAmp;
 import frc.robot.commands.MoveArmSpeaker;
 import frc.robot.commands.MoveClimber;
+import frc.robot.commands.ScoreAmp;
 import frc.robot.commands.MoveArmIntake;
 import frc.robot.commands.ShootNoteSpeaker;
 import frc.robot.subsystems.ArmSubsystem;
@@ -55,8 +61,16 @@ public class RobotContainer {
   ArmSubsystem arm = new ArmSubsystem();
   ClimberSubsystem climber = new ClimberSubsystem();
 
+  Map<String, Command> robotCommands  = new HashMap<String, Command>();
+
+  
+
+  //NamedCommands.registerCommand();
+
   private Command runAuto = drivetrain.getAutoPath("Test");
 
+  
+  
   private final Trigger rightTrigger = new Trigger(() -> joystick.getRightTriggerAxis() > 0.2);
   private final Trigger leftTrigger = new Trigger(() -> joystick.getLeftTriggerAxis() > 0.2);
 
@@ -73,10 +87,6 @@ public class RobotContainer {
       new JoystickButton(joystick, XboxController.Button.kLeftBumper.value);
   private final JoystickButton bumperRight =
       new JoystickButton(joystick, XboxController.Button.kRightBumper.value);
-
-  
- 
-
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -102,7 +112,7 @@ public class RobotContainer {
     rightTrigger.whileTrue(new SequentialCommandGroup(new MoveArmIntake(arm), new IntakePiece(intake, shooter)));
 
     //move arm
-    //buttonX.whileTrue();
+    buttonX.whileTrue(new SequentialCommandGroup(new MoveArmAmp(arm), new ScoreAmp(shooter)));
 
     climber.setDefaultCommand(new MoveClimber(climber, operator.getRightY(), operator.getLeftY()));
 
@@ -114,6 +124,10 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
+    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter));
+    robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
+    robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm));
+    NamedCommands.registerCommands(robotCommands);
     configureBindings();
   }
 
