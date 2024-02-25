@@ -18,6 +18,8 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setPIDConfig(Constants.Climber.rightClimber.rightClimberMotorSlot, Constants.Climber.rightClimber.rightClimberPIDConfig)
     .setSupplyCurrentLimit(20.0)
     .setStatorCurrentLimit(20.0)
+    .setReverseSoftLimit(Constants.Climber.minPosition)
+    .setForwardSoftLimit(Constants.Climber.maxPosition)
     
     );
     //.setReverseSoftLimit(Constants.Climber.minPosition)
@@ -30,6 +32,9 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setPIDConfig(Constants.Climber.leftClimber.leftClimberMotorSlot, Constants.Climber.leftClimber.leftClimberPIDConfig)
     .setSupplyCurrentLimit(20.0)
     .setStatorCurrentLimit(20.0)
+    .setReverseSoftLimit(Constants.Climber.minPosition)
+    .setForwardSoftLimit(Constants.Climber.maxPosition)
+    
    
     );
 
@@ -42,6 +47,9 @@ public class ClimberSubsystem  extends SubsystemBase{
     public ClimberSubsystem() {
       //Body
       //Show scheduler status in SmartDashboard.
+      m_rightClimberMotor.zeroSensorPosition();
+      m_leftClimberMotor.zeroSensorPosition();
+      
       SmartDashboard.putData(this);
 
     }
@@ -78,7 +86,7 @@ public class ClimberSubsystem  extends SubsystemBase{
 
     }
 
-    public void moveClimber(double rightOut, double leftOut) {
+   /*public void moveClimber(double rightOut, double leftOut) {
         System.out.println("Right operator joystick output" + rightOut);
         System.out.println("Left operator joystick output" + leftOut);
         double rightVelo = rightOut * Constants.Climber.maxSpeed;
@@ -88,6 +96,16 @@ public class ClimberSubsystem  extends SubsystemBase{
         double leftFFVolts = m_leftFF.calculate(leftVelo);
         m_rightClimberMotor.setVelocitySetpoint(Constants.Climber.rightClimber.rightClimberMotorSlot,rightFFVolts);
         m_leftClimberMotor.setVelocitySetpoint(Constants.Climber.leftClimber.leftClimberMotorSlot,leftFFVolts);
+    }*/
+
+    public void moveClimber(double rightOut, double leftOut) {
+       // System.out.println("Right operator joystick output" + rightOut);
+        //System.out.println("Left operator joystick output" + leftOut);
+        double pos = m_rightClimberMotor.getSensorPosition();
+        System.out.println("Right Climber position" + pos);
+
+        m_rightClimberMotor.setPercentOutput(rightOut);
+        m_leftClimberMotor.setPercentOutput(leftOut);
     }
 
     
@@ -105,6 +123,8 @@ public class ClimberSubsystem  extends SubsystemBase{
    
     @Override
     public void periodic() {
+
+        
       // This method will be called once per scheduler run
     }
   

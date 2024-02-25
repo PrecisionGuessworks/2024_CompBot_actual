@@ -60,7 +60,7 @@ public class RobotContainer {
   IntakeSubsystem intake = new IntakeSubsystem();
   ShooterSubsystem shooter = new ShooterSubsystem();
   ArmSubsystem arm = new ArmSubsystem();
-  //ClimberSubsystem climber = new ClimberSubsystem();
+  ClimberSubsystem climber = new ClimberSubsystem();
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
@@ -74,6 +74,7 @@ public class RobotContainer {
   
   private final Trigger rightTrigger = new Trigger(() -> joystick.getRightTriggerAxis() > 0.2);
   private final Trigger leftTrigger = new Trigger(() -> joystick.getLeftTriggerAxis() > 0.2);
+  private final Trigger operatorLeftTrigger = new Trigger(() -> operator.getLeftTriggerAxis() > 0.2);
 
   private final JoystickButton buttonA =
       new JoystickButton(joystick, XboxController.Button.kA.value);
@@ -120,8 +121,10 @@ public class RobotContainer {
 
     buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 
+    operatorLeftTrigger.whileTrue(new MoveClimber(climber, operator));
+
     //climber.setDefaultCommand(new MoveClimber(climber, operator.getRightY(), operator.getLeftY()));
-    //climber.moveClimber(operator.getRightY(), operator.getLeftY());
+    
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -136,6 +139,7 @@ public class RobotContainer {
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
     NamedCommands.registerCommands(robotCommands);
     configureBindings();
+    
   }
 
   public Command getAutonomousCommand() {

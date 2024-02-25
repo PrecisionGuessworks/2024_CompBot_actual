@@ -41,6 +41,15 @@ public class TalonFx {
   private final EasyStatusSignal m_sensorPositionSignal;
   private final EasyStatusSignal m_sensorVelocitySignal;
   private double sensorUpdateFrequencyHz = 100.0;
+  
+  public TalonFx(
+      final CANDeviceID canID,
+      final TalonFx leader,
+      final boolean opposeLeader,
+      final TalonFxConfiguration config) {
+    this(canID, leader.getMechanismRatio(), config);
+    m_controller.setControl(new Follower(leader.getDeviceID(), opposeLeader));
+  }
 
     public TalonFx(
       final CANDeviceID canID, final MechanismRatio ratio, final TalonFxConfiguration config) {

@@ -317,8 +317,8 @@ public class Constants {
 
         }
 
-        public static final double maxPosition = 0.5;
-        public static final double minPosition = 0.0;
+        public static final double maxPosition = 0;
+        public static final double minPosition = -32.0;
         public static final double maxSpeed = 0.4; //speed gain
     }
 }
