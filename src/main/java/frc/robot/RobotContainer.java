@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,27 +19,36 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.commands.EjectPiece;
 import frc.robot.commands.IntakePiece;
-import frc.robot.commands.MoveArm;
-import frc.robot.commands.ShootNote;
+import frc.robot.commands.MoveArmAmp;
+import frc.robot.commands.MoveArmSpeaker;
+import frc.robot.commands.MoveClimber;
+import frc.robot.commands.ScoreAmp;
+import frc.robot.commands.MoveArmIntake;
+import frc.robot.commands.ShootNoteSpeaker;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 
 public class RobotContainer {
-  final double MaxSpeed = 6; // 6 meters per second desired top speed
-  final double MaxAngularRate = Math.PI; // Half a rotation per second max angular velocity
+  final double MaxSpeed = 5.0292; // 6 meters per second desired top speed
+  final double MaxAngularRate = 2 * Math.PI; // Half a rotation per second max angular velocity
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   //CommandPS4Controller joystick = new CommandPS4Controller(0);
   public final XboxController joystick = new XboxController(0); // My joystick
+  public final XboxController operator = new XboxController(1); //operator
+
   CommandSwerveDrivetrain drivetrain = Constants.Swerve.TunerConstants.DriveTrain; // My drivetrain
   SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                                             // driving in open loop
@@ -47,11 +60,21 @@ public class RobotContainer {
   IntakeSubsystem intake = new IntakeSubsystem();
   ShooterSubsystem shooter = new ShooterSubsystem();
   ArmSubsystem arm = new ArmSubsystem();
+  ClimberSubsystem climber = new ClimberSubsystem();
+
+  Map<String, Command> robotCommands  = new HashMap<String, Command>();
+
+  
+
+  //NamedCommands.registerCommand();
 
   private Command runAuto = drivetrain.getAutoPath("Test");
 
+  
+  
   private final Trigger rightTrigger = new Trigger(() -> joystick.getRightTriggerAxis() > 0.2);
   private final Trigger leftTrigger = new Trigger(() -> joystick.getLeftTriggerAxis() > 0.2);
+  private final Trigger operatorLeftTrigger = new Trigger(() -> operator.getLeftTriggerAxis() > 0.2);
 
   private final JoystickButton buttonA =
       new JoystickButton(joystick, XboxController.Button.kA.value);
@@ -66,10 +89,6 @@ public class RobotContainer {
       new JoystickButton(joystick, XboxController.Button.kLeftBumper.value);
   private final JoystickButton bumperRight =
       new JoystickButton(joystick, XboxController.Button.kRightBumper.value);
-
-  
- 
-
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -89,14 +108,23 @@ public class RobotContainer {
     bumperLeft.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     //shoot da note
-    leftTrigger.whileTrue(new ShootNote(shooter));
+    leftTrigger.whileTrue(new EjectPiece(shooter, arm));
+
+    bumperRight.whileTrue(new ShootNoteSpeaker(shooter, arm));
+    //bumperRight.onFalse(new MoveArmIntake(arm));
 
     //intake piece
-    rightTrigger.whileTrue(new IntakePiece(intake, shooter));
+    rightTrigger.whileTrue(new SequentialCommandGroup(new MoveArmIntake(arm), new IntakePiece(intake, shooter)));
 
     //move arm
-    buttonX.whileTrue(new MoveArm(arm));
+    buttonX.whileTrue(new ScoreAmp(shooter, arm));
 
+    buttonB.whileTrue(drivetrain.followTrajectoryCommand());
+
+    operatorLeftTrigger.whileTrue(new MoveClimber(climber, operator));
+
+    //climber.setDefaultCommand(new MoveClimber(climber, operator.getRightY(), operator.getLeftY()));
+    
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -105,7 +133,13 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
+    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter));
+    robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
+    robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm));
+    robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
+    NamedCommands.registerCommands(robotCommands);
     configureBindings();
+    
   }
 
   public Command getAutonomousCommand() {

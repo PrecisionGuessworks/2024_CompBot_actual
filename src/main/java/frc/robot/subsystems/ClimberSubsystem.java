@@ -18,9 +18,12 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setPIDConfig(Constants.Climber.rightClimber.rightClimberMotorSlot, Constants.Climber.rightClimber.rightClimberPIDConfig)
     .setSupplyCurrentLimit(20.0)
     .setStatorCurrentLimit(20.0)
-    .setReverseSoftLimit(Constants.Climber.maxPosition)
-          .setForwardSoftLimit(Constants.Climber.minPosition)
+    .setReverseSoftLimit(Constants.Climber.minPosition)
+    .setForwardSoftLimit(Constants.Climber.maxPosition)
+    
     );
+    //.setReverseSoftLimit(Constants.Climber.minPosition)
+     //     .setForwardSoftLimit(Constants.Climber.maxPosition)
 
     private final TalonFx m_leftClimberMotor = new TalonFx(Constants.Climber.leftClimber.leftClimberID, 
     Constants.Climber.leftClimber.leftClimberRatio, 
@@ -31,7 +34,12 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setStatorCurrentLimit(20.0)
     .setReverseSoftLimit(Constants.Climber.minPosition)
     .setForwardSoftLimit(Constants.Climber.maxPosition)
+    
+   
     );
+
+   //  .setReverseSoftLimit(Constants.Climber.minPosition)
+   // .setForwardSoftLimit(Constants.Climber.maxPosition)
 
     private final ElevatorFeedforward m_rightFF = Constants.Climber.rightClimber.rightFF;
     private final ElevatorFeedforward m_leftFF = Constants.Climber.leftClimber.leftFF;
@@ -39,6 +47,9 @@ public class ClimberSubsystem  extends SubsystemBase{
     public ClimberSubsystem() {
       //Body
       //Show scheduler status in SmartDashboard.
+      m_rightClimberMotor.zeroSensorPosition();
+      m_leftClimberMotor.zeroSensorPosition();
+      
       SmartDashboard.putData(this);
 
     }
@@ -75,13 +86,29 @@ public class ClimberSubsystem  extends SubsystemBase{
 
     }
 
-    public void moveClimber(double position) {
-        double rightFFVolts = m_rightFF.calculate(position);
-        double leftFFVolts = m_leftFF.calculate(position);
+   /*public void moveClimber(double rightOut, double leftOut) {
+        System.out.println("Right operator joystick output" + rightOut);
+        System.out.println("Left operator joystick output" + leftOut);
+        double rightVelo = rightOut * Constants.Climber.maxSpeed;
+        double leftVelo = leftOut * Constants.Climber.maxSpeed;
+        
+        double rightFFVolts = m_rightFF.calculate(rightVelo);
+        double leftFFVolts = m_leftFF.calculate(leftVelo);
+        m_rightClimberMotor.setVelocitySetpoint(Constants.Climber.rightClimber.rightClimberMotorSlot,rightFFVolts);
+        m_leftClimberMotor.setVelocitySetpoint(Constants.Climber.leftClimber.leftClimberMotorSlot,leftFFVolts);
+    }*/
 
-        m_rightClimberMotor.setPositionSetpoint(Constants.Climber.rightClimber.rightClimberMotorSlot, rightFFVolts);
-        m_leftClimberMotor.setPositionSetpoint(Constants.Climber.leftClimber.leftClimberMotorSlot,leftFFVolts);
+    public void moveClimber(double rightOut, double leftOut) {
+       // System.out.println("Right operator joystick output" + rightOut);
+        //System.out.println("Left operator joystick output" + leftOut);
+        double pos = m_rightClimberMotor.getSensorPosition();
+        System.out.println("Right Climber position" + pos);
+
+        m_rightClimberMotor.setPercentOutput(rightOut);
+        m_leftClimberMotor.setPercentOutput(leftOut);
     }
+
+    
 
     public boolean isRightClimberPositionGood(double position) {
         if (position > Constants.Climber.maxPosition) {
@@ -96,6 +123,8 @@ public class ClimberSubsystem  extends SubsystemBase{
    
     @Override
     public void periodic() {
+
+        
       // This method will be called once per scheduler run
     }
   
