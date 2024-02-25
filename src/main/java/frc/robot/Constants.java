@@ -234,6 +234,10 @@ public class Constants {
                 public static final double rightPivotAccelerationConstraint = 0.24; // rad/s
                 public static final double rightPivotVelocityConstraint = 0.4; // rad/s
 
+                public static final double rightMaxVelocity = 0.4;
+                public static final double rightMaxAcceleration = 0.24;
+                public static final double rightMaxJerk = 0.1;
+
                 public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
                 //public static final double rightPivotAccelerationConstraintDown = 0.05; // rad/s
                // public static final double rightPivotVelocityConstraintDown = 0.05; // rad/s
@@ -254,6 +258,10 @@ public class Constants {
 
                 public static final double leftPivotAccelerationConstraint = 0.3; // rad/s
                 public static final double leftPivotVelocityConstraint = 0.7; // rad/s
+
+                public static final double leftMaxVelocity = 0.4;
+                public static final double leftMaxAcceleration = 0.24;
+                public static final double leftMaxJerk = 0.1;
 
                 public static final Constraints leftPivotTrapConstraints = new Constraints(leftPivotVelocityConstraint, leftPivotAccelerationConstraint);
 

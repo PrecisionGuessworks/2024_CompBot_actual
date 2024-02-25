@@ -20,6 +20,7 @@ import frc.robot.motorcontrol.devices.EasyStatusSignal;
 import frc.robot.motorcontrol.configurations.phoenix.PhoenixUtils;
 import frc.robot.Robot;
 import java.util.function.Function;
+import frc.robot.motorcontrol.TalonFx;
 
 import frc.robot.motorcontrol.MechanismRatio;
 import frc.robot.motorcontrol.PIDConfig;
@@ -46,6 +47,9 @@ public class TalonFxConfiguration {
     public int fusedCANcodeID = 99;
     public double FUSEDCANcoder_MECHANISM_RATIO = 1.0;
     public double FUSEDCANcoder_MOTOR_MECHANISM_RATIO = 1.0;
+    private double motionMagicCruiseVelocity = 0.0; // In MechanismRatio units
+    private double motionMagicAcceleration = 0.0; // In MechanismRatio units
+    private double motionMagicJerk = 0.0; // In MechanismRatio units
 
     public TalonFxConfiguration setBrakeMode() {
       NEUTRAL_MODE = NeutralModeValue.Brake;
@@ -103,8 +107,16 @@ public class TalonFxConfiguration {
         return this;
       } 
 
+      public TalonFxConfiguration setMotionMagicConfig(
+        final double cruiseVelocity, final double acceleration, final double jerk) {
+      motionMagicCruiseVelocity = cruiseVelocity;
+      motionMagicAcceleration = acceleration;
+      motionMagicJerk = jerk;
+      return this;
+    }
+
       public TalonFXConfiguration toTalonFXConfiguration(
-        final Function<Double, Double> toNativeSensorPosition) {
+        final Function<Double, Double> toNativeSensorPosition, final Function<Double, Double> toNativeSensorVelocity) {
       final TalonFXConfiguration config = new TalonFXConfiguration();
       config.MotorOutput.NeutralMode = NEUTRAL_MODE;
       config.MotorOutput.Inverted =
@@ -142,6 +154,12 @@ public class TalonFxConfiguration {
           config.Feedback.SensorToMechanismRatio = FUSEDCANcoder_MECHANISM_RATIO;
           config.Feedback.RotorToSensorRatio = FUSEDCANcoder_MOTOR_MECHANISM_RATIO;
       }
+
+      config.MotionMagic.MotionMagicCruiseVelocity =
+          toNativeSensorVelocity.apply(motionMagicCruiseVelocity);
+      config.MotionMagic.MotionMagicAcceleration =
+          toNativeSensorVelocity.apply(motionMagicAcceleration);
+      config.MotionMagic.MotionMagicJerk = toNativeSensorVelocity.apply(motionMagicJerk);
       
       return config;
     }

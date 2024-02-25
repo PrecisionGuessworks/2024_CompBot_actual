@@ -7,6 +7,7 @@ import com.ctre.phoenix6.configs.Slot2Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -37,11 +38,12 @@ public class TalonFx {
   private final VoltageOut m_voltageControl = new VoltageOut(0);
   private final VelocityVoltage m_velocityControl = new VelocityVoltage(0);
   private final PositionVoltage m_positionControl = new PositionVoltage(0);
+  private final MotionMagicVoltage m_motionMagicControl = new MotionMagicVoltage(0);
   private final EasyStatusSignal m_percentOutputSignal;
   private final EasyStatusSignal m_sensorPositionSignal;
   private final EasyStatusSignal m_sensorVelocitySignal;
   private double sensorUpdateFrequencyHz = 100.0;
-  
+
   public TalonFx(
       final CANDeviceID canID,
       final TalonFx leader,
@@ -73,7 +75,7 @@ public class TalonFx {
   public void setConfiguration() {
     // Set motor controller configuration.
     final TalonFXConfiguration config =
-        m_config.toTalonFXConfiguration(this::toNativeSensorPosition);
+        m_config.toTalonFXConfiguration(this::toNativeSensorPosition, this::toNativeSensorVelocity);
     PhoenixUtils.retryUntilSuccess(
         () -> m_controller.getConfigurator().apply(config, kCANTimeoutS),
         () -> {
@@ -188,7 +190,7 @@ public class TalonFx {
     m_controller
         .getConfigurator()
         .apply(
-            m_config.toTalonFXConfiguration(this::toNativeSensorPosition).CurrentLimits,
+            m_config.toTalonFXConfiguration(this::toNativeSensorPosition, this::toNativeSensorVelocity).CurrentLimits,
             kCANTimeoutS);
   }
   public void setPercentOutput(final double percent) {
@@ -254,6 +256,14 @@ public double getPercentOutput() {
   m_percentOutputSignal.refresh();
   return m_percentOutputSignal.getValue();
 }
+
+public void setMotionMagicPositionSetpoint(
+      final int slot, final double setpoint, final double feedforwardVolts) {
+    m_motionMagicControl.Slot = slot;
+    m_motionMagicControl.Position = toNativeSensorPosition(setpoint);
+    m_motionMagicControl.FeedForward = feedforwardVolts;
+    m_controller.setControl(m_motionMagicControl);
+  }
 
 public double getPhysicalPercentOutput() {
   return (getInverted() ? -1.0 : 1.0) * getPercentOutput();
