@@ -114,7 +114,7 @@ public class RobotContainer {
     //bumperRight.onFalse(new MoveArmIntake(arm));
 
     //intake piece
-    rightTrigger.whileTrue(new SequentialCommandGroup(new MoveArmIntake(arm), new IntakePiece(intake, shooter)));
+    rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
 
     //move arm
     buttonX.whileTrue(new ScoreAmp(shooter, arm));
@@ -133,7 +133,7 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
-    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter));
+    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
