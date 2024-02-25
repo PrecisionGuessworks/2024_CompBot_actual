@@ -22,6 +22,7 @@ public class MoveArmIntake extends Command{
   @Override
   public void execute() {
    if (m_armSubsystem.isAtAngle(Constants.Arm.intakeAngle, Constants.Arm.intakeAngleTolerance) != true) {
+    //m_armSubsystem.resetEncoders(Constants.Arm.intakeAngle);
         m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
 
    }

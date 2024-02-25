@@ -170,6 +170,7 @@ public class Constants {
         new SimpleMotorFeedforward(0, 0.019);
 
                 public static final double topIntakePower = -0.4;
+                public static final double topEjectPower = 0.7;
         }
 
         public static final class BottomRoller {
@@ -183,6 +184,7 @@ public class Constants {
         new SimpleMotorFeedforward(0, 0.019);
 
                 public static final double bottomIntakePower = -0.4;
+                public static final double bottomEjectPower = 0.7;
         }
 
         public static final class Conveyer {
@@ -208,7 +210,7 @@ public class Constants {
 
         }
        
-        public static final double launchVelocity = 500.0; // rads/s
+        public static final double launchVelocity = 560.0; // rads/s
         public static final double launchVelocityTolerance = 10.0; // rads/s
         public static final double ScoreAmpPower = 0.3;
         public static final double AmpVelocityTolerance = 10.0; // rads/s
@@ -224,7 +226,7 @@ public class Constants {
         public static final class RightPivot {
                 public static final CANDeviceID rightPivotID = new CANDeviceID(16, kRioName);
                 public static final int rightPivotMotorSlot = 0;
-                public static final PIDConfig rightPivotPIDConfig = new PIDConfig(1.0, 0.0, 0.03);
+                public static final PIDConfig rightPivotPIDConfig = new PIDConfig(0.7, 0.01, 0.03);
                 // TODO: Check ratio
                 public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 125);
                 
@@ -233,10 +235,10 @@ public class Constants {
                 public static final double rightPivotVelocityConstraint = 0.4; // rad/s
 
                 public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
-                public static final double rightPivotAccelerationConstraintDown = 0.05; // rad/s
-                public static final double rightPivotVelocityConstraintDown = 0.05; // rad/s
+                //public static final double rightPivotAccelerationConstraintDown = 0.05; // rad/s
+               // public static final double rightPivotVelocityConstraintDown = 0.05; // rad/s
 
-                public static final Constraints rightPivotTrapConstraintsDown = new Constraints(rightPivotVelocityConstraintDown, rightPivotAccelerationConstraintDown);
+                //public static final Constraints rightPivotTrapConstraintsDown = new Constraints(rightPivotVelocityConstraintDown, rightPivotAccelerationConstraintDown);
 
                 public static final ArmFeedforward rightFeedForward = new ArmFeedforward(0.03, 0.46, 2.25);
                 
@@ -245,20 +247,20 @@ public class Constants {
         public static final class LeftPivot {
                 public static final CANDeviceID leftPivotID = new CANDeviceID(15, kRioName);
                 public static final int leftPivotMotorSlot = 0;
-                public static final PIDConfig leftPivotPIDConfig = new PIDConfig(1.0, 0.0, 0.03);
+                public static final PIDConfig leftPivotPIDConfig = new PIDConfig(0.7, 0.01, 0.03);
                 // TODO: Check ratio
                 public static final MechanismRatio leftPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean leftPivotInvert = true;
 
-                public static final double leftPivotAccelerationConstraint = 0.24; // rad/s
-                public static final double leftPivotVelocityConstraint = 0.4; // rad/s
+                public static final double leftPivotAccelerationConstraint = 0.3; // rad/s
+                public static final double leftPivotVelocityConstraint = 0.7; // rad/s
 
                 public static final Constraints leftPivotTrapConstraints = new Constraints(leftPivotVelocityConstraint, leftPivotAccelerationConstraint);
 
-                public static final double leftPivotAccelerationConstraintDown = 0.05; // rad/s
-                public static final double leftPivotVelocityConstraintDown = 0.05; // rad/s
+               // public static final double leftPivotAccelerationConstraintDown = 0.05; // rad/s
+                //public static final double leftPivotVelocityConstraintDown = 0.05; // rad/s
 
-                public static final Constraints leftPivotTrapConstraintsDown = new Constraints(leftPivotVelocityConstraintDown, leftPivotAccelerationConstraintDown);
+              //  public static final Constraints leftPivotTrapConstraintsDown = new Constraints(leftPivotVelocityConstraintDown, leftPivotAccelerationConstraintDown);
 
                 public static final ArmFeedforward leftFeedForward = new ArmFeedforward(0.03, 0.46, 2.25);
              
@@ -277,10 +279,13 @@ public class Constants {
         public static final double intakeAngle = Units.degreesToRadians(4);
         public static final double intakeAngleTolerance = Units.degreesToRadians(3);
 
-        public static final double launchAngle = Units.degreesToRadians(60);;
+        public static final double launchAngle = Units.degreesToRadians(69);;
         public static final double launchAngleTolerance = Units.degreesToRadians(3);
-        public static final double scoreAmpArmAngle = Units.degreesToRadians(100); // rads
+        public static final double scoreAmpArmAngle = Units.degreesToRadians(105); // rads
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
+
+        public static final double eject = Units.degreesToRadians(30);
+        public static final double ejectAngleTolerance = Units.degreesToRadians(3);
 
         //public static final TrapezoidProfile.State m_goal = new TrapezoidProfile.State(100, 0);
 

@@ -25,8 +25,12 @@ public class MoveClimber extends Command{
 
   @Override
   public void execute() {
+    System.out.println("Climber right stick input"+ m_rightOut);
+    System.out.println("Climber left stick input"+ m_leftOut);
     
     m_climber.moveClimber(m_rightOut, m_leftOut);
+
+
     // Called every time Command is scheduled
   }
 

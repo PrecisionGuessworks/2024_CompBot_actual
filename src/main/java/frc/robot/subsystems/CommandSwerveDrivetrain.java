@@ -79,9 +79,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
 
-    public Command followTrajectoryCommand(Pose2d target, PathConstraints constraints) {
+    public Command followTrajectoryCommand() {
 
-        Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
+        Pose2d targetPose = new Pose2d(5, 2, Rotation2d.fromDegrees(180));
 
         // Create the constraints to use while pathfinding
         PathConstraints pathConstraints = new PathConstraints(

@@ -34,10 +34,11 @@ public class ShootNoteSpeaker extends Command{
     m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
 
     if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance)) {
-        Timer timer = new Timer();
+       // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
+        
         m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
-        timer.advanceIfElapsed(3);
-        m_armSubsystem.setArmAngle((Constants.Arm.intakeAngle));
+        
+        
         
     }
 

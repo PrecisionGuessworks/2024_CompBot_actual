@@ -126,6 +126,21 @@ public class ShooterSubsystem  extends SubsystemBase{
 
 
   }
+  public void eject() {
+      m_topMotor.setCurrentLimit(40.0);
+      m_bottomMotor.setCurrentLimit(40.0);
+      m_topMotor.setPercentOutput(Constants.Shooter.TopRoller.topEjectPower);
+      m_bottomMotor.setPercentOutput(Constants.Shooter.BottomRoller.bottomEjectPower);
+      m_ampMotor.setCurrentLimit(40.0);
+      m_feedMotor.setCurrentLimit(40.0);
+      m_feedMotor.setPercentOutput(-Constants.Shooter.Conveyer.conveyerIntakePower);
+      m_ampMotor.setPercentOutput(-Constants.Shooter.Amp.ampIntakePower);
+      m_rollerTimer.reset();
+
+
+
+  }
+
 
   public void stopRoller() {
       m_feedMotor.setPercentOutput(0.0);

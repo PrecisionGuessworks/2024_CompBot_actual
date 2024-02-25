@@ -32,6 +32,8 @@ public class ScoreAmp extends Command{
     
     m_armSubsystem.setArmAngle(Constants.Arm.scoreAmpArmAngle);
     if (m_armSubsystem.isAtAngle(Constants.Arm.scoreAmpArmAngle, Constants.Arm.scoreAmpArmAngleTolerance)) {
+       // m_armSubsystem.resetEncoders(Constants.Arm.scoreAmpArmAngle);
+        
         m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreAmpFeedVelocity);
         
         

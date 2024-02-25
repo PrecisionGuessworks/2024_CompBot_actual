@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.commands.EjectPiece;
 import frc.robot.commands.IntakePiece;
 import frc.robot.commands.MoveArmAmp;
 import frc.robot.commands.MoveArmSpeaker;
@@ -40,8 +41,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 
 public class RobotContainer {
-  final double MaxSpeed = 6; // 6 meters per second desired top speed
-  final double MaxAngularRate = Math.PI; // Half a rotation per second max angular velocity
+  final double MaxSpeed = 5.0292; // 6 meters per second desired top speed
+  final double MaxAngularRate = 2 * Math.PI; // Half a rotation per second max angular velocity
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   //CommandPS4Controller joystick = new CommandPS4Controller(0);
@@ -106,9 +107,10 @@ public class RobotContainer {
     bumperLeft.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     //shoot da note
-    leftTrigger.whileTrue(new MoveArmSpeaker(arm));
+    leftTrigger.whileTrue(new EjectPiece(shooter, arm));
 
     bumperRight.whileTrue(new ShootNoteSpeaker(shooter, arm));
+    //bumperRight.onFalse(new MoveArmIntake(arm));
 
     //intake piece
     rightTrigger.whileTrue(new SequentialCommandGroup(new MoveArmIntake(arm), new IntakePiece(intake, shooter)));
@@ -116,8 +118,10 @@ public class RobotContainer {
     //move arm
     buttonX.whileTrue(new ScoreAmp(shooter, arm));
 
-    //climber.setDefaultCommand(new MoveClimber(climber, operator.getRightY(), operator.getLeftY()));
+    buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 
+    //climber.setDefaultCommand(new MoveClimber(climber, operator.getRightY(), operator.getLeftY()));
+    //climber.moveClimber(operator.getRightY(), operator.getLeftY());
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));

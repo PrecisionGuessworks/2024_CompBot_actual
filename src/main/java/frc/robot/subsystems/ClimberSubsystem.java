@@ -18,9 +18,10 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setPIDConfig(Constants.Climber.rightClimber.rightClimberMotorSlot, Constants.Climber.rightClimber.rightClimberPIDConfig)
     .setSupplyCurrentLimit(20.0)
     .setStatorCurrentLimit(20.0)
-    .setReverseSoftLimit(Constants.Climber.minPosition)
-          .setForwardSoftLimit(Constants.Climber.maxPosition)
+    
     );
+    //.setReverseSoftLimit(Constants.Climber.minPosition)
+     //     .setForwardSoftLimit(Constants.Climber.maxPosition)
 
     private final TalonFx m_leftClimberMotor = new TalonFx(Constants.Climber.leftClimber.leftClimberID, 
     Constants.Climber.leftClimber.leftClimberRatio, 
@@ -29,9 +30,11 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setPIDConfig(Constants.Climber.leftClimber.leftClimberMotorSlot, Constants.Climber.leftClimber.leftClimberPIDConfig)
     .setSupplyCurrentLimit(20.0)
     .setStatorCurrentLimit(20.0)
-    .setReverseSoftLimit(Constants.Climber.minPosition)
-    .setForwardSoftLimit(Constants.Climber.maxPosition)
+   
     );
+
+   //  .setReverseSoftLimit(Constants.Climber.minPosition)
+   // .setForwardSoftLimit(Constants.Climber.maxPosition)
 
     private final ElevatorFeedforward m_rightFF = Constants.Climber.rightClimber.rightFF;
     private final ElevatorFeedforward m_leftFF = Constants.Climber.leftClimber.leftFF;
@@ -76,6 +79,8 @@ public class ClimberSubsystem  extends SubsystemBase{
     }
 
     public void moveClimber(double rightOut, double leftOut) {
+        System.out.println("Right operator joystick output" + rightOut);
+        System.out.println("Left operator joystick output" + leftOut);
         double rightVelo = rightOut * Constants.Climber.maxSpeed;
         double leftVelo = leftOut * Constants.Climber.maxSpeed;
         
@@ -84,6 +89,8 @@ public class ClimberSubsystem  extends SubsystemBase{
         m_rightClimberMotor.setVelocitySetpoint(Constants.Climber.rightClimber.rightClimberMotorSlot,rightFFVolts);
         m_leftClimberMotor.setVelocitySetpoint(Constants.Climber.leftClimber.leftClimberMotorSlot,leftFFVolts);
     }
+
+    
 
     public boolean isRightClimberPositionGood(double position) {
         if (position > Constants.Climber.maxPosition) {
