@@ -50,12 +50,6 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Low Backup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "Low Run"
           }
         }
