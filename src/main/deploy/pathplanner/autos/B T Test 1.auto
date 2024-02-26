@@ -40,6 +40,18 @@
           "data": {
             "pathName": "Top Front Lineup"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Backup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": " Top Front Run Far"
+          }
         }
       ]
     }
