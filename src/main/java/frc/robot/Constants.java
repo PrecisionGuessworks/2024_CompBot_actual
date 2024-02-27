@@ -231,8 +231,8 @@ public class Constants {
                 public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 125);
                 
                 public static final boolean rightPivotInvert = false;
-                public static final double rightPivotAccelerationConstraint = 0.24; // rad/s
-                public static final double rightPivotVelocityConstraint = 0.4; // rad/s
+                public static final double rightPivotAccelerationConstraint = 2; // rad/s
+                public static final double rightPivotVelocityConstraint = 1.2; // rad/s
 
                 public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
                 //public static final double rightPivotAccelerationConstraintDown = 0.05; // rad/s
