@@ -38,6 +38,21 @@ public class Constants {
 
    // private static final Slot0Configs driveGains = new Slot0Configs().withKP(3).withKI(0).withKD(0).withKS(0.48665 / 12).withKV(2.4132 / 12).withKA(0.06921 / 12);
 
+
+ // Crev Controller Constants
+//  public static final double kDriveS = (0.48665 / 12.0);
+//  public static final double kDriveV = (2.4132 / 12.0);
+//  public static final double kDriveA = (0.06921 / 12.0);
+
+//  public static final double kDriveP = 0.01; // 0.08;
+//  public static final double kDriveI = 0.0;
+//  public static final double kDriveD = 0; // 0.1;
+
+//  public static final double kAngleP = 0.09;
+//  public static final double kAngleI = 0.0;
+//  public static final double kAngleD = 0.1;
+
+
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
     private static final double kSlipCurrentA = 300.0;

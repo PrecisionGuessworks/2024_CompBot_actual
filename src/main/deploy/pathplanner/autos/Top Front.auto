@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7167555668444672,
+      "y": 6.695995258657184
+    },
+    "rotation": -120.67728002179645
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Backup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Pickup Close"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Lineup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Far"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Lineup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Backup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": " Top Front Run Far"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

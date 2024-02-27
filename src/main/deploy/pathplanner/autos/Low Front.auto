@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7110363865397776,
+      "y": 4.408850563894021
+    },
+    "rotation": 122.59258147259929
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Low Backup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Low Close"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Low Lineup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Low Backup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Low Far"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Low Lineup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Low Run"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
