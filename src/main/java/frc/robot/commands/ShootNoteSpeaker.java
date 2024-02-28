@@ -49,7 +49,7 @@ public class ShootNoteSpeaker extends Command{
   public void end(boolean interrupted) {
     m_shooterSubsystem.setFeedVelocity(0);
     m_shooterSubsystem.setLaunchVelocity(0);
-    m_armSubsystem.setArmAngle((Constants.Arm.intakeAngle));
+    //m_armSubsystem.setArmAngle((Constants.Arm.intakeAngle));
 
     //Called when command ends or is interrupted
   }

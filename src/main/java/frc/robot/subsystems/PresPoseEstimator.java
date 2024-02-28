@@ -23,7 +23,7 @@ import frc.robot.Constants;
 import frc.robot.motorcontrol.TalonFx;
 import frc.robot.motorcontrol.configurations.TalonFxConfiguration;
 
-public class PoseEstimator  extends SubsystemBase{
+public class PresPoseEstimator  extends SubsystemBase{
     private final PhotonCamera m_photonCamera;
     private final CommandSwerveDrivetrain m_swerveDrivetrain;
     private final AprilTagFieldLayout m_aprilTagFieldLayout;
@@ -33,16 +33,17 @@ public class PoseEstimator  extends SubsystemBase{
 
     private double previousPipelineTimestamp = 0;
 
-    private final Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0));
+    private Transform3d robotToCam = new Transform3d();
 
     private final PhotonPoseEstimator m_photonPoseEstimator;
 
     
-    public PoseEstimator(PhotonCamera photonCamera, CommandSwerveDrivetrain swerveDrivetrain) {
+    public PresPoseEstimator(PhotonCamera photonCamera, CommandSwerveDrivetrain swerveDrivetrain, Transform3d RToCam) {
       //Body
       m_photonCamera = photonCamera;
       m_swerveDrivetrain = swerveDrivetrain;
       m_aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+      robotToCam = RToCam;
     
      m_photonPoseEstimator = new PhotonPoseEstimator(m_aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, photonCamera, robotToCam);
 

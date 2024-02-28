@@ -7,15 +7,22 @@ package frc.robot;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.photonvision.PhotonCamera;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -25,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.commands.AutoAim;
 import frc.robot.commands.EjectPiece;
 import frc.robot.commands.IntakePiece;
 import frc.robot.commands.MoveArmAmp;
@@ -37,6 +45,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PresPoseEstimator;
 import frc.robot.subsystems.ShooterSubsystem;
 
 
@@ -56,11 +65,15 @@ public class RobotContainer {
   SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   Telemetry logger = new Telemetry(MaxSpeed);
 
+  PhotonCamera aprilCam = new PhotonCamera("test");
+  Transform3d robotToCam = new Transform3d(new Translation3d(0.0, 0.5, 0.3), new Rotation3d(0,Units.degreesToRadians(15),0));
+
   //Subsystems
   IntakeSubsystem intake = new IntakeSubsystem();
   ShooterSubsystem shooter = new ShooterSubsystem();
   ArmSubsystem arm = new ArmSubsystem();
   ClimberSubsystem climber = new ClimberSubsystem();
+  PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam);
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
@@ -110,16 +123,16 @@ public class RobotContainer {
     //shoot da note
     leftTrigger.whileTrue(new EjectPiece(shooter, arm));
 
-    bumperRight.whileTrue(new ShootNoteSpeaker(shooter, arm));
+    bumperRight.whileTrue(new AutoAim(drivetrain, aprilCam, arm, shooter, robotToCam));
     //bumperRight.onFalse(new MoveArmIntake(arm));
 
     //intake piece
-    rightTrigger.whileTrue(new SequentialCommandGroup(new MoveArmIntake(arm), new IntakePiece(intake, shooter)));
+    rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
 
     //move arm
     buttonX.whileTrue(new ScoreAmp(shooter, arm));
 
-    buttonB.whileTrue(drivetrain.followTrajectoryCommand());
+    //buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 
     operatorLeftTrigger.whileTrue(new MoveClimber(climber, operator));
 
@@ -133,7 +146,7 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
-    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter));
+    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
