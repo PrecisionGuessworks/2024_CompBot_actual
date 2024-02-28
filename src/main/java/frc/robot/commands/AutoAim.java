@@ -80,7 +80,7 @@ public class AutoAim extends Command{
         Translation2d tagVector = tagPose2d.minus(robotPose.getTranslation());
         final double goalDistance = tagVector.getNorm();
 
-        double armTheta = Math.atan2((tag_pose.getZ()-CAMERA_HEIGHT_METERS), goalDistance);
+        double armTheta = Math.atan2(((tag_pose.getZ()+1.2)-CAMERA_HEIGHT_METERS), goalDistance);
 
         filteredAngle = Math.max(Math.min(armTheta, Constants.Arm.maxAngle), Constants.Arm.intakeAngle);
         

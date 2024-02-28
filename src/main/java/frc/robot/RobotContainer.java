@@ -65,15 +65,15 @@ public class RobotContainer {
   SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   Telemetry logger = new Telemetry(MaxSpeed);
 
-  PhotonCamera aprilCam = new PhotonCamera("test");
-  Transform3d robotToCam = new Transform3d(new Translation3d(0.0, 0.5, 0.3), new Rotation3d(0,Units.degreesToRadians(15),0));
+  //PhotonCamera aprilCam = new PhotonCamera("test");
+  //Transform3d robotToCam = new Transform3d(new Translation3d(0.0, 0.5, 0.3), new Rotation3d(0,Units.degreesToRadians(15),0));
 
   //Subsystems
   IntakeSubsystem intake = new IntakeSubsystem();
   ShooterSubsystem shooter = new ShooterSubsystem();
   ArmSubsystem arm = new ArmSubsystem();
   ClimberSubsystem climber = new ClimberSubsystem();
-  PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam);
+  //PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam);
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
@@ -123,7 +123,7 @@ public class RobotContainer {
     //shoot da note
     leftTrigger.whileTrue(new EjectPiece(shooter, arm));
 
-    bumperRight.whileTrue(new AutoAim(drivetrain, aprilCam, arm, shooter, robotToCam));
+    bumperRight.whileTrue(new ShootNoteSpeaker(shooter, arm));
     //bumperRight.onFalse(new MoveArmIntake(arm));
 
     //intake piece

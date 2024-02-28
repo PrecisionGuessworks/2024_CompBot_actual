@@ -36,7 +36,7 @@ public class IntakePiece extends Command{
 
     m_arm.setArmAngle(Constants.Arm.intakeAngle);
 
-    if (m_arm.isAtAngle(Constants.Arm.scoreAmpArmAngle, Constants.Arm.scoreAmpArmAngleTolerance) != true) {
+    if (m_arm.isAtAngle(Constants.Arm.intakeAngle, Constants.Arm.intakeAngleTolerance)) {
       m_intakeSubsystem.startRollerSpin();
       m_shooter.Intake();
       
