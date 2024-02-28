@@ -7,6 +7,8 @@ package frc.robot;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.photonvision.PhotonCamera;
+
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
@@ -55,6 +57,8 @@ public class RobotContainer {
   SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   Telemetry logger = new Telemetry(MaxSpeed);
+
+  PhotonCamera aprilCam = new PhotonCamera("test");
 
   //Subsystems
   IntakeSubsystem intake = new IntakeSubsystem();
@@ -119,7 +123,7 @@ public class RobotContainer {
     //move arm
     buttonX.whileTrue(new ScoreAmp(shooter, arm));
 
-    buttonB.whileTrue(drivetrain.followTrajectoryCommand());
+    //buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 
     operatorLeftTrigger.whileTrue(new MoveClimber(climber, operator));
 
