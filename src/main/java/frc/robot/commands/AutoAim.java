@@ -8,7 +8,9 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -24,15 +26,16 @@ import frc.robot.vision.Fiducials;
 public class AutoAim extends Command{
     private final CommandSwerveDrivetrain m_swerve;
     private final PhotonCamera m_camera;
-    private final int CAMERA_HEIGHT_METERS = 0;
+    private double CAMERA_HEIGHT_METERS = 0;
     private final ArmSubsystem m_armSubsystem;
     private final ShooterSubsystem m_shooterSubsystem;
 
-    public AutoAim(CommandSwerveDrivetrain swerve, PhotonCamera camera, ArmSubsystem arm, ShooterSubsystem shooter) {
+    public AutoAim(CommandSwerveDrivetrain swerve, PhotonCamera camera, ArmSubsystem arm, ShooterSubsystem shooter, Transform3d robotToCam) {
         m_swerve = swerve;
         m_camera = camera;
         m_armSubsystem = arm;
         m_shooterSubsystem = shooter;
+        CAMERA_HEIGHT_METERS = robotToCam.getZ();
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(swerve, arm, shooter);
 
@@ -41,6 +44,7 @@ public class AutoAim extends Command{
     @Override
   public void initialize() {
     // Called when the command is initially scheduled.
+    m_shooterSubsystem.setFeedVelocity(0);
     m_shooterSubsystem.setLaunchVelocity(Constants.Shooter.launchVelocity);
   }
 
@@ -88,8 +92,6 @@ public class AutoAim extends Command{
         
         m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
     }
-    
-
   }
 
   @Override
