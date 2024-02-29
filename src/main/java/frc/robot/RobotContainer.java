@@ -26,6 +26,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -59,6 +61,8 @@ public class RobotContainer {
   //CommandPS4Controller joystick = new CommandPS4Controller(0);
   public final XboxController joystick = new XboxController(0); // My joystick
   public final XboxController operator = new XboxController(1); //operator
+
+  private final SendableChooser<Command> autoChooser;
 
   CommandSwerveDrivetrain drivetrain = Constants.Swerve.TunerConstants.DriveTrain; // My drivetrain
   SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -156,12 +160,19 @@ public class RobotContainer {
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
     robotCommands.put("ScoreAmp", new AutoAimPose(drivetrain, aprilCam, arm, shooter, robotToCam));
     NamedCommands.registerCommands(robotCommands);
+
+    autoChooser = AutoBuilder.buildAutoChooser();
+
+    // Another option that allows you to specify the default auto by its name
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
     configureBindings();
     
   }
 
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("Top Front");
+    return autoChooser.getSelected();
     //return Commands.print("No autonomous command configured");
   }
 }
