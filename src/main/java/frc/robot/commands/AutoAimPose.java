@@ -61,11 +61,11 @@ public class AutoAimPose extends Command{
 
     if (hasTargets) {
         if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
-            tag_pose = Fiducials.AprilTags.BlueSpeakerTag.pose;
+            tag_pose = Fiducials.AprilTags.aprilTagFiducials[6].getPose();
         }
 
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-            tag_pose = Fiducials.AprilTags.RedSpeakerTag.pose;
+            tag_pose = Fiducials.AprilTags.aprilTagFiducials[3].getPose();
         }
         
         Pose2d robotPose = m_swerve.getState().Pose;

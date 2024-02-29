@@ -46,11 +46,11 @@ public class AutoAimPID extends Command{
     int speakerID = 7;
 
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
-            speakerID = Fiducials.AprilTags.BlueSpeakerTag.ID;
+            speakerID = Fiducials.AprilTags.aprilTagFiducials[6].getID();
         }
 
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-            speakerID = Fiducials.AprilTags.RedSpeakerTag.ID;
+            speakerID = Fiducials.AprilTags.aprilTagFiducials[3].getID();
         }
 
         if (result.hasTargets()) {

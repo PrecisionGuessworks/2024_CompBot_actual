@@ -14,5 +14,9 @@ public class PresAprilTag {
     public Pose3d getPose() {
         return Pose;
     }
+
+    public int getID() {
+        return ID;
+    }
     
 }
