@@ -210,7 +210,7 @@ public class Constants {
                 public static final PIDConfig conveyerMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
                 public static final SimpleMotorFeedforward feedFeedforward =
         new SimpleMotorFeedforward(0, 0.019);
-                public static final double conveyerIntakePower = -0.5;
+                public static final double conveyerIntakePower = -0.35;
         }
 
         public static final class Amp {
@@ -221,11 +221,11 @@ public class Constants {
                 public static final PIDConfig ampMotorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
                 public static final SimpleMotorFeedforward ampFeedforward =
         new SimpleMotorFeedforward(0, 0.019);
-                public static final double ampIntakePower = -0.5;
+                public static final double ampIntakePower = -0.35;
 
         }
        
-        public static final double launchVelocity = 560.0; // rads/s
+        public static final double launchVelocity = 440.0; // rads/s
         public static final double launchVelocityTolerance = 10.0; // rads/s
         public static final double ScoreAmpPower = 0.3;
         public static final double AmpVelocityTolerance = 10.0; // rads/s
@@ -246,7 +246,7 @@ public class Constants {
                 public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 125);
                 
                 public static final boolean rightPivotInvert = false;
-                public static final double rightPivotAccelerationConstraint = 2; // rad/s
+                public static final double rightPivotAccelerationConstraint = 0.8; // rad/s
                 public static final double rightPivotVelocityConstraint = 1.2; // rad/s
 
                 public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
@@ -267,7 +267,7 @@ public class Constants {
                 public static final MechanismRatio leftPivotRatio = new MechanismRatio(1, 125);
                 public static final boolean leftPivotInvert = true;
 
-                public static final double leftPivotAccelerationConstraint = 2; // rad/s
+                public static final double leftPivotAccelerationConstraint = 0.8; // rad/s
                 public static final double leftPivotVelocityConstraint = 1.2; // rad/s
 
                 public static final Constraints leftPivotTrapConstraints = new Constraints(leftPivotVelocityConstraint, leftPivotAccelerationConstraint);
@@ -294,7 +294,7 @@ public class Constants {
         public static final double intakeAngle = Units.degreesToRadians(4);
         public static final double intakeAngleTolerance = Units.degreesToRadians(3);
 
-        public static final double launchAngle = Units.degreesToRadians(69);;
+        public static final double launchAngle = Units.degreesToRadians(74);;
         public static final double launchAngleTolerance = Units.degreesToRadians(3);
         public static final double scoreAmpArmAngle = Units.degreesToRadians(105); // rads
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads

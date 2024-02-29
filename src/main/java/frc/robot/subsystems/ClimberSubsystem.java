@@ -18,8 +18,7 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setPIDConfig(Constants.Climber.rightClimber.rightClimberMotorSlot, Constants.Climber.rightClimber.rightClimberPIDConfig)
     .setSupplyCurrentLimit(20.0)
     .setStatorCurrentLimit(20.0)
-    .setReverseSoftLimit(Constants.Climber.minPosition)
-    .setForwardSoftLimit(Constants.Climber.maxPosition)
+    
     
     );
     //.setReverseSoftLimit(Constants.Climber.minPosition)
@@ -32,11 +31,14 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setPIDConfig(Constants.Climber.leftClimber.leftClimberMotorSlot, Constants.Climber.leftClimber.leftClimberPIDConfig)
     .setSupplyCurrentLimit(20.0)
     .setStatorCurrentLimit(20.0)
-    .setReverseSoftLimit(Constants.Climber.minPosition)
-    .setForwardSoftLimit(Constants.Climber.maxPosition)
+    
     
    
     );
+   // .setReverseSoftLimit(Constants.Climber.minPosition)
+  //  .setForwardSoftLimit(Constants.Climber.maxPosition)
+  //  .setReverseSoftLimit(Constants.Climber.minPosition)
+   // .setForwardSoftLimit(Constants.Climber.maxPosition)
 
    //  .setReverseSoftLimit(Constants.Climber.minPosition)
    // .setForwardSoftLimit(Constants.Climber.maxPosition)
@@ -49,7 +51,7 @@ public class ClimberSubsystem  extends SubsystemBase{
       //Show scheduler status in SmartDashboard.
       m_rightClimberMotor.zeroSensorPosition();
       m_leftClimberMotor.zeroSensorPosition();
-      
+
       SmartDashboard.putData(this);
 
     }

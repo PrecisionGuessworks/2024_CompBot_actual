@@ -37,7 +37,8 @@ public class MoveArmIntake extends Command{
   @Override
   public boolean isFinished() {
     //Called when Command is finished
-    return m_armSubsystem.isArmMotionFinished();
+    //return m_armSubsystem.isArmMotionFinished();
+    return false;
   }
     
 
