@@ -45,7 +45,7 @@ public class PresPoseEstimator  extends SubsystemBase{
       m_aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
       robotToCam = RToCam;
     
-     m_photonPoseEstimator = new PhotonPoseEstimator(m_aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, photonCamera, robotToCam);
+     m_photonPoseEstimator = new PhotonPoseEstimator(m_aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, m_photonCamera, robotToCam);
 
    
       //Show scheduler status in SmartDashboard.
@@ -70,7 +70,10 @@ public class PresPoseEstimator  extends SubsystemBase{
         if (pipelineResult.hasTargets()) {
           var resultTimestamp = pipelineResult.getTimestampSeconds();
           m_swerveDrivetrain.addVisionMeasurement(getEstimatedGlobalPose(getCurrentPose()).get().estimatedPose.toPose2d(), resultTimestamp);
+  
         }
+
+        
       // This method will be called once per scheduler run
     }
   
