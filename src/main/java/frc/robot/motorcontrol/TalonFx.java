@@ -182,7 +182,7 @@ public class TalonFx {
 
   public void setCurrentLimit(final double amps) {
     m_config.SUPPLY_CURRENT_LIMIT = amps;
-    m_config.STATOR_CURRENT_LIMIT = amps;
+    //m_config.STATOR_CURRENT_LIMIT = amps;
 
     // TODO: Consider a shorter non-blocking timeout
     m_controller

@@ -23,7 +23,9 @@ public class IntakePiece extends Command{
 
     @Override
   public void initialize() {
-    m_arm.setArmAngle(Constants.Arm.intakeAngle);
+    //m_arm.setArmAngle(Constants.Arm.intakeAngle);
+    m_intakeSubsystem.startRollerSpin();
+    //m_shooter.Intake();
     
 
     // Called when the command is initially scheduled.

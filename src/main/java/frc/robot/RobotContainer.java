@@ -65,8 +65,8 @@ public class RobotContainer {
   SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   Telemetry logger = new Telemetry(MaxSpeed);
 
-  //PhotonCamera aprilCam = new PhotonCamera("test");
-  //Transform3d robotToCam = new Transform3d(new Translation3d(0.0, 0.5, 0.3), new Rotation3d(0,Units.degreesToRadians(15),0));
+  PhotonCamera aprilCam = new PhotonCamera("OV2311");
+  Transform3d robotToCam = new Transform3d(new Translation3d(0.0, 0.44, 0.37), new Rotation3d(0,Units.degreesToRadians(15),0));
 
   //Subsystems
   IntakeSubsystem intake = new IntakeSubsystem();
@@ -81,7 +81,7 @@ public class RobotContainer {
 
   //NamedCommands.registerCommand();
 
-  private Command runAuto = drivetrain.getAutoPath("Test");
+  private Command runAuto = drivetrain.getAutoPath("Top Front");
 
   
   
@@ -148,8 +148,10 @@ public class RobotContainer {
   public RobotContainer() {
     robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
+    robotCommands.put("MoveArmSpeaker", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
+    robotCommands.put("ScoreAmp", new AutoAim(drivetrain, aprilCam, arm, shooter, robotToCam));
     NamedCommands.registerCommands(robotCommands);
     configureBindings();
     

@@ -33,7 +33,7 @@ public class PresPoseEstimator  extends SubsystemBase{
 
     private double previousPipelineTimestamp = 0;
 
-    private Transform3d robotToCam = new Transform3d();
+    private final Transform3d robotToCam;;
 
     private final PhotonPoseEstimator m_photonPoseEstimator;
 
@@ -65,9 +65,12 @@ public class PresPoseEstimator  extends SubsystemBase{
     @Override
     public void periodic() {
         var pipelineResult = m_photonCamera.getLatestResult();
-        var resultTimestamp = pipelineResult.getTimestampSeconds();
+        
 
-        m_swerveDrivetrain.addVisionMeasurement(getEstimatedGlobalPose(getCurrentPose()).get().estimatedPose.toPose2d(), resultTimestamp);
+        if (pipelineResult.hasTargets()) {
+          var resultTimestamp = pipelineResult.getTimestampSeconds();
+          m_swerveDrivetrain.addVisionMeasurement(getEstimatedGlobalPose(getCurrentPose()).get().estimatedPose.toPose2d(), resultTimestamp);
+        }
       // This method will be called once per scheduler run
     }
   

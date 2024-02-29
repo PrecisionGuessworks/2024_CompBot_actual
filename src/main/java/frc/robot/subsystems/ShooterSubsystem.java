@@ -15,15 +15,15 @@ public class ShooterSubsystem  extends SubsystemBase{
 
     private final TalonFx m_topMotor = new TalonFx(
       Constants.Shooter.TopRoller.topRollerID, Constants.Shooter.TopRoller.topRollerMotorRatio, 
-      TalonFx.makeDefaultConfig().setInverted(Constants.Shooter.TopRoller.topRollerMotorInverted).setSupplyCurrentLimit(40.0)
-      .setStatorCurrentLimit(40.0)
+      TalonFx.makeDefaultConfig().setInverted(Constants.Shooter.TopRoller.topRollerMotorInverted).setSupplyCurrentLimit(50.0)
+      .setStatorCurrentLimit(100.0)
       .setPIDConfig(Constants.Shooter.TopRoller.topRollerMotorSlot,Constants.Shooter.TopRoller.topMotorPIDConfig)
     );
 
     private final TalonFx m_bottomMotor = new TalonFx(
       Constants.Shooter.BottomRoller.bottomRollerID, Constants.Shooter.BottomRoller.bottomRollerMotorRatio, 
-      TalonFx.makeDefaultConfig().setInverted(Constants.Shooter.BottomRoller.bottomRollerMotorInverted).setSupplyCurrentLimit(40.0)
-      .setStatorCurrentLimit(40.0)
+      TalonFx.makeDefaultConfig().setInverted(Constants.Shooter.BottomRoller.bottomRollerMotorInverted).setSupplyCurrentLimit(50.0)
+      .setStatorCurrentLimit(100.0)
       .setPIDConfig(Constants.Shooter.BottomRoller.bottomRollerMotorSlot,Constants.Shooter.BottomRoller.bottomMotorPIDConfig)
     );
 
@@ -113,8 +113,8 @@ public class ShooterSubsystem  extends SubsystemBase{
     }
 
     public void Intake() {
-      m_topMotor.setCurrentLimit(40.0);
-      m_bottomMotor.setCurrentLimit(40.0);
+      m_topMotor.setCurrentLimit(60.0);
+      m_bottomMotor.setCurrentLimit(60.0);
       m_topMotor.setPercentOutput(Constants.Shooter.TopRoller.topIntakePower);
       m_bottomMotor.setPercentOutput(Constants.Shooter.BottomRoller.bottomIntakePower);
       m_ampMotor.setCurrentLimit(40.0);

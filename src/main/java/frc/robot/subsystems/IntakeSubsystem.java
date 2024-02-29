@@ -33,7 +33,7 @@ public class IntakeSubsystem  extends SubsystemBase{
     }
 
     public void startRollerSpin() {
-        m_rollerMotor.setCurrentLimit(20.0);
+        m_rollerMotor.setCurrentLimit(30.0);
         m_rollerMotor.setPercentOutput(Constants.Intake.Roller.rollerIntakePower);
         m_rollerTimer.reset();
 
