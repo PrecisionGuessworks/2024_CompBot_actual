@@ -12,8 +12,10 @@ import org.photonvision.PhotonCamera;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -158,7 +160,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return runAuto;
+    return new PathPlannerAuto("Top Front");
     //return Commands.print("No autonomous command configured");
   }
 }
