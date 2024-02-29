@@ -23,14 +23,14 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.vision.Fiducials;
 
 
-public class AutoAim extends Command{
+public class AutoAimPose extends Command{
     private final CommandSwerveDrivetrain m_swerve;
     private final PhotonCamera m_camera;
     private double CAMERA_HEIGHT_METERS = 0;
     private final ArmSubsystem m_armSubsystem;
     private final ShooterSubsystem m_shooterSubsystem;
 
-    public AutoAim(CommandSwerveDrivetrain swerve, PhotonCamera camera, ArmSubsystem arm, ShooterSubsystem shooter, Transform3d robotToCam) {
+    public AutoAimPose(CommandSwerveDrivetrain swerve, PhotonCamera camera, ArmSubsystem arm, ShooterSubsystem shooter, Transform3d robotToCam) {
         m_swerve = swerve;
         m_camera = camera;
         m_armSubsystem = arm;

@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.commands.AutoAim;
+import frc.robot.commands.AutoAimPose;
 import frc.robot.commands.EjectPiece;
 import frc.robot.commands.IntakePiece;
 import frc.robot.commands.MoveArmAmp;
@@ -69,13 +69,14 @@ public class RobotContainer {
 
   PhotonCamera aprilCam = new PhotonCamera("OV2311");
   Transform3d robotToCam = new Transform3d(new Translation3d(0.0, 0.44, 0.37), new Rotation3d(0,Units.degreesToRadians(15),0));
+  Transform3d camToRobot = new Transform3d(new Translation3d(0.0, -0.44, -0.37), new Rotation3d(0,Units.degreesToRadians(-15),0));
 
   //Subsystems
   IntakeSubsystem intake = new IntakeSubsystem();
   ShooterSubsystem shooter = new ShooterSubsystem();
   ArmSubsystem arm = new ArmSubsystem();
   ClimberSubsystem climber = new ClimberSubsystem();
-  PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam);
+  PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
@@ -153,7 +154,7 @@ public class RobotContainer {
     robotCommands.put("MoveArmSpeaker", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
-    robotCommands.put("ScoreAmp", new AutoAim(drivetrain, aprilCam, arm, shooter, robotToCam));
+    robotCommands.put("ScoreAmp", new AutoAimPose(drivetrain, aprilCam, arm, shooter, robotToCam));
     NamedCommands.registerCommands(robotCommands);
     configureBindings();
     
