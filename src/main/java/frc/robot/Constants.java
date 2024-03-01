@@ -255,7 +255,7 @@ public class Constants {
 
                 //public static final Constraints rightPivotTrapConstraintsDown = new Constraints(rightPivotVelocityConstraintDown, rightPivotAccelerationConstraintDown);
 
-                public static final ArmFeedforward rightFeedForward = new ArmFeedforward(0.07, 1.27, 1.35);
+                public static final ArmFeedforward rightFeedForward = new ArmFeedforward(0.02, 1.23, 1.35);
                 
         }
         
@@ -277,7 +277,7 @@ public class Constants {
 
               //  public static final Constraints leftPivotTrapConstraintsDown = new Constraints(leftPivotVelocityConstraintDown, leftPivotAccelerationConstraintDown);
 
-                public static final ArmFeedforward leftFeedForward = new ArmFeedforward(0.07, 1.27, 1.35);
+                public static final ArmFeedforward leftFeedForward = new ArmFeedforward(0.02, 1.23, 1.35);
              
         }
 

@@ -38,10 +38,6 @@ public class MoveArmIntake extends Command{
   @Override
   public boolean isFinished() {
 
-     if (m_armSubsystem.isAtAngle(Constants.Arm.intakeAngle, Constants.Arm.intakeAngleTolerance) == true) {
-      return true;
-
-     }
     //Called when Command is finished
     //return m_armSubsystem.isArmMotionFinished();
     return false;

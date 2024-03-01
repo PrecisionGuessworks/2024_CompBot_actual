@@ -59,9 +59,7 @@ public class ShootNoteSpeaker extends Command{
   @Override
   public boolean isFinished() {
     //Called when Command is finished
-    if (shoot == true){
-      return true;
-    }
+    
     return false;
   }
     
