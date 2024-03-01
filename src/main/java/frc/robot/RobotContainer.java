@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.commands.AutoAimPID;
 import frc.robot.commands.AutoAimPose;
 import frc.robot.commands.EjectPiece;
 import frc.robot.commands.IntakePiece;
@@ -62,7 +63,7 @@ public class RobotContainer {
   public final XboxController joystick = new XboxController(0); // My joystick
   public final XboxController operator = new XboxController(1); //operator
 
-  private final SendableChooser<Command> autoChooser;
+  //private final SendableChooser<Command> autoChooser;
 
   CommandSwerveDrivetrain drivetrain = Constants.Swerve.TunerConstants.DriveTrain; // My drivetrain
   SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
@@ -80,7 +81,7 @@ public class RobotContainer {
   ShooterSubsystem shooter = new ShooterSubsystem();
   ArmSubsystem arm = new ArmSubsystem();
   ClimberSubsystem climber = new ClimberSubsystem();
-  PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
+  //PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
@@ -88,7 +89,7 @@ public class RobotContainer {
 
   //NamedCommands.registerCommand();
 
-  private Command runAuto = drivetrain.getAutoPath("Top Front");
+  private Command runAuto = drivetrain.getAutoPath("CommandTest");
 
   
   
@@ -110,6 +111,19 @@ public class RobotContainer {
   private final JoystickButton bumperRight =
       new JoystickButton(joystick, XboxController.Button.kRightBumper.value);
 
+  private final JoystickButton operatorBumperRight =
+      new JoystickButton(operator, XboxController.Button.kRightBumper.value);
+
+  private final JoystickButton operatorBumperLeft =
+      new JoystickButton(operator, XboxController.Button.kLeftBumper.value);
+
+  private final JoystickButton operatorButtonA =
+      new JoystickButton(operator, XboxController.Button.kA.value);
+  
+      private final JoystickButton operatorButtonY =
+      new JoystickButton(operator, XboxController.Button.kY.value);
+  
+
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
@@ -128,7 +142,7 @@ public class RobotContainer {
     bumperLeft.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     //shoot da note
-    leftTrigger.whileTrue(new EjectPiece(shooter, arm));
+    operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm));
 
     bumperRight.whileTrue(new ShootNoteSpeaker(shooter, arm));
     //bumperRight.onFalse(new MoveArmIntake(arm));
@@ -136,8 +150,11 @@ public class RobotContainer {
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
 
+    operatorButtonA.whileTrue(new MoveArmIntake(arm));
+
     //move arm
-    buttonX.whileTrue(new ScoreAmp(shooter, arm));
+    operatorBumperRight.whileTrue(new ScoreAmp(shooter, arm));
+    operatorButtonY.whileTrue(new MoveArmAmp(arm));
 
     //buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 
@@ -161,18 +178,18 @@ public class RobotContainer {
     robotCommands.put("ScoreAmp", new AutoAimPose(drivetrain, aprilCam, arm, shooter, robotToCam));
     NamedCommands.registerCommands(robotCommands);
 
-    autoChooser = AutoBuilder.buildAutoChooser();
+    //autoChooser = AutoBuilder.buildAutoChooser();
 
     // Another option that allows you to specify the default auto by its name
     // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    //SmartDashboard.putData("Auto Chooser", autoChooser);
     configureBindings();
     
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return runAuto;
     //return Commands.print("No autonomous command configured");
   }
 }

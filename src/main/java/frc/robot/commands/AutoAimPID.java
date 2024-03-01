@@ -55,18 +55,19 @@ public class AutoAimPID extends Command{
 
         if (result.hasTargets()) {
                 List<PhotonTrackedTarget> targets = result.getTargets();
+                System.out.println(targets);
 
                 for (int i = 0; i < targets.size(); i++) {
                     int targetID = targets.get(i).getFiducialId();
+                    System.out.println("target ID "+targetID);
                     if (targetID == speakerID) {
                         // Calculate angular turn power
                 // -1.0 required to ensure positive PID controller effort _increases_ yaw
                         rotationSpeed = -turnController.calculate(targets.get(i).getYaw(), 0);
+                        System.out.println("rotation speed "+rotationSpeed);
 
                     }
-                    else {
-                        rotationSpeed = 0; 
-                    }      
+                         
                 }
             } 
             else {

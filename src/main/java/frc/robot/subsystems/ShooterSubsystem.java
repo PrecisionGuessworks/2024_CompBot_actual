@@ -107,6 +107,11 @@ public class ShooterSubsystem  extends SubsystemBase{
           && Math.abs(launchVelocity - m_bottomMotor.getSensorVelocity()) <= tolerance;
     }
 
+    public boolean isAtFeedVelocity(double launchVelocity, double tolerance) {
+      return Math.abs(launchVelocity - m_ampMotor.getSensorVelocity()) <= tolerance
+          && Math.abs(launchVelocity - m_feedMotor.getSensorVelocity()) <= tolerance;
+    }
+
     public boolean isAtAmpVelocity(double launchVelocity, double tolerance) {
       return Math.abs(launchVelocity - Math.abs(m_topMotor.getSensorVelocity())) <= tolerance
           && Math.abs(launchVelocity - Math.abs(m_bottomMotor.getSensorVelocity())) <= tolerance;

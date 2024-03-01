@@ -18,11 +18,13 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setPIDConfig(Constants.Climber.rightClimber.rightClimberMotorSlot, Constants.Climber.rightClimber.rightClimberPIDConfig)
     .setSupplyCurrentLimit(20.0)
     .setStatorCurrentLimit(20.0)
+    .setReverseSoftLimit(Constants.Climber.minPosition)
+    .setForwardSoftLimit(Constants.Climber.maxPosition)
     
     
     );
-    //.setReverseSoftLimit(Constants.Climber.minPosition)
-     //     .setForwardSoftLimit(Constants.Climber.maxPosition)
+    //
+     //     
 
     private final TalonFx m_leftClimberMotor = new TalonFx(Constants.Climber.leftClimber.leftClimberID, 
     Constants.Climber.leftClimber.leftClimberRatio, 
@@ -31,6 +33,8 @@ public class ClimberSubsystem  extends SubsystemBase{
     .setPIDConfig(Constants.Climber.leftClimber.leftClimberMotorSlot, Constants.Climber.leftClimber.leftClimberPIDConfig)
     .setSupplyCurrentLimit(20.0)
     .setStatorCurrentLimit(20.0)
+    .setReverseSoftLimit(Constants.Climber.minPosition)
+    .setForwardSoftLimit(Constants.Climber.maxPosition)
     
     
    

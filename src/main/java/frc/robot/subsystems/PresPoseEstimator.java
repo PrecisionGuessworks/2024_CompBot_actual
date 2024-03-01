@@ -75,7 +75,7 @@ public class PresPoseEstimator  extends SubsystemBase{
             var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
             var camPose = (Fiducials.AprilTags.aprilTagFiducials[target.getFiducialId()-1].getPose()).transformBy(camToTargetTrans.inverse());
             m_swerveDrivetrain.addVisionMeasurement(
-                    camPose.transformBy(robotToCam).toPose2d(), imageCaptureTime);
+                    camPose.transformBy(camToRobot).toPose2d(), imageCaptureTime);
         }
 
         

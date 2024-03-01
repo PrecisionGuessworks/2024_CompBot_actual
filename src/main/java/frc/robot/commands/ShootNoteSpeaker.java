@@ -10,6 +10,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShootNoteSpeaker extends Command{
     private final ShooterSubsystem m_shooterSubsystem;
     private final ArmSubsystem m_armSubsystem;
+    private boolean shoot = false;
 
     public ShootNoteSpeaker(ShooterSubsystem shooterSubsystem, ArmSubsystem armSubsystem) {
         m_shooterSubsystem = shooterSubsystem;
@@ -37,8 +38,9 @@ public class ShootNoteSpeaker extends Command{
        // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
         
         m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
-        
-        
+        if (m_shooterSubsystem.isAtFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity, Constants.Shooter.launchVelocityTolerance)) {
+          shoot = true;
+        }
         
     }
 
@@ -57,6 +59,9 @@ public class ShootNoteSpeaker extends Command{
   @Override
   public boolean isFinished() {
     //Called when Command is finished
+    if (shoot == true){
+      return true;
+    }
     return false;
   }
     
