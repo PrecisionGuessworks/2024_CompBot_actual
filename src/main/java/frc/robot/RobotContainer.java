@@ -25,6 +25,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -34,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.commands.AutoAimPID;
@@ -127,6 +129,8 @@ public class RobotContainer {
 
       private final JoystickButton operatorButtonB =
       new JoystickButton(operator, XboxController.Button.kB.value);
+
+      private final Trigger operatorDPadDown = new POVButton(operator, 180);
   
 
   private void configureBindings() {
@@ -153,14 +157,14 @@ public class RobotContainer {
     //bumperRight.onFalse(new MoveArmIntake(arm));
 
     //intake piece
-    rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
+    rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm, joystick));
 
     operatorButtonA.whileTrue(new MoveArmIntakeAmp(arm));
 
     //move arm
     operatorBumperRight.whileTrue(new ScoreAmp(shooter, arm));
     operatorButtonY.whileTrue(new MoveArmAmp(arm));
-    operatorButtonB.whileTrue(new SetClimberSensorMax(climber));
+    operatorDPadDown.whileTrue(new SetClimberSensorMax(climber));
 
     //buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 
@@ -176,7 +180,7 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
-    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm));
+    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm, joystick));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("MoveArmSpeaker", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm));

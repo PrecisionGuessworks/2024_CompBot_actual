@@ -27,7 +27,7 @@ public class ArmSubsystem  extends SubsystemBase{
           .setBrakeMode()
           .setPIDConfig(Constants.Arm.RightPivot.rightPivotMotorSlot, Constants.Arm.RightPivot.rightPivotPIDConfig)
           .setSupplyCurrentLimit(40)
-          .setStatorCurrentLimit(40)
+          .setStatorCurrentLimit(50)
           .setReverseSoftLimit(Constants.Arm.minAngle)
           .setForwardSoftLimit(Constants.Arm.maxAngle)
     );
@@ -56,7 +56,7 @@ public class ArmSubsystem  extends SubsystemBase{
           .setBrakeMode()
           .setPIDConfig(Constants.Arm.LeftPivot.leftPivotMotorSlot, Constants.Arm.LeftPivot.leftPivotPIDConfig)
           .setSupplyCurrentLimit(40)
-          .setStatorCurrentLimit(40)
+          .setStatorCurrentLimit(50)
           .setReverseSoftLimit(Constants.Arm.minAngle)
           .setForwardSoftLimit(Constants.Arm.maxAngle)
     );

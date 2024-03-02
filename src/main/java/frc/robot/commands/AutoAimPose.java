@@ -8,6 +8,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -70,10 +71,14 @@ public class AutoAimPose extends Command{
         
         Pose2d robotPose = m_swerve.getState().Pose;
 
+        
+
 
         Rotation2d targetYaw = PhotonUtils.getYawToPose(robotPose, tag_pose.toPose2d());
 
         Pose2d targetPose = new Pose2d(robotPose.getX(), robotPose.getY(), targetYaw);
+        Transform2d tol = robotPose.minus(targetPose);
+        
         m_swerve.followTrajectoryCommand(targetPose);
 
         Translation2d tagPose2d = new Translation2d(tag_pose.getX(), tag_pose.getY());
