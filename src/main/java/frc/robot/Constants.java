@@ -164,7 +164,7 @@ public class Constants {
                 public static final double reverseRollerIntakePower = -0.50;
                 public static final double rollerSlowPower = 0.25;
 
-                public static final double rollerStallSpeed = Math.PI * (1.0 / 8.0);
+                public static final double rollerStallSpeed = Math.PI * Math.PI * (1.0 / 32.0);
                 public static final double rollerStallTime = 0.1;
 
                 public static final int intakeBeamBreakInputChannel = 0;
