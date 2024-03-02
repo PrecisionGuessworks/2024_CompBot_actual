@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.autoCommands.BlueAuto;
 import frc.robot.commands.AutoAimPID;
 import frc.robot.commands.AutoAimPose;
 import frc.robot.commands.EjectPiece;
@@ -199,7 +200,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return runAuto;
+    return new BlueAuto(drivetrain, arm, shooter);
     //return Commands.print("No autonomous command configured");
   }
 }
