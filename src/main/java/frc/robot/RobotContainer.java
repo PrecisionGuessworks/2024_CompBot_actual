@@ -44,7 +44,9 @@ import frc.robot.commands.MoveArmAmp;
 import frc.robot.commands.MoveArmSpeaker;
 import frc.robot.commands.MoveClimber;
 import frc.robot.commands.ScoreAmp;
+import frc.robot.commands.SetClimberSensorMax;
 import frc.robot.commands.MoveArmIntake;
+import frc.robot.commands.MoveArmIntakeAmp;
 import frc.robot.commands.ShootNoteSpeaker;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -122,6 +124,9 @@ public class RobotContainer {
   
       private final JoystickButton operatorButtonY =
       new JoystickButton(operator, XboxController.Button.kY.value);
+
+      private final JoystickButton operatorButtonB =
+      new JoystickButton(operator, XboxController.Button.kB.value);
   
 
   private void configureBindings() {
@@ -150,11 +155,12 @@ public class RobotContainer {
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
 
-    operatorButtonA.whileTrue(new MoveArmIntake(arm));
+    operatorButtonA.whileTrue(new MoveArmIntakeAmp(arm));
 
     //move arm
     operatorBumperRight.whileTrue(new ScoreAmp(shooter, arm));
     operatorButtonY.whileTrue(new MoveArmAmp(arm));
+    operatorButtonB.whileTrue(new SetClimberSensorMax(climber));
 
     //buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 

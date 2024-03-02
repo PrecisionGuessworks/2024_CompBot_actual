@@ -68,6 +68,13 @@ public class ClimberSubsystem  extends SubsystemBase{
 
     }
 
+    public void setRightClimberSensorMax() {
+        m_rightClimberMotor.setSensorPosition(Constants.Climber.maxPosition);
+    }
+    public void setLeftClimberSensorMax() {
+        m_leftClimberMotor.setSensorPosition(Constants.Climber.maxPosition);
+    }
+
     public void moveLeftClimberUp() {
         double position = Constants.Climber.maxPosition;
         
