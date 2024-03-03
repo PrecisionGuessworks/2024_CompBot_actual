@@ -154,6 +154,7 @@ public class RobotContainer {
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
     robotCommands.put("ScoreAmp", new AutoAim(drivetrain, aprilCam, arm, shooter, robotToCam));
+    robotCommands.put("Intake", new IntakePiece(intake, shooter, arm).withTimeout(5.0));
     NamedCommands.registerCommands(robotCommands);
     configureBindings();
     
