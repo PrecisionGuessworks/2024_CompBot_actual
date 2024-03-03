@@ -1,13 +1,14 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.ExampleSubsystem;
 
-public class MoveArmAmp extends Command{
-    private final ArmSubsystem m_armSubsystem;
 
-    public MoveArmAmp(ArmSubsystem subsystem) {
-        m_armSubsystem = subsystem;
+public class SetClimberSensorMin extends Command{
+    private final ClimberSubsystem m_subsystem;
+
+    public SetClimberSensorMin(ClimberSubsystem subsystem) {
+        m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(subsystem);
 
@@ -15,18 +16,14 @@ public class MoveArmAmp extends Command{
 
     @Override
   public void initialize() {
-    m_armSubsystem.setArmAngle(Constants.Arm.moveAmpArmAngle);
-    
+    m_subsystem.setRightClimberSensorMin();
+    m_subsystem.setLeftClimberSensorMin();
+
     // Called when the command is initially scheduled.
   }
 
   @Override
   public void execute() {
-    
-   if (m_armSubsystem.isAtAngle(Constants.Arm.moveAmpArmAngle, Constants.Arm.scoreAmpArmAngleTolerance) != true) {
-        m_armSubsystem.setArmAngle(Constants.Arm.moveAmpArmAngle);
-
-   }
     // Called every time Command is scheduled
   }
 
@@ -39,7 +36,6 @@ public class MoveArmAmp extends Command{
   public boolean isFinished() {
     //Called when Command is finished
     return false;
-    
   }
     
 

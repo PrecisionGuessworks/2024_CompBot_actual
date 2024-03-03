@@ -77,9 +77,9 @@ public class AutoAimPose extends Command{
         Rotation2d targetYaw = PhotonUtils.getYawToPose(robotPose, tag_pose.toPose2d());
 
         Pose2d targetPose = new Pose2d(robotPose.getX(), robotPose.getY(), targetYaw);
-        Transform2d tol = robotPose.minus(targetPose);
+        //Transform2d tol = robotPose.minus(targetPose);
         
-        m_swerve.followTrajectoryCommand(targetPose);
+        m_swerve.followTrajectoryCommand(targetPose,0.0);
 
         Translation2d tagPose2d = new Translation2d(tag_pose.getX(), tag_pose.getY());
         Translation2d tagVector = tagPose2d.minus(robotPose.getTranslation());

@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.autoCommands;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -9,13 +9,13 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 
-public class IntakePiece extends Command{
+public class AutoIntake extends Command{
     private final IntakeSubsystem m_intakeSubsystem;
     private final ShooterSubsystem m_shooter;
     private final ArmSubsystem m_arm;
 
 
-    public IntakePiece(IntakeSubsystem intake, ShooterSubsystem shooter, ArmSubsystem arm) {
+    public AutoIntake(IntakeSubsystem intake, ShooterSubsystem shooter, ArmSubsystem arm) {
         m_intakeSubsystem = intake;
         m_shooter = shooter;
         m_arm = arm;
@@ -68,13 +68,6 @@ public class IntakePiece extends Command{
 
   @Override
   public boolean isFinished() {
-    if (m_intakeSubsystem.isRollerStalled() || m_intakeSubsystem.isBeakBreakTriggered()) {
-      m_intakeSubsystem.stopRoller();
-      m_shooter.stopRoller();
-      
-      return true;
-      
-    }
     
     //Called when Command is finished
     return false;

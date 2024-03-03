@@ -7,6 +7,8 @@ package frc.robot;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.photonvision.PhotonCamera;
+
 //import org.photonvision.PhotonCamera;
 
 import com.ctre.phoenix6.Utils;
@@ -40,8 +42,6 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.autoCommands.AutoIntake;
-import frc.robot.autoCommands.BlueAuto;
-import frc.robot.autoCommands.RedAuto;
 import frc.robot.commands.EjectPiece;
 import frc.robot.commands.IntakePiece;
 import frc.robot.commands.MoveArmAmp;
@@ -57,6 +57,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.PresPoseEstimator;
 //import frc.robot.subsystems.PresPoseEstimator;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -79,7 +80,12 @@ public class RobotContainer {
   SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   Telemetry logger = new Telemetry(MaxSpeed);
 
+  //enable for testing once
+
   //PhotonCamera aprilCam = new PhotonCamera("OV2311");
+
+
+
   Transform3d robotToCam = new Transform3d(new Translation3d(0.0, 0.44, 0.37), new Rotation3d(0,Units.degreesToRadians(15),0));
   Transform3d camToRobot = new Transform3d(new Translation3d(0.0, -0.44, -0.37), new Rotation3d(0,Units.degreesToRadians(-15),0));
 
@@ -88,6 +94,10 @@ public class RobotContainer {
   ShooterSubsystem shooter = new ShooterSubsystem();
   ArmSubsystem arm = new ArmSubsystem();
   ClimberSubsystem climber = new ClimberSubsystem();
+
+
+/*  enable for testing once    */
+
   //PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
@@ -210,7 +220,7 @@ public class RobotContainer {
     return redAuto();
     
   }
-  public Command redAuto() {
+  public Command blueAuto() {
     Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(180));
     Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(0));
 
@@ -218,13 +228,28 @@ public class RobotContainer {
 
     return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(2.5),
      new MoveArmIntake(arm).withTimeout(3.5), 
-     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2,01
-     3)).withTimeout(3.0), 
-     drivetrain.followTrajectoryCommand(waypoint1,0), new ShootNoteSpeaker(shooter
-     , arm));
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2, 0.3)).withTimeout(3.0), 
+     drivetrain.followTrajectoryCommand(waypoint1, 0.0), new ShootNoteSpeaker(shooter, arm));
 
     // new AutoIntake(intake, shooter, arm).withTimeout(3.0);
-ured");
+
+
+  }
+
+  public Command redAuto() {
+    //Todo change pose points.
+    Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(0));
+    Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(180));
+
+    drivetrain.seedFieldRelative(waypoint1);
+
+    return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(2.5),
+     new MoveArmIntake(arm).withTimeout(3.5), 
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2, 0.3)).withTimeout(3.0), 
+     drivetrain.followTrajectoryCommand(waypoint1, 0.0), new ShootNoteSpeaker(shooter, arm));
+
+    // new AutoIntake(intake, shooter, arm).withTimeout(3.0);
+
 
   }
 }

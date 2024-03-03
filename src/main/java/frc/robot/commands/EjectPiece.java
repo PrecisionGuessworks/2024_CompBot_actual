@@ -3,23 +3,27 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 
 public class EjectPiece extends Command{
     private final ShooterSubsystem m_shooter;
     private final ArmSubsystem m_arm;
+    private final IntakeSubsystem m_intake;
 
-    public EjectPiece(ShooterSubsystem shooter, ArmSubsystem arm) {
+    public EjectPiece(ShooterSubsystem shooter, ArmSubsystem arm, IntakeSubsystem intake) {
        m_shooter = shooter;
        m_arm = arm;
+       m_intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(shooter, arm);
+        addRequirements(shooter, arm, intake);
 
     }
 
     @Override
   public void initialize() {
+    m_intake.reverseRollerSpin();
     
     // Called when the command is initially scheduled.
   }
@@ -33,6 +37,7 @@ public class EjectPiece extends Command{
        // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
         
         m_shooter.eject();
+        m_intake.reverseRollerSpin();
     // Called every time Command is scheduled
   }}
 
@@ -40,6 +45,7 @@ public class EjectPiece extends Command{
   public void end(boolean interrupted) {
     //Called when command ends or is interrupted
     m_shooter.stopRoller();
+    m_intake.stopRoller();
   }
 
   @Override

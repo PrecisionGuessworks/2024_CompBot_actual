@@ -161,10 +161,10 @@ public class Constants {
                 public static final boolean rollerMotorInverted = false;
 
                 public static final double rollerIntakePower = 1.0;
-                public static final double reverseRollerIntakePower = -1.0;
+                public static final double reverseRollerIntakePower = -0.50;
                 public static final double rollerSlowPower = 0.25;
 
-                public static final double rollerStallSpeed = Math.PI * (1.0 / 8.0);
+                public static final double rollerStallSpeed = Math.PI * Math.PI * (1.0 / 32.0);
                 public static final double rollerStallTime = 0.1;
 
                 public static final int intakeBeamBreakInputChannel = 0;
@@ -246,8 +246,8 @@ public class Constants {
                 public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 75);
                 
                 public static final boolean rightPivotInvert = false;
-                public static final double rightPivotAccelerationConstraint = 0.4; // rad/s
-                public static final double rightPivotVelocityConstraint = 0.9; // rad/s
+                public static final double rightPivotAccelerationConstraint = 0.8; // rad/s
+                public static final double rightPivotVelocityConstraint = 1.2; // rad/s
 
                 public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
                 //public static final double rightPivotAccelerationConstraintDown = 0.05; // rad/s
@@ -255,7 +255,7 @@ public class Constants {
 
                 //public static final Constraints rightPivotTrapConstraintsDown = new Constraints(rightPivotVelocityConstraintDown, rightPivotAccelerationConstraintDown);
 
-                public static final ArmFeedforward rightFeedForward = new ArmFeedforward(0.02, 1.23, 1.35, 0.02);
+                public static final ArmFeedforward rightFeedForward = new ArmFeedforward(0.02, 0.92, 1.35, 0.06);
                 
         }
         
@@ -267,8 +267,8 @@ public class Constants {
                 public static final MechanismRatio leftPivotRatio = new MechanismRatio(1, 75);
                 public static final boolean leftPivotInvert = true;
 
-                public static final double leftPivotAccelerationConstraint = 0.6; // rad/s
-                public static final double leftPivotVelocityConstraint = 1.1; // rad/s
+                public static final double leftPivotAccelerationConstraint = 0.8; // rad/s
+                public static final double leftPivotVelocityConstraint = 1.2; // rad/s
 
                 public static final Constraints leftPivotTrapConstraints = new Constraints(leftPivotVelocityConstraint, leftPivotAccelerationConstraint);
 
@@ -277,7 +277,7 @@ public class Constants {
 
               //  public static final Constraints leftPivotTrapConstraintsDown = new Constraints(leftPivotVelocityConstraintDown, leftPivotAccelerationConstraintDown);
 
-                public static final ArmFeedforward leftFeedForward = new ArmFeedforward(0.02, 1.23, 1.35, 0.02);
+                public static final ArmFeedforward leftFeedForward = new ArmFeedforward(0.02, 0.92, 1.35, 0.06);
              
         }
 
@@ -292,16 +292,27 @@ public class Constants {
         public static final double maxAngle = Units.degreesToRadians(110);
         public static final double startingAngle = minAngle;
         public static final double intakeAngle = Units.degreesToRadians(3);
-        public static final double intakeAngleTolerance = Units.degreesToRadians(6);
+        public static final double intakeAngleTolerance = Units.degreesToRadians(8);
 
         public static final double launchAngle = Units.degreesToRadians(74);
         public static final double launchAngleTolerance = Units.degreesToRadians(3);
         public static final double scoreAmpArmAngle = Units.degreesToRadians(110); // rads
         public static final double moveAmpArmAngle = Units.degreesToRadians(85); 
-        public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(8); // rads
-tatic final double moveAmpArmAngle = Units.degreesToRadians(85); 
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
-imberID = new CANDeviceID(23, kRioName);
+        public static final double midpointAngle = Units.degreesToRadians(75); 
+        public static final double midpointAngleTolerance = Units.degreesToRadians(5);
+
+        public static final double eject = Units.degreesToRadians(30);
+        public static final double ejectAngleTolerance = Units.degreesToRadians(3);
+
+        //public static final TrapezoidProfile.State m_goal = new TrapezoidProfile.State(100, 0);
+
+
+    }
+
+    public static final class Climber {
+        public static final class rightClimber {
+                public static final CANDeviceID rightClimberID = new CANDeviceID(23, kRioName);
                 public static final int rightClimberMotorSlot = 0;
                 public static final PIDConfig rightClimberPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
                 // TODO: Check ratio
@@ -329,5 +340,3 @@ imberID = new CANDeviceID(23, kRioName);
         public static final double maxSpeed = 0.4; //speed gain
     }
 }
-
-

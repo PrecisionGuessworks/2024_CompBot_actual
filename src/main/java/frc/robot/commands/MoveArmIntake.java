@@ -15,13 +15,14 @@ public class MoveArmIntake extends Command{
 
     @Override
   public void initialize() {
+    m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
     
     // Called when the command is initially scheduled.
   }
 
   @Override
   public void execute() {
-    m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
+    
    if (m_armSubsystem.isAtAngle(Constants.Arm.intakeAngle, Constants.Arm.intakeAngleTolerance) != true) {
     //m_armSubsystem.resetEncoders(Constants.Arm.intakeAngle);
         m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
