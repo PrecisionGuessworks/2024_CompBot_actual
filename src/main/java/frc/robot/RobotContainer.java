@@ -7,7 +7,7 @@ package frc.robot;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.photonvision.PhotonCamera;
+//import org.photonvision.PhotonCamera;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -38,9 +39,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.autoCommands.AutoIntake;
 import frc.robot.autoCommands.BlueAuto;
-import frc.robot.commands.AutoAimPID;
-import frc.robot.commands.AutoAimPose;
+import frc.robot.autoCommands.RedAuto;
 import frc.robot.commands.EjectPiece;
 import frc.robot.commands.IntakePiece;
 import frc.robot.commands.MoveArmAmp;
@@ -48,6 +49,7 @@ import frc.robot.commands.MoveArmSpeaker;
 import frc.robot.commands.MoveClimber;
 import frc.robot.commands.ScoreAmp;
 import frc.robot.commands.SetClimberSensorMax;
+import frc.robot.commands.SetClimberSensorMin;
 import frc.robot.commands.MoveArmIntake;
 import frc.robot.commands.MoveArmIntakeAmp;
 import frc.robot.commands.ShootNoteSpeaker;
@@ -55,7 +57,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.PresPoseEstimator;
+//import frc.robot.subsystems.PresPoseEstimator;
 import frc.robot.subsystems.ShooterSubsystem;
 
 
@@ -77,7 +79,7 @@ public class RobotContainer {
   SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   Telemetry logger = new Telemetry(MaxSpeed);
 
-  PhotonCamera aprilCam = new PhotonCamera("OV2311");
+  //PhotonCamera aprilCam = new PhotonCamera("OV2311");
   Transform3d robotToCam = new Transform3d(new Translation3d(0.0, 0.44, 0.37), new Rotation3d(0,Units.degreesToRadians(15),0));
   Transform3d camToRobot = new Transform3d(new Translation3d(0.0, -0.44, -0.37), new Rotation3d(0,Units.degreesToRadians(-15),0));
 
@@ -132,6 +134,8 @@ public class RobotContainer {
       new JoystickButton(operator, XboxController.Button.kB.value);
 
       private final Trigger operatorDPadDown = new POVButton(operator, 180);
+
+      private final Trigger operatorDPadUp = new POVButton(operator, 0);
   
 
   private void configureBindings() {
@@ -152,20 +156,21 @@ public class RobotContainer {
     bumperLeft.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
 
     //shoot da note
-    operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm));
+    operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
     bumperRight.whileTrue(new ShootNoteSpeaker(shooter, arm));
     //bumperRight.onFalse(new MoveArmIntake(arm));
 
     //intake piece
-    rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm, joystick));
+    rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
 
-    operatorButtonA.whileTrue(new MoveArmIntakeAmp(arm));
+    operatorButtonA.whileTrue(new MoveArmIntake(arm));
 
     //move arm
     operatorBumperRight.whileTrue(new ScoreAmp(shooter, arm));
     operatorButtonY.whileTrue(new MoveArmAmp(arm));
     operatorDPadDown.whileTrue(new SetClimberSensorMax(climber));
+    operatorDPadUp.whileTrue(new SetClimberSensorMin(climber));
 
     //buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 
@@ -181,12 +186,12 @@ public class RobotContainer {
   }
 
   public RobotContainer() {
-    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm, joystick));
+    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("MoveArmSpeaker", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
-    robotCommands.put("ScoreAmp", new AutoAimPose(drivetrain, aprilCam, arm, shooter, robotToCam));
+    
     NamedCommands.registerCommands(robotCommands);
 
     //autoChooser = AutoBuilder.buildAutoChooser();
@@ -200,7 +205,23 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new BlueAuto(drivetrain, arm, shooter);
-    //return Commands.print("No autonomous command configured");
+    
+    //return new ShootNoteSpeaker(shooter, arm);
+    return redAuto();
+    
   }
-}
+  public Command redAuto() {
+    Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(180));
+    Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(0));
+
+    drivetrain.seedFieldRelative(waypoint1);
+
+    return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(2.5),
+     new MoveArmIntake(arm).withTimeout(3.5), 
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2,01
+     3)).withTimeout(3.0), 
+     drivetrain.followTrajectoryCommand(waypoint1,0), new ShootNoteSpeaker(shooter
+     , arm));
+
+    // new AutoIntake(intake, shooter, arm).withTimeout(3.0);
+ured");
