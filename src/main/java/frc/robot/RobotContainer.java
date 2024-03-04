@@ -173,11 +173,11 @@ public class RobotContainer {
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
 
-    operatorButtonA.whileTrue(new MoveArmIntake(arm));
+    operatorButtonA.onTrue(new MoveArmIntake(arm));
 
     //move arm
     operatorBumperRight.whileTrue(new ScoreAmp(shooter, arm));
-    operatorButtonY.whileTrue(new MoveArmAmp(arm));
+    operatorButtonY.onTrue(new MoveArmAmp(arm));
     operatorDPadDown.whileTrue(new SetClimberSensorMax(climber));
     operatorDPadUp.whileTrue(new SetClimberSensorMin(climber));
 

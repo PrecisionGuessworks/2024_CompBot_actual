@@ -23,10 +23,7 @@ public class MoveArmAmp extends Command{
   @Override
   public void execute() {
     
-   if (m_armSubsystem.isAtAngle(Constants.Arm.moveAmpArmAngle, Constants.Arm.scoreAmpArmAngleTolerance) != true) {
-        m_armSubsystem.setArmAngle(Constants.Arm.moveAmpArmAngle);
-
-   }
+   
     // Called every time Command is scheduled
   }
 
@@ -38,7 +35,7 @@ public class MoveArmAmp extends Command{
   @Override
   public boolean isFinished() {
     //Called when Command is finished
-    return false;
+    return m_armSubsystem.isAtAngle(Constants.Arm.moveAmpArmAngle, Constants.Arm.scoreAmpArmAngleTolerance);
     
   }
     

@@ -16,6 +16,7 @@ public class MoveArmIntakeAmp extends Command{
 
     @Override
   public void initialize() {
+    m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
     
     // Called when the command is initially scheduled.
   }
@@ -23,20 +24,7 @@ public class MoveArmIntakeAmp extends Command{
   @Override
   public void execute() {
     
-    if (m_armSubsystem.getArmAngle() >= (Constants.Arm.midpointAngle+Constants.Arm.midpointAngleTolerance)) {
-      m_armSubsystem.setArmAngle(Constants.Arm.midpointAngle);
-      
 
-    }
-    else {
-      if (((m_armSubsystem.getArmAngle()+Constants.Arm.midpointAngleTolerance) <= Constants.Arm.midpointAngle)) {
-      m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
-
-   }
-
-    }
-    
-   
     // Called every time Command is scheduled
   }
 
@@ -50,7 +38,7 @@ public class MoveArmIntakeAmp extends Command{
 
     //Called when Command is finished
     //return m_armSubsystem.isArmMotionFinished();
-    return false;
+    return m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.intakeAngleTolerance);
   }
     
 
