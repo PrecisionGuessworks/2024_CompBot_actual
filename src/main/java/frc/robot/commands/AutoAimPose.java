@@ -58,6 +58,7 @@ public class AutoAimPose extends Command{
 
     Pose3d tag_pose = new Pose3d();
     double filteredAngle = Constants.Arm.intakeAngle;
+    Pose2d robotPose = m_swerve.getState().Pose;
     
 
     if (hasTargets) {
@@ -68,8 +69,6 @@ public class AutoAimPose extends Command{
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             tag_pose = Fiducials.AprilTags.aprilTagFiducials[3].getPose();
         }
-        
-        Pose2d robotPose = m_swerve.getState().Pose;
 
 
         Rotation2d targetYaw = PhotonUtils.getYawToPose(robotPose, tag_pose.toPose2d());
@@ -79,15 +78,18 @@ public class AutoAimPose extends Command{
         
         m_swerve.followTrajectoryCommand(targetPose,0.0);
 
-        Translation2d tagPose2d = new Translation2d(tag_pose.getX(), tag_pose.getY());
-        Translation2d tagVector = tagPose2d.minus(robotPose.getTranslation());
-        final double goalDistance = tagVector.getNorm();
-
-        double armTheta = Math.atan2(((tag_pose.getZ()+1.2)-CAMERA_HEIGHT_METERS), goalDistance);
-
-        filteredAngle = Math.max(Math.min(armTheta, Constants.Arm.maxAngle), Constants.Arm.intakeAngle);
+        
         
     }
+
+    Translation2d tagPose2d = new Translation2d(tag_pose.getX(), tag_pose.getY());
+    Translation2d tagVector = tagPose2d.minus(robotPose.getTranslation());
+    final double goalDistance = tagVector.getNorm();
+
+    double armTheta = Math.atan2(((tag_pose.getZ()+1.2)-CAMERA_HEIGHT_METERS), goalDistance);
+
+    filteredAngle = Math.max(Math.min(armTheta, Constants.Arm.maxAngle), Constants.Arm.intakeAngle);
+
     m_armSubsystem.setArmAngle(filteredAngle);
 
     if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(filteredAngle, Constants.Arm.launchAngleTolerance)) {
