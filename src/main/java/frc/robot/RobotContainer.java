@@ -170,7 +170,6 @@ public class RobotContainer {
 
     bumperRight.whileTrue(new ShootNoteSpeaker(shooter, arm));
     //bumperRight.onFalse(new MoveArmIntake(arm));
-
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
 
