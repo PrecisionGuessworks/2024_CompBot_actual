@@ -11,6 +11,7 @@ public class ShootNoteSpeaker extends Command{
     private final ShooterSubsystem m_shooterSubsystem;
     private final ArmSubsystem m_armSubsystem;
 
+
     public ShootNoteSpeaker(ShooterSubsystem shooterSubsystem, ArmSubsystem armSubsystem) {
         m_shooterSubsystem = shooterSubsystem;
         m_armSubsystem = armSubsystem;
@@ -38,8 +39,6 @@ public class ShootNoteSpeaker extends Command{
         
         m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
         
-        
-        
     }
 
     // Called every time Command is scheduled
@@ -57,6 +56,7 @@ public class ShootNoteSpeaker extends Command{
   @Override
   public boolean isFinished() {
     //Called when Command is finished
+    
     return false;
   }
     

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.motorcontrol.TalonFx;
 import frc.robot.motorcontrol.configurations.TalonFxConfiguration;
+import frc.robot.vision.Fiducials;
 
 public class PresPoseEstimator  extends SubsystemBase{
     private final PhotonCamera m_photonCamera;
@@ -33,19 +34,21 @@ public class PresPoseEstimator  extends SubsystemBase{
 
     private double previousPipelineTimestamp = 0;
 
-    private final Transform3d robotToCam;;
+    private final Transform3d robotToCam;
+    private final Transform3d camToRobot;
 
-    private final PhotonPoseEstimator m_photonPoseEstimator;
+    //private final PhotonPoseEstimator m_photonPoseEstimator;
 
     
-    public PresPoseEstimator(PhotonCamera photonCamera, CommandSwerveDrivetrain swerveDrivetrain, Transform3d RToCam) {
+    public PresPoseEstimator(PhotonCamera photonCamera, CommandSwerveDrivetrain swerveDrivetrain, Transform3d RToCam, Transform3d CToRobot) {
       //Body
       m_photonCamera = photonCamera;
       m_swerveDrivetrain = swerveDrivetrain;
       m_aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
       robotToCam = RToCam;
+      camToRobot = CToRobot;
     
-     m_photonPoseEstimator = new PhotonPoseEstimator(m_aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, m_photonCamera, robotToCam);
+     //m_photonPoseEstimator = new PhotonPoseEstimator(m_aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, m_photonCamera, robotToCam);
 
    
       //Show scheduler status in SmartDashboard.
@@ -53,24 +56,26 @@ public class PresPoseEstimator  extends SubsystemBase{
 
     }
 
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+    /*public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
         m_photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
         return m_photonPoseEstimator.update();
     }
 
     public Pose2d getCurrentPose() {
         return m_swerveDrivetrain.getState().Pose;
-      }
+      } */
    
     @Override
     public void periodic() {
-        var pipelineResult = m_photonCamera.getLatestResult();
-        
+        var res = m_photonCamera.getLatestResult();
+        if (res.hasTargets()) {
+            var target = res.getBestTarget();
 
-        if (pipelineResult.hasTargets()) {
-          var resultTimestamp = pipelineResult.getTimestampSeconds();
-          m_swerveDrivetrain.addVisionMeasurement(getEstimatedGlobalPose(getCurrentPose()).get().estimatedPose.toPose2d(), resultTimestamp);
-  
+            var imageCaptureTime = res.getTimestampSeconds();
+            var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
+            var camPose = (Fiducials.AprilTags.aprilTagFiducials[target.getFiducialId()-1].getPose()).transformBy(camToTargetTrans.inverse());
+            m_swerveDrivetrain.addVisionMeasurement(
+                    camPose.transformBy(camToRobot).toPose2d(), imageCaptureTime);
         }
 
         

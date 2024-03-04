@@ -8,6 +8,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -23,14 +24,14 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.vision.Fiducials;
 
 
-public class AutoAim extends Command{
+public class AutoAimPose extends Command{
     private final CommandSwerveDrivetrain m_swerve;
     private final PhotonCamera m_camera;
     private double CAMERA_HEIGHT_METERS = 0;
     private final ArmSubsystem m_armSubsystem;
     private final ShooterSubsystem m_shooterSubsystem;
 
-    public AutoAim(CommandSwerveDrivetrain swerve, PhotonCamera camera, ArmSubsystem arm, ShooterSubsystem shooter, Transform3d robotToCam) {
+    public AutoAimPose(CommandSwerveDrivetrain swerve, PhotonCamera camera, ArmSubsystem arm, ShooterSubsystem shooter, Transform3d robotToCam) {
         m_swerve = swerve;
         m_camera = camera;
         m_armSubsystem = arm;
@@ -61,11 +62,11 @@ public class AutoAim extends Command{
 
     if (hasTargets) {
         if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
-            tag_pose = Fiducials.AprilTags.BlueSpeakerTag.pose;
+            tag_pose = Fiducials.AprilTags.aprilTagFiducials[6].getPose();
         }
 
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-            tag_pose = Fiducials.AprilTags.RedSpeakerTag.pose;
+            tag_pose = Fiducials.AprilTags.aprilTagFiducials[3].getPose();
         }
         
         Pose2d robotPose = m_swerve.getState().Pose;
@@ -74,7 +75,9 @@ public class AutoAim extends Command{
         Rotation2d targetYaw = PhotonUtils.getYawToPose(robotPose, tag_pose.toPose2d());
 
         Pose2d targetPose = new Pose2d(robotPose.getX(), robotPose.getY(), targetYaw);
-        m_swerve.followTrajectoryCommand(targetPose);
+        //Transform2d tol = robotPose.minus(targetPose);
+        
+        m_swerve.followTrajectoryCommand(targetPose,0.0);
 
         Translation2d tagPose2d = new Translation2d(tag_pose.getX(), tag_pose.getY());
         Translation2d tagVector = tagPose2d.minus(robotPose.getTranslation());

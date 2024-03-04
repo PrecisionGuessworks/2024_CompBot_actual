@@ -59,6 +59,55 @@
           "data": {
             "name": "ShootNoteSpeaker"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top Front Far"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakePiece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Lineup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoteSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveArmIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Backup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": " Top Front Run Far"
+          }
         }
       ]
     }

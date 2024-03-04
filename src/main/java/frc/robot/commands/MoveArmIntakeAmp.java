@@ -3,10 +3,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class MoveArmIntake extends Command{
+public class MoveArmIntakeAmp extends Command{
     private final ArmSubsystem m_armSubsystem;
+    private boolean atMidpoint = false;
 
-    public MoveArmIntake(ArmSubsystem subsystem) {
+    public MoveArmIntakeAmp(ArmSubsystem subsystem) {
         m_armSubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(subsystem);
@@ -15,7 +16,6 @@ public class MoveArmIntake extends Command{
 
     @Override
   public void initialize() {
-    m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
     
     // Called when the command is initially scheduled.
   }
@@ -23,11 +23,20 @@ public class MoveArmIntake extends Command{
   @Override
   public void execute() {
     
-   if (m_armSubsystem.isAtAngle(Constants.Arm.intakeAngle, Constants.Arm.intakeAngleTolerance) != true) {
-    //m_armSubsystem.resetEncoders(Constants.Arm.intakeAngle);
-        m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
+    if (m_armSubsystem.getArmAngle() >= (Constants.Arm.midpointAngle+Constants.Arm.midpointAngleTolerance)) {
+      m_armSubsystem.setArmAngle(Constants.Arm.midpointAngle);
+      
+
+    }
+    else {
+      if (((m_armSubsystem.getArmAngle()+Constants.Arm.midpointAngleTolerance) <= Constants.Arm.midpointAngle)) {
+      m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
 
    }
+
+    }
+    
+   
     // Called every time Command is scheduled
   }
 
@@ -43,5 +52,8 @@ public class MoveArmIntake extends Command{
     //return m_armSubsystem.isArmMotionFinished();
     return false;
   }
+    
+
+
     
 }

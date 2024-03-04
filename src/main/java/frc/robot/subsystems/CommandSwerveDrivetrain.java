@@ -79,7 +79,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         return m_kinematics.toChassisSpeeds(getState().ModuleStates);
     }
 
-    public Command followTrajectoryCommand(Pose2d target) {
+    public Command followTrajectoryCommand(Pose2d target, double rotDelay) {
 
         Pose2d targetPose = target;
 
@@ -93,7 +93,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             targetPose,
             pathConstraints,
             0.0, // Goal end velocity in meters/sec
-            0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+            rotDelay // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
 
 }

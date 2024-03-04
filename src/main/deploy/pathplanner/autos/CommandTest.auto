@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7167555668444672,
-      "y": 6.695995258657184
+      "x": 1.4924799386635812,
+      "y": 5.668238882774062
     },
-    "rotation": -120.67728002179645
+    "rotation": 178.96571035332428
   },
   "command": {
     "type": "sequential",
@@ -18,15 +18,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "MoveArmIntake"
+            "waitTime": 1.5
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Top Front Backup"
+            "name": "MoveArmIntake"
           }
         },
         {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Top Pickup Close"
+                  "pathName": "Test Path"
                 }
               },
               {
@@ -46,18 +46,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Top Front Lineup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoteSpeaker"
           }
         }
       ]
