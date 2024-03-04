@@ -221,8 +221,8 @@ public class RobotContainer {
     
   }
   public Command blueAuto() {
-    Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(180));
-    Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(0));
+    Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(Units.degreesToRadians(180)));
+    Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(Units.degreesToRadians(0)));
 
     drivetrain.seedFieldRelative(waypoint1);
 
@@ -238,8 +238,8 @@ public class RobotContainer {
 
   public Command redAuto() {
     //Todo change pose points.
-    Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(0));
-    Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(180));
+    Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(Units.degreesToRadians(0)));
+    Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(Units.degreesToRadians(180)));
 
     drivetrain.seedFieldRelative(waypoint1);
 
