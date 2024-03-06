@@ -55,14 +55,9 @@ public class AutoAimPose extends Command{
     var result = m_camera.getLatestResult();
     boolean hasTargets = result.hasTargets();
     var alliance = DriverStation.getAlliance();
-
     Pose3d tag_pose = new Pose3d();
-    double filteredAngle = Constants.Arm.intakeAngle;
-    Pose2d robotPose = m_swerve.getState().Pose;
-    
 
-    if (hasTargets) {
-        if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
             tag_pose = Fiducials.AprilTags.aprilTagFiducials[6].getPose();
         }
 
@@ -70,17 +65,10 @@ public class AutoAimPose extends Command{
             tag_pose = Fiducials.AprilTags.aprilTagFiducials[3].getPose();
         }
 
-
-        Rotation2d targetYaw = PhotonUtils.getYawToPose(robotPose, tag_pose.toPose2d());
-
-        Pose2d targetPose = new Pose2d(robotPose.getX(), robotPose.getY(), targetYaw);
-        //Transform2d tol = robotPose.minus(targetPose);
-        
-        m_swerve.followTrajectoryCommand(targetPose,0.0);
-
-        
-        
-    }
+    
+    double filteredAngle = Constants.Arm.intakeAngle;
+    Pose2d robotPose = m_swerve.getState().Pose;
+    
 
     Translation2d tagPose2d = new Translation2d(tag_pose.getX(), tag_pose.getY());
     Translation2d tagVector = tagPose2d.minus(robotPose.getTranslation());

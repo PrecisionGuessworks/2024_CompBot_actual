@@ -4,20 +4,24 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 
-public class ShootNoteSpeaker extends Command{
+public class ShootNoteSpeakerTogether extends Command{
     private final ShooterSubsystem m_shooterSubsystem;
     private final ArmSubsystem m_armSubsystem;
+    private final IntakeSubsystem m_intake;
+    
 
 
-    public ShootNoteSpeaker(ShooterSubsystem shooterSubsystem, ArmSubsystem armSubsystem) {
+    public ShootNoteSpeakerTogether(ShooterSubsystem shooterSubsystem, ArmSubsystem armSubsystem, IntakeSubsystem intake) {
         m_shooterSubsystem = shooterSubsystem;
         m_armSubsystem = armSubsystem;
+        m_intake = intake;
         //m_armSubsystem = armSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(shooterSubsystem, armSubsystem);
+        addRequirements(shooterSubsystem, armSubsystem, intake);
 
     }
 
@@ -38,8 +42,15 @@ public class ShootNoteSpeaker extends Command{
        // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
         
         m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
+        if (!m_intake.isBeakBreakTriggered()) {
+          m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
+    }
         
     }
+
+    
+
+    
 
     // Called every time Command is scheduled
   }
