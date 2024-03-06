@@ -217,36 +217,104 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     
     //return new ShootNoteSpeaker(shooter, arm);
-    return redAuto();
-    
+    return blueAutoAmp();
+    //return redAutoAmp();
   }
-  public Command blueAuto() {
-    Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(180));
-    Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(0));
-
+  public Command blueAutoCenter() {
+    Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(Units.degreesToRadians(180)));
+    Pose2d waypoint2 = new Pose2d(3, 5.54, new Rotation2d(0));
+    Pose2d waypoint3 = new Pose2d(3.0, 5.54, new Rotation2d(0));
+    Pose2d waypoint4 = new Pose2d(1.6, 5.54, new Rotation2d(0));
     drivetrain.seedFieldRelative(waypoint1);
+    
+    return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
+     new MoveArmIntake(arm).withTimeout(3), 
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint4, 0.1)).withTimeout(1.5),
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2, 0.1)).withTimeout(1), 
+     //old drivetrain.followTrajectoryCommand(waypoint1, 0.0), new ShootNoteSpeaker(shooter, arm));
+     new ParallelCommandGroup(drivetrain.followTrajectoryCommand(waypoint1, 0.1)).withTimeout(2.5), 
+     new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
+     new MoveArmIntake(arm).withTimeout(3),
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint3, 0.1)).withTimeout(2.5)
+    );
 
-    return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(2.5),
-     new MoveArmIntake(arm).withTimeout(3.5), 
-     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2, 0.3)).withTimeout(3.0), 
-     drivetrain.followTrajectoryCommand(waypoint1, 0.0), new ShootNoteSpeaker(shooter, arm));
+     
+    // new AutoIntake(intake, shooter, arm).withTimeout(3.0);
 
+
+  }
+  public Command blueAutoAmp() {
+    Pose2d waypoint1 = new Pose2d(1, 2, new Rotation2d(Units.degreesToRadians(-120)));
+    Pose2d waypoint2 = new Pose2d(3.88, 2.35, new Rotation2d(0));
+    Pose2d waypoint3 = new Pose2d(3.88, 2.35, new Rotation2d(0));
+    Pose2d waypoint4 = new Pose2d(2, 2.35, new Rotation2d(0));
+    drivetrain.seedFieldRelative(waypoint1);
+    
+    return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
+     new MoveArmIntake(arm).withTimeout(2.5), 
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint4, 0.5)).withTimeout(2),
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2, 0.1)).withTimeout(2), 
+     //old drivetrain.followTrajectoryCommand(waypoint1, 0.0), new ShootNoteSpeaker(shooter, arm));
+     new ParallelCommandGroup(drivetrain.followTrajectoryCommand(waypoint1, 0.1)).withTimeout(2.5), 
+     new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
+     new MoveArmIntake(arm).withTimeout(3),
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint3, 0.1)).withTimeout(2.5)
+    );
+
+     
     // new AutoIntake(intake, shooter, arm).withTimeout(3.0);
 
 
   }
 
-  public Command redAuto() {
-    //Todo change pose points.
-    Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(0));
-    Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(180));
-
+  public Command redAutoAmp() {
+    Pose2d waypoint1 = new Pose2d(1, 2.35, new Rotation2d(Units.degreesToRadians(120)));
+    Pose2d waypoint2 = new Pose2d(3.88, 2, new Rotation2d(0));
+    Pose2d waypoint3 = new Pose2d(3.88, 2, new Rotation2d(0));
+    Pose2d waypoint4 = new Pose2d(2, 2, new Rotation2d(0));
     drivetrain.seedFieldRelative(waypoint1);
+    
+    return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
+     new MoveArmIntake(arm).withTimeout(2.5), 
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint4, 0.5)).withTimeout(2),
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2, 0.1)).withTimeout(2), 
+     //old drivetrain.followTrajectoryCommand(waypoint1, 0.0), new ShootNoteSpeaker(shooter, arm));
+     new ParallelCommandGroup(drivetrain.followTrajectoryCommand(waypoint1, 0.1)).withTimeout(2.5), 
+     new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
+     new MoveArmIntake(arm).withTimeout(3),
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint3, 0.1)).withTimeout(2.5)
+    );
+  }
+  public Command redAutoCenter() {
+    //Todo change pose points.
+    //real y is 15.2 but this is just for testing
+    Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(Units.degreesToRadians(180)));
+    Pose2d waypoint2 = new Pose2d(2.5, 5.54, new Rotation2d(0));
+    Pose2d waypoint3 = new Pose2d(3.0, 5.54, new Rotation2d(0));
+    Pose2d waypoint4 = new Pose2d(2, 5.54, new Rotation2d(0));
+    drivetrain.seedFieldRelative(waypoint1);
+    
+    return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
+     new MoveArmIntake(arm).withTimeout(3), 
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint4, 0.1)).withTimeout(1.5),
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2, 0.1)).withTimeout(1), 
+     //old drivetrain.followTrajectoryCommand(waypoint1, 0.0), new ShootNoteSpeaker(shooter, arm));
+     new ParallelCommandGroup(drivetrain.followTrajectoryCommand(waypoint1, 0.1)).withTimeout(2.5), 
+     new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
+     new MoveArmIntake(arm).withTimeout(3),
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint3, 0.1)).withTimeout(2.5)
 
-    return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(2.5),
-     new MoveArmIntake(arm).withTimeout(3.5), 
-     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2, 0.3)).withTimeout(3.0), 
-     drivetrain.followTrajectoryCommand(waypoint1, 0.0), new ShootNoteSpeaker(shooter, arm));
+    );
+
+    //old Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(0));
+    // Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(Units.degreesToRadians(180)));
+
+    // drivetrain.seedFieldRelative(waypoint1);
+
+    // return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(2.5),
+    //  new MoveArmIntake(arm).withTimeout(3.5), 
+    //  new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2, 0.3)).withTimeout(3.0), 
+    //  drivetrain.followTrajectoryCommand(waypoint1, 0.0), new ShootNoteSpeaker(shooter, arm));
 
     // new AutoIntake(intake, shooter, arm).withTimeout(3.0);
 
