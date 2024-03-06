@@ -71,8 +71,6 @@ public class AutoAimPose extends Command{
         
         Pose2d robotPose = m_swerve.getState().Pose;
 
-        
-
 
         Rotation2d targetYaw = PhotonUtils.getYawToPose(robotPose, tag_pose.toPose2d());
 

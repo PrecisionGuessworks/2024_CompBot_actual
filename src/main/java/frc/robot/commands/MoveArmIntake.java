@@ -44,7 +44,4 @@ public class MoveArmIntake extends Command{
     return false;
   }
     
-
-
-    
 }
