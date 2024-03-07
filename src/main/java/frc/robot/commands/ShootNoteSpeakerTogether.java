@@ -13,7 +13,8 @@ public class ShootNoteSpeakerTogether extends Command{
     private final ArmSubsystem m_armSubsystem;
     private final IntakeSubsystem m_intake;
     int shottimeout = 0;
-    int isfirst = 0;
+    boolean pastin = false;
+    boolean isfirst = false;
 
     public ShootNoteSpeakerTogether(ShooterSubsystem shooterSubsystem, ArmSubsystem armSubsystem, IntakeSubsystem intake) {
         m_shooterSubsystem = shooterSubsystem;
@@ -38,21 +39,25 @@ public class ShootNoteSpeakerTogether extends Command{
   public void execute() {
    
     if (!m_intake.isBeakBreakTriggered()) {
-      shottimeout++;
-      if (isfirst == 0) {
+      if(pastin == true){
+        shottimeout++;
+        } 
+      if (isfirst == false) {
         shottimeout = 0;
-        isfirst = 1;
+        isfirst = true;
       }
       
-      if (shottimeout >= 8){
-          isfirst = 0;
+      if (shottimeout >= Constants.Arm.ShootTimeout){
+          isfirst = false;
+          pastin = false;
           m_shooterSubsystem.setFeedVelocity(0);
           m_shooterSubsystem.setLaunchVelocity(0);
           m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
           }
           
     } else{
- m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
+      pastin = true;
+       m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
 
     if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance)) {
        // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
@@ -62,7 +67,6 @@ public class ShootNoteSpeakerTogether extends Command{
         
     }
     }
-
     
 
     
