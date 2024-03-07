@@ -22,7 +22,7 @@ public class MoveArmAmp extends Command{
 
   @Override
   public void execute() {
-    
+    m_armSubsystem.setArmAngle(Constants.Arm.moveAmpArmAngle);
    
     // Called every time Command is scheduled
   }

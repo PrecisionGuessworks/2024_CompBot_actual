@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,11 +30,13 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -42,6 +45,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.autoCommands.AutoIntake;
+import frc.robot.autoCommands.PathFollowWithEvents;
 import frc.robot.commands.AutoAimPose;
 import frc.robot.commands.EjectPiece;
 import frc.robot.commands.IntakePiece;
@@ -62,6 +66,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PresPoseEstimator;
 //import frc.robot.subsystems.PresPoseEstimator;
 import frc.robot.subsystems.ShooterSubsystem;
+
 
 
 public class RobotContainer {
@@ -115,7 +120,7 @@ public class RobotContainer {
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("MoveArmSpeaker", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));
-    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake).withTimeout(2.5));
+    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.5));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
     
     NamedCommands.registerCommands(robotCommands);
@@ -223,13 +228,13 @@ public class RobotContainer {
     
     //return new ShootNoteSpeaker(shooter, arm);
     //return redAuto();
-    //return blueAutoAmp();
-    PathPlannerPath path = PathPlannerPath.fromPathFile("");
-
-        // Create a path following command using AutoBuilder. This will also trigger event markers.
-        return AutoBuilder.followPath(path);
+    return blueAutoAmp();
+    
     
   }
+
+
+  
   public Command blueAuto() {
     Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(Units.degreesToRadians(180)));
     Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(Units.degreesToRadians(0)));
@@ -286,19 +291,25 @@ public class RobotContainer {
 
   }
   public Command blueAutoAmp() {
-    Pose2d waypoint1 = new Pose2d(1, 2, new Rotation2d(Units.degreesToRadians(-120)));
-    Pose2d waypoint2 = new Pose2d(3.88, 2.35, new Rotation2d(0));
-    Pose2d waypoint3 = new Pose2d(3.88, 2.35, new Rotation2d(0));
+    Pose2d waypointStart = new Pose2d(1, 2, new Rotation2d(Units.degreesToRadians(-120)));
+    Pose2d waypointIntake = new Pose2d(3.88, 2.35, new Rotation2d(0));
+    Pose2d waypointRun = new Pose2d(6, 2.35, new Rotation2d(0));
     Pose2d waypoint4 = new Pose2d(2, 2.35, new Rotation2d(0));
-    drivetrain.seedFieldRelative(waypoint1);
+    drivetrain.seedFieldRelative(waypointStart);
     
-    return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
+    return new SequentialCommandGroup(new ShootNoteSpeakerTogether(shooter, arm,intake).withTimeout(1.5),
      new MoveArmIntake(arm).withTimeout(2.5), 
-     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint4, 0.5)).withTimeout(2),
-     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint2, 0.1)).withTimeout(2),
-     drivetrain.followTrajectoryCommand(waypoint1, 0.1).withTimeout(2.5), 
-     new ShootNoteSpeaker(shooter, arm).withTimeout(1.5));
-
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypoint4, 0.5)).withTimeout(1.5),
+     new ParallelCommandGroup(new AutoIntake(intake,shooter, arm), drivetrain.followTrajectoryCommand(waypointIntake, 0.1)).withTimeout(1.5),
+     drivetrain.followTrajectoryCommand(waypointStart, 0.5).withTimeout(2),
+     new ShootNoteSpeakerTogether(shooter, arm,intake).withTimeout(1.5),
+     drivetrain.followTrajectoryCommand(waypointRun, 0.5).withTimeout(2)
+     
+     
+     
+     
+     );
+    
      
     // new AutoIntake(intake, shooter, arm).withTimeout(3.0);
 

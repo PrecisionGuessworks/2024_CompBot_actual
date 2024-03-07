@@ -225,14 +225,14 @@ public class Constants {
 
         }
        
-        public static final double launchVelocity = 440.0; // rads/s
+        public static final double launchVelocity = 400.0; // rads/s
         public static final double launchVelocityTolerance = 20.0; // rads/s
-        public static final double ScoreAmpPower = 0.3;
+        public static final double ScoreAmpPower = 0.5;
         public static final double AmpVelocityTolerance = 10.0; // rads/s
 
         public static final double intakeFeedVelocity = 80; // rad/s
         public static final double scoreAmpFeedVelocity = 80; // rad/s
-        public static final double scoreSpeakerFeedVelocity = 80; // rad/s
+        public static final double scoreSpeakerFeedVelocity = 160; // rad/s
         
         
     }
@@ -246,8 +246,8 @@ public class Constants {
                 public static final MechanismRatio rightPivotRatio = new MechanismRatio(1, 75);
                 
                 public static final boolean rightPivotInvert = false;
-                public static final double rightPivotAccelerationConstraint = 1.0; // rad/s
-                public static final double rightPivotVelocityConstraint = 1; // rad/s
+                public static final double rightPivotAccelerationConstraint = 1.5; // rad/s
+                public static final double rightPivotVelocityConstraint = 2.5; // rad/s
 
                 public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
                 //public static final double rightPivotAccelerationConstraintDown = 0.05; // rad/s
@@ -295,9 +295,10 @@ public class Constants {
         public static final double intakeAngleTolerance = Units.degreesToRadians(8);
 
         public static final double launchAngle = Units.degreesToRadians(74);
+        public static final double ampPreAngle = Units.degreesToRadians(55);
         public static final double launchAngleTolerance = Units.degreesToRadians(3);
         public static final double scoreAmpArmAngle = Units.degreesToRadians(110); // rads
-        public static final double moveAmpArmAngle = Units.degreesToRadians(85); 
+        public static final double moveAmpArmAngle = Units.degreesToRadians(65); 
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
         public static final double midpointAngle = Units.degreesToRadians(75); 
         public static final double midpointAngleTolerance = Units.degreesToRadians(5);

@@ -22,7 +22,7 @@ public class MoveArmIntake extends Command{
 
   @Override
   public void execute() {
-    
+    m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
   }
 
   @Override

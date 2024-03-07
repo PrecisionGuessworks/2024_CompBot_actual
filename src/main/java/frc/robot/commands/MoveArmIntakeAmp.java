@@ -38,7 +38,7 @@ public class MoveArmIntakeAmp extends Command{
 
     //Called when Command is finished
     //return m_armSubsystem.isArmMotionFinished();
-    return m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.intakeAngleTolerance);
+    return m_armSubsystem.isAtAngle(Constants.Arm.ampPreAngle, Constants.Arm.intakeAngleTolerance);
   }
     
 
