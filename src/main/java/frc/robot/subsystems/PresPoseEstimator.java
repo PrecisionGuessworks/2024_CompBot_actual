@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.PhotonUtils;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -70,29 +72,30 @@ public class PresPoseEstimator  extends SubsystemBase{
     @Override
     public void periodic() {
         var res = m_photonCamera.getLatestResult();
+        
         if (res.hasTargets()) {
+            Pose2d robotPose = m_swerveDrivetrain.getState().Pose;
             var target = res.getBestTarget();
 
             var imageCaptureTime = res.getTimestampSeconds();
-            var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
-            var camPose = (Fiducials.AprilTags.aprilTagFiducials[target.getFiducialId()-1].getPose()).transformBy(camToTargetTrans.inverse());
 
-            Pose2d interPose = camPose.transformBy(camToRobot).toPose2d();
+            try {
+               Pose3d tagPose = m_aprilTagFieldLayout.getTagPose(target.getFiducialId()).get();
+              robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), tagPose, camToRobot).toPose2d();
 
-            Rotation2d interRot = interPose.getRotation();
+            }
 
-            double radians = Units.degreesToRadians(interRot.getDegrees() + 125);
-
-            Rotation2d actualRot = new Rotation2d(radians);
-
-            Pose2d actualPose = new Pose2d(interPose.getX(), interPose.getY(), actualRot);
+            catch (NoSuchElementException e) {
+              robotPose = m_swerveDrivetrain.getState().Pose;
+            }
+            
 
             
             m_swerveDrivetrain.addVisionMeasurement(
-                    actualPose, imageCaptureTime);
+                    robotPose, imageCaptureTime);
 
 
-            System.out.println("Photon Pose: "+ actualPose);
+            System.out.println("Photon Pose: "+ robotPose);
             
         }
 
