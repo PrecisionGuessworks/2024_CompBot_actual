@@ -68,16 +68,8 @@ public class IntakePiece extends Command{
 
   @Override
   public boolean isFinished() {
-    if (m_intakeSubsystem.isRollerStalled() || m_intakeSubsystem.isBeakBreakTriggered()) {
-      m_intakeSubsystem.stopRoller();
-      m_shooter.stopRoller();
+    return (m_intakeSubsystem.isRollerStalled() || m_intakeSubsystem.isBeakBreakTriggered());
       
-      return true;
-      
-    }
-    
-    //Called when Command is finished
-    return false;
   }
     
 

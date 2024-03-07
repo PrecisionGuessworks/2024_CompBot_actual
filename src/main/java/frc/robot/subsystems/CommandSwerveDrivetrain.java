@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import java.util.function.Supplier;
 
+import org.photonvision.PhotonUtils;
+
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
@@ -17,9 +19,12 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -27,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.Constants.Swerve.TunerConstants;
+import frc.robot.vision.Fiducials;
 
 /**
  * Class that extends the Phoenix SwerveDrivetrain class and implements subsystem
@@ -94,6 +100,42 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             pathConstraints,
             0.0, // Goal end velocity in meters/sec
             rotDelay // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+        );
+
+}
+
+public Command AutoAim() {
+
+    var alliance = DriverStation.getAlliance();
+    Pose3d tag_pose = new Pose3d();
+
+       if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+            tag_pose = Fiducials.AprilTags.aprilTagFiducials[6].getPose();
+        }
+
+        if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+            tag_pose = Fiducials.AprilTags.aprilTagFiducials[3].getPose();
+        }
+
+    
+    double filteredAngle = Constants.Arm.intakeAngle;
+    Pose2d robotPose = this.getState().Pose;
+    //Rotation2d targetYaw = PhotonUtils.getYawToPose(robotPose, tag_pose.toPose2d());
+
+    Rotation2d targetYaw = new Rotation2d(Units.degreesToRadians(180));
+    Pose2d targetPose = new Pose2d(1, 1, targetYaw);
+
+        // Create the constraints to use while pathfinding
+        PathConstraints pathConstraints = new PathConstraints(
+            3.0, 4.0, 
+            Units.degreesToRadians(540), Units.degreesToRadians(720));
+        
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        return AutoBuilder.pathfindToPose(
+            targetPose,
+            pathConstraints,
+            0.0, // Goal end velocity in meters/sec
+            0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
         );
 
 }

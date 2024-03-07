@@ -55,39 +55,29 @@ public class AutoAimPose extends Command{
     var result = m_camera.getLatestResult();
     boolean hasTargets = result.hasTargets();
     var alliance = DriverStation.getAlliance();
-
     Pose3d tag_pose = new Pose3d();
-    double filteredAngle = Constants.Arm.intakeAngle;
-    
 
-    if (hasTargets) {
-        if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
             tag_pose = Fiducials.AprilTags.aprilTagFiducials[6].getPose();
         }
 
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             tag_pose = Fiducials.AprilTags.aprilTagFiducials[3].getPose();
         }
-        
-        Pose2d robotPose = m_swerve.getState().Pose;
 
+    
+    double filteredAngle = Constants.Arm.intakeAngle;
+    Pose2d robotPose = m_swerve.getState().Pose;
+    
 
-        Rotation2d targetYaw = PhotonUtils.getYawToPose(robotPose, tag_pose.toPose2d());
+    Translation2d tagPose2d = new Translation2d(tag_pose.getX(), tag_pose.getY());
+    Translation2d tagVector = tagPose2d.minus(robotPose.getTranslation());
+    final double goalDistance = tagVector.getNorm();
 
-        Pose2d targetPose = new Pose2d(robotPose.getX(), robotPose.getY(), targetYaw);
-        //Transform2d tol = robotPose.minus(targetPose);
-        
-        m_swerve.followTrajectoryCommand(targetPose,0.0);
+    double armTheta = Math.atan2(((tag_pose.getZ()+1.2)-CAMERA_HEIGHT_METERS), goalDistance);
 
-        Translation2d tagPose2d = new Translation2d(tag_pose.getX(), tag_pose.getY());
-        Translation2d tagVector = tagPose2d.minus(robotPose.getTranslation());
-        final double goalDistance = tagVector.getNorm();
+    filteredAngle = Math.max(Math.min(armTheta, Constants.Arm.maxAngle), Constants.Arm.intakeAngle);
 
-        double armTheta = Math.atan2(((tag_pose.getZ()+1.2)-CAMERA_HEIGHT_METERS), goalDistance);
-
-        filteredAngle = Math.max(Math.min(armTheta, Constants.Arm.maxAngle), Constants.Arm.intakeAngle);
-        
-    }
     m_armSubsystem.setArmAngle(filteredAngle);
 
     if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(filteredAngle, Constants.Arm.launchAngleTolerance)) {

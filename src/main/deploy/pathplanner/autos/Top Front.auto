@@ -18,9 +18,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "MoveArmIntake"
+            "waitTime": 3.0
           }
         },
         {

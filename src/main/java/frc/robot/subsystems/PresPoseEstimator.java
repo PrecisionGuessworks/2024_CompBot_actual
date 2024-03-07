@@ -13,9 +13,11 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -74,9 +76,27 @@ public class PresPoseEstimator  extends SubsystemBase{
             var imageCaptureTime = res.getTimestampSeconds();
             var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
             var camPose = (Fiducials.AprilTags.aprilTagFiducials[target.getFiducialId()-1].getPose()).transformBy(camToTargetTrans.inverse());
+
+            Pose2d interPose = camPose.transformBy(camToRobot).toPose2d();
+
+            Rotation2d interRot = interPose.getRotation();
+
+            double radians = Units.degreesToRadians(interRot.getDegrees() + 125);
+
+            Rotation2d actualRot = new Rotation2d(radians);
+
+            Pose2d actualPose = new Pose2d(interPose.getX(), interPose.getY(), actualRot);
+
+            
             m_swerveDrivetrain.addVisionMeasurement(
-                    camPose.transformBy(camToRobot).toPose2d(), imageCaptureTime);
+                    actualPose, imageCaptureTime);
+
+
+            System.out.println("Photon Pose: "+ actualPose);
+            
         }
+
+        System.out.println("Acutal Pose:  "+ m_swerveDrivetrain.getState().Pose);
 
         
       // This method will be called once per scheduler run
