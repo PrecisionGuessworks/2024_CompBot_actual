@@ -226,7 +226,7 @@ public class Constants {
         }
        
         public static final double launchVelocity = 440.0; // rads/s
-        public static final double launchVelocityTolerance = 10.0; // rads/s
+        public static final double launchVelocityTolerance = 20.0; // rads/s
         public static final double ScoreAmpPower = 0.3;
         public static final double AmpVelocityTolerance = 10.0; // rads/s
 
@@ -247,7 +247,7 @@ public class Constants {
                 
                 public static final boolean rightPivotInvert = false;
                 public static final double rightPivotAccelerationConstraint = 1.0; // rad/s
-                public static final double rightPivotVelocityConstraint = 1.0; // rad/s
+                public static final double rightPivotVelocityConstraint = 1; // rad/s
 
                 public static final Constraints rightPivotTrapConstraints = new Constraints(rightPivotVelocityConstraint, rightPivotAccelerationConstraint);
                 //public static final double rightPivotAccelerationConstraintDown = 0.05; // rad/s

@@ -110,7 +110,25 @@ public class RobotContainer {
 
   private Command runAuto = drivetrain.getAutoPath("CommandTest");
 
-  
+  public RobotContainer() {
+    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm));
+    robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
+    robotCommands.put("MoveArmSpeaker", new MoveArmIntake(arm));
+    robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));
+    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake).withTimeout(2.5));
+    robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
+    
+    NamedCommands.registerCommands(robotCommands);
+
+    //autoChooser = AutoBuilder.buildAutoChooser();
+
+    // Another option that allows you to specify the default auto by its name
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
+    //SmartDashboard.putData("Auto Chooser", autoChooser);
+    configureBindings();
+    
+  }
   
   private final Trigger rightTrigger = new Trigger(() -> joystick.getRightTriggerAxis() > 0.2);
   private final Trigger leftTrigger = new Trigger(() -> joystick.getLeftTriggerAxis() > 0.2);
@@ -171,7 +189,7 @@ public class RobotContainer {
     //shoot da note
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
-    bumperRight.onTrue(new ShootNoteSpeaker(shooter, arm));
+    bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
@@ -199,30 +217,17 @@ public class RobotContainer {
     drivetrain.registerTelemetry(logger::telemeterize);
   }
 
-  public RobotContainer() {
-    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm));
-    robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
-    robotCommands.put("MoveArmSpeaker", new MoveArmIntake(arm));
-    robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));
-    robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
-    
-    NamedCommands.registerCommands(robotCommands);
-
-    //autoChooser = AutoBuilder.buildAutoChooser();
-
-    // Another option that allows you to specify the default auto by its name
-    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
-
-    //SmartDashboard.putData("Auto Chooser", autoChooser);
-    configureBindings();
-    
-  }
+  
 
   public Command getAutonomousCommand() {
     
     //return new ShootNoteSpeaker(shooter, arm);
     //return redAuto();
-    return blueAutoAmp();
+    //return blueAutoAmp();
+    PathPlannerPath path = PathPlannerPath.fromPathFile("");
+
+        // Create a path following command using AutoBuilder. This will also trigger event markers.
+        return AutoBuilder.followPath(path);
     
   }
   public Command blueAuto() {
