@@ -5,6 +5,7 @@
   "pathFolders": [
     "Low Front",
     "Mid Front",
+    "Cali test",
     "Old only path autos",
     "Top Front"
   ],
@@ -12,6 +13,6 @@
   "defaultMaxVel": 4.75,
   "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 500.0,
-  "defaultMaxAngAccel": 500.0,
+  "defaultMaxAngAccel": 600.0,
   "maxModuleSpeed": 5.0
 }
