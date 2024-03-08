@@ -154,7 +154,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Old only path autos",
   "previewStartingState": {
     "rotation": -120.0,
     "velocity": 0
