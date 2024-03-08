@@ -118,7 +118,7 @@ public class RobotContainer {
   public RobotContainer() {
     robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm).withTimeout(2.5));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
-    robotCommands.put("MoveArmSpeaker", new MoveArmIntake(arm));
+    robotCommands.put("MoveArmIntake", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));
     robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(3));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm, intake));
@@ -228,7 +228,9 @@ public class RobotContainer {
     
     //return new ShootNoteSpeaker(shooter, arm);
     //return redAuto();
+    //return blueAuto();
     //return blueAutoAmp();
+    //return redAutoAmp();
     return new PathPlannerAuto("MidFront");
     
   }
