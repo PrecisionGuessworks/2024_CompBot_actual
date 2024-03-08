@@ -28,24 +28,31 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Mid Front pickup"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "IntakePiece"
                 }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Mid Front pickup"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Mid Front Lineup"
+                      }
+                    }
+                  ]
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Mid Front Lineup"
           }
         },
         {
