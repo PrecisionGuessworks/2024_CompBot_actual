@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.21986283972568,
-        "y": 7.688426043518754
+        "x": 1.0527431410192767,
+        "y": 7.500879976379242
       },
       "isLocked": false,
       "linkedName": "Top Lineup Start"
     },
     {
       "anchor": {
-        "x": 2.8463466260265857,
-        "y": 7.0061298789264255
+        "x": 3.1363209122357327,
+        "y": 6.957886715773432
       },
       "prevControl": {
-        "x": 2.7148307357445725,
-        "y": 7.0594471317434575
+        "x": 3.0048050219537195,
+        "y": 7.011203968590464
       },
       "nextControl": {
-        "x": 3.101346202692406,
-        "y": 6.902751672170012
+        "x": 3.391320488901553,
+        "y": 6.854508509017019
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 6.957886715773432
       },
       "prevControl": {
-        "x": 1.2267547201761073,
-        "y": 7.743561087122175
+        "x": 1.0777460742738738,
+        "y": 7.567554465058169
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,12 +47,12 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.45,
-      "rotationDegrees": -15.19321035434025,
+      "rotationDegrees": -11.550000000000011,
       "rotateFast": true
     },
     {
       "waypointRelativePos": 1.6,
-      "rotationDegrees": -18.269999999999982,
+      "rotationDegrees": -8.51779915560116,
       "rotateFast": false
     }
   ],

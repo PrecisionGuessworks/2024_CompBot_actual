@@ -36,41 +36,32 @@ public class ScoreAmp extends Command{
   @Override
   public void execute() {
     // Called every time Command is scheduled
-    
-    m_armSubsystem.setArmAngle(Constants.Arm.scoreAmpArmAngle);
-    if (m_armSubsystem.isAtAngle(Constants.Arm.scoreAmpArmAngle, Constants.Arm.scoreAmpArmAngleTolerance)) {
-       // m_armSubsystem.resetEncoders(Constants.Arm.scoreAmpArmAngle);      
-        m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreAmpFeedVelocity);   
-        
-    }
-  
+
   
 
     if (!m_intake.isBeakBreakTriggered()) {
-      if(pastin == true){
-      shottimeout++;
-      }     
-      if (isfirst == false && second == false) {
-        shottimeout = 0;
-        isfirst = true;
-      }
       
-      if (shottimeout >= Constants.Arm.AmpTimeout && shottimeout < Constants.Arm.AmpTimeoutMid){
+      shottimeout++;
+           
+      
+      if ((shottimeout >= Constants.Arm.AmpTimeout) && (shottimeout < Constants.Arm.AmpTimeoutMid)){
         isfirst = false;
         m_shooterSubsystem.setFeedVelocity(0);
         m_shooterSubsystem.setLaunchVelocity(0);
         m_armSubsystem.setArmAngle(Constants.Arm.moveAmpArmAngle);
         } 
-        else if (shottimeout >= Constants.Arm.AmpTimeoutMid){
+        if (shottimeout >= Constants.Arm.AmpTimeoutMid){
         isfirst = false;
         second = false;
         pastin = false;
         m_shooterSubsystem.setFeedVelocity(0);
         m_shooterSubsystem.setLaunchVelocity(0);
         m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);   
-        }        
+        }     
+           
     } else{
-    pastin = true;
+    
+    shottimeout = 0;
     m_armSubsystem.setArmAngle(Constants.Arm.scoreAmpArmAngle);
     if (m_armSubsystem.isAtAngle(Constants.Arm.scoreAmpArmAngle, Constants.Arm.scoreAmpArmAngleTolerance)) {
        // m_armSubsystem.resetEncoders(Constants.Arm.scoreAmpArmAngle);      

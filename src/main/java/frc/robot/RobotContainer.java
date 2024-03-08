@@ -116,12 +116,12 @@ public class RobotContainer {
   private Command runAuto = drivetrain.getAutoPath("CommandTest");
 
   public RobotContainer() {
-    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm));
+    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm).withTimeout(2.5));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("MoveArmSpeaker", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));
-    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.5));
-    robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
+    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(3));
+    robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm, intake));
     
     NamedCommands.registerCommands(robotCommands);
 
@@ -202,7 +202,7 @@ public class RobotContainer {
     operatorButtonA.onTrue(new MoveArmIntake(arm));
 
     //move arm
-    operatorBumperRight.whileTrue(new ScoreAmp(shooter, arm));
+    operatorBumperRight.onTrue(new ScoreAmp(shooter, arm, intake));
     operatorButtonY.onTrue(new MoveArmAmp(arm));
     operatorDPadDown.whileTrue(new SetClimberSensorMax(climber));
     operatorDPadUp.whileTrue(new SetClimberSensorMin(climber));
@@ -228,8 +228,8 @@ public class RobotContainer {
     
     //return new ShootNoteSpeaker(shooter, arm);
     //return redAuto();
-    return blueAutoAmp();
-    
+    //return blueAutoAmp();
+    return new PathPlannerAuto("MidFront");
     
   }
 

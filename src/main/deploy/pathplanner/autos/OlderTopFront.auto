@@ -14,13 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoteSpeaker"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
+            "name": "ShootNoteSpeakerTogether"
           }
         },
         {
@@ -57,7 +51,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoteSpeaker"
+            "name": "ShootNoteSpeakerTogether"
           }
         }
       ]

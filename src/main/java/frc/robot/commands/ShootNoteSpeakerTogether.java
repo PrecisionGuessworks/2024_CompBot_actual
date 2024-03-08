@@ -39,13 +39,10 @@ public class ShootNoteSpeakerTogether extends Command{
   public void execute() {
    
     if (!m_intake.isBeakBreakTriggered()) {
-      if(pastin == true){
+      
         shottimeout++;
-        } 
-      if (isfirst == false) {
-        shottimeout = 0;
-        isfirst = true;
-      }
+      
+      
       
       if (shottimeout >= Constants.Arm.ShootTimeout){
           isfirst = false;
@@ -56,12 +53,12 @@ public class ShootNoteSpeakerTogether extends Command{
           }
           
     } else{
-      pastin = true;
+      
        m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
 
     if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance)) {
        // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
-        
+        shottimeout = 0;
         m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
         
         
