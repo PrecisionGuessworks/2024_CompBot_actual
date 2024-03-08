@@ -105,7 +105,7 @@ public class RobotContainer {
 
 /*  enable for testing once    */
 
-  //PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
+  PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
