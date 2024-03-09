@@ -44,6 +44,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
+import frc.robot.Constants.Blinkin;
 import frc.robot.autoCommands.AutoIntake;
 import frc.robot.autoCommands.PathFollowWithEvents;
 import frc.robot.commands.AutoAimPose;
@@ -66,6 +67,8 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PresPoseEstimator;
 //import frc.robot.subsystems.PresPoseEstimator;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.Blinkin.BlinkinSubsystem;
+import frc.robot.subsystems.Blinkin.Colors;
 
 
 
@@ -101,6 +104,7 @@ public class RobotContainer {
   ShooterSubsystem shooter = new ShooterSubsystem();
   ArmSubsystem arm = new ArmSubsystem();
   ClimberSubsystem climber = new ClimberSubsystem();
+  BlinkinSubsystem blinkin = new BlinkinSubsystem();
 
 
 /*  enable for testing once    */
@@ -215,6 +219,16 @@ public class RobotContainer {
 
     //climber.setDefaultCommand(new MoveClimber(climber, operator.getRightY(), operator.getLeftY()));
     
+
+    // Blinkn based on beam break states
+    if(intake.isBeamBreakTriggered()) {
+      blinkin.setColor(Colors.GREEN);
+    } //else if (arm.isBeamBreakTriggered()) {
+      //blinkin.setColor(Colors.ORANGE);
+    //}
+     else {
+      blinkin.setBlinkinToAllianceColor();
+    }
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
