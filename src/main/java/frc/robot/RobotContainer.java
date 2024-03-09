@@ -68,10 +68,11 @@ import frc.robot.subsystems.PresPoseEstimator;
 import frc.robot.subsystems.ShooterSubsystem;
 
 
-
 public class RobotContainer {
   final double MaxSpeed = 5.0292; // 6 meters per second desired top speed
   final double MaxAngularRate = 2 * Math.PI; // Half a rotation per second max angular velocity
+
+  private final SendableChooser<Command> chooser;
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   //CommandPS4Controller joystick = new CommandPS4Controller(0);
@@ -125,12 +126,9 @@ public class RobotContainer {
     
     NamedCommands.registerCommands(robotCommands);
 
-    //autoChooser = AutoBuilder.buildAutoChooser();
-
-    // Another option that allows you to specify the default auto by its name
-    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
-
-    //SmartDashboard.putData("Auto Chooser", autoChooser);
+    
+    chooser = AutoBuilder.buildAutoChooser("default");
+        SmartDashboard.putData("Auto Choices", chooser);
     configureBindings();
     
   }
@@ -231,8 +229,8 @@ public class RobotContainer {
     //return blueAuto();
     //return blueAutoAmp();
     //return redAutoAmp();
-    return new PathPlannerAuto("MidFront");
-    
+    //return new PathPlannerAuto("MidFront");
+    return chooser.getSelected();
   }
 
 
