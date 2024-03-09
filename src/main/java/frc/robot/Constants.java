@@ -336,8 +336,13 @@ public class Constants {
 
         }
 
+        
         public static final double maxPosition = 0;
         public static final double minPosition = -32.0;
         public static final double maxSpeed = 0.4; //speed gain
     }
+
+    public static final class Blinkin {
+                public static final int BLINKIN_ID = 9; // TODO: Where is this plugged in????
+        }
 }
