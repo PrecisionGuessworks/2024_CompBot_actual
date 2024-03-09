@@ -37,7 +37,7 @@ public class ShootNoteSpeakerTogether extends Command{
   @Override
   public void execute() {
    
-    if (!m_intake.isBeakBreakTriggered()) {
+    if (!m_intake.isBeamBreakTriggered()) {
       shottimeout++;
       if (isfirst == 0) {
         shottimeout = 0;
