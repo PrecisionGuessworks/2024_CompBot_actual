@@ -176,7 +176,7 @@ public class RobotContainer {
     operatorButtonA.whileTrue(new MoveArmIntake(arm));
 
     //move arm
-    operatorBumperRight.whileTrue(new ScoreAmp(shooter, arm));
+    operatorBumperRight.whileTrue(new ScoreAmp(shooter, arm, intake));
     operatorButtonY.whileTrue(new MoveArmAmp(arm));
     operatorDPadDown.whileTrue(new SetClimberSensorMax(climber));
     operatorDPadUp.whileTrue(new SetClimberSensorMin(climber));
@@ -199,7 +199,7 @@ public class RobotContainer {
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("MoveArmSpeaker", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm));
-    robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
+    robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm, intake));
     
     NamedCommands.registerCommands(robotCommands);
 
