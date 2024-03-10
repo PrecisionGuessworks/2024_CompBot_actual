@@ -11,10 +11,12 @@ public class BlinkinState extends Command {
   /** Creates a new BlinkinState. */
   private BlinkinSubsystem blinkin = BlinkinSubsystem.getInstance();
   private boolean greenOn, orangeOn, doneSignalling;
+  private IntakeSubsystem m_intake;
 
-  public BlinkinState() {
+  public BlinkinState(IntakeSubsystem intake) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(blinkin);
+    m_intake = intake;
+    addRequirements(blinkin, intake);
     blinkin.setBlinkinToAllianceColor();
     doneSignalling = true;
   }
@@ -26,7 +28,7 @@ public class BlinkinState extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(IntakeSubsystem.isBeamBreakTriggered()) {
+    if(m_intake.isBeamBreakTriggered()) {
 
     }
   }
