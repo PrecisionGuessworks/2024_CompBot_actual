@@ -34,7 +34,7 @@ public class Constants {
 
      private static final Slot0Configs driveGains = new Slot0Configs()
         .withKP(3).withKI(0).withKD(0)
-        .withKS(0).withKV(0).withKA(0);
+        .withKS(0.48665 / 12).withKV(2.4132 / 12).withKA(0.06921 / 12);
 
    // private static final Slot0Configs driveGains = new Slot0Configs().withKP(3).withKI(0).withKD(0).withKS(0.48665 / 12).withKV(2.4132 / 12).withKA(0.06921 / 12);
 
@@ -153,7 +153,9 @@ public class Constants {
         public static final CANDeviceID motorID = new CANDeviceID(0);
         public static final MechanismRatio motorRatio = new MechanismRatio(0, 0, 0);
     }
-
+    public static final class Blinkin {
+        public static final int BLINKIN_ID = 9; // TODO: Where is this plugged in????
+}
     public static final class Intake {
         public static final class Roller {
                 public static final CANDeviceID rollerMotorID = new CANDeviceID(21, kRioName);
@@ -295,14 +297,16 @@ public class Constants {
         public static final double intakeAngleTolerance = Units.degreesToRadians(8);
 
         public static final double launchAngle = Units.degreesToRadians(74);
-        public static final double ampPreAngle = Units.degreesToRadians(55);
+        public static final double ampPreAngle = Units.degreesToRadians(80);
         public static final double launchAngleTolerance = Units.degreesToRadians(3);
         public static final double scoreAmpArmAngle = Units.degreesToRadians(110); // rads
         public static final double moveAmpArmAngle = Units.degreesToRadians(65); 
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
         public static final double midpointAngle = Units.degreesToRadians(75); 
         public static final double midpointAngleTolerance = Units.degreesToRadians(5);
-
+        public static final double ShootTimeout = 8;
+        public static final double AmpTimeout = 12;
+        public static final double AmpTimeoutMid = 36;
         public static final double eject = Units.degreesToRadians(30);
         public static final double ejectAngleTolerance = Units.degreesToRadians(3);
 
@@ -336,13 +340,8 @@ public class Constants {
 
         }
 
-        
         public static final double maxPosition = 0;
         public static final double minPosition = -32.0;
         public static final double maxSpeed = 0.4; //speed gain
     }
-
-    public static final class Blinkin {
-                public static final int BLINKIN_ID = 9; // TODO: Where is this plugged in????
-        }
 }

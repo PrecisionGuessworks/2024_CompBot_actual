@@ -5,17 +5,24 @@ import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 
 public class ScoreAmp extends Command{
     private final ShooterSubsystem m_shooterSubsystem;
     private final ArmSubsystem m_armSubsystem;
+    private final IntakeSubsystem m_intake;
+    int shottimeout = 0;
+    boolean pastin = false;
+    boolean isfirst = false;
+    boolean second = false;
 
-    public ScoreAmp(ShooterSubsystem shooter, ArmSubsystem arm) {
+    public ScoreAmp(ShooterSubsystem shooter, ArmSubsystem arm , IntakeSubsystem intake) {
         m_shooterSubsystem = shooter;
         m_armSubsystem = arm;
+        m_intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(shooter, arm);
+        addRequirements(shooter, arm, intake);
 
     }
 
@@ -29,15 +36,44 @@ public class ScoreAmp extends Command{
   @Override
   public void execute() {
     // Called every time Command is scheduled
+
+  
+
+    if (!m_intake.isBeakBreakTriggered()) {
+      
+      shottimeout++;
+           
+      
+      if ((shottimeout >= Constants.Arm.AmpTimeout) && (shottimeout < Constants.Arm.AmpTimeoutMid)){
+        isfirst = false;
+        m_shooterSubsystem.setFeedVelocity(0);
+        m_shooterSubsystem.setLaunchVelocity(0);
+        m_armSubsystem.setArmAngle(Constants.Arm.moveAmpArmAngle);
+        } 
+        if (shottimeout >= Constants.Arm.AmpTimeoutMid){
+        isfirst = false;
+        second = false;
+        pastin = false;
+        m_shooterSubsystem.setFeedVelocity(0);
+        m_shooterSubsystem.setLaunchVelocity(0);
+        m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);   
+        }     
+           
+    } else{
     
+    shottimeout = 0;
     m_armSubsystem.setArmAngle(Constants.Arm.scoreAmpArmAngle);
     if (m_armSubsystem.isAtAngle(Constants.Arm.scoreAmpArmAngle, Constants.Arm.scoreAmpArmAngleTolerance)) {
-       // m_armSubsystem.resetEncoders(Constants.Arm.scoreAmpArmAngle);
-        
-        m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreAmpFeedVelocity);
-        
+       // m_armSubsystem.resetEncoders(Constants.Arm.scoreAmpArmAngle);      
+        m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreAmpFeedVelocity);   
         
     }
+    }
+
+
+    
+  
+  
   }
 
   @Override

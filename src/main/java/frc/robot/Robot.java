@@ -7,6 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.Blinkin;
+import frc.robot.subsystems.Blinkin.BlinkinSubsystem;
+import frc.robot.subsystems.Blinkin.Colors;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -55,7 +58,17 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+// if(intake.isBeamBreakTriggered()) {
+//       blinkin.setColor(Colors.GREEN);
+//     } //else if (arm.isBeamBreakTriggered()) {
+//       //blinkin.setColor(Colors.ORANGE);
+//     //}
+//      else {
+//       blinkin.setBlinkinToAllianceColor();
+//     }
+
+  }
 
   @Override
   public void teleopExit() {}

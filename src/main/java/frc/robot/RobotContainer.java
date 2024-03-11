@@ -44,7 +44,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
-import frc.robot.Constants.Blinkin;
 import frc.robot.autoCommands.AutoIntake;
 import frc.robot.autoCommands.PathFollowWithEvents;
 import frc.robot.commands.AutoAimPose;
@@ -67,14 +66,15 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PresPoseEstimator;
 //import frc.robot.subsystems.PresPoseEstimator;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.Constants.Blinkin;
 import frc.robot.subsystems.Blinkin.BlinkinSubsystem;
 import frc.robot.subsystems.Blinkin.Colors;
-
-
 
 public class RobotContainer {
   final double MaxSpeed = 5.0292; // 6 meters per second desired top speed
   final double MaxAngularRate = 2 * Math.PI; // Half a rotation per second max angular velocity
+
+  private final SendableChooser<Command> chooser;
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   //CommandPS4Controller joystick = new CommandPS4Controller(0);
@@ -109,7 +109,7 @@ public class RobotContainer {
 
 /*  enable for testing once    */
 
-  //PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
+  PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
@@ -120,21 +120,18 @@ public class RobotContainer {
   private Command runAuto = drivetrain.getAutoPath("CommandTest");
 
   public RobotContainer() {
-    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm));
+    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm).withTimeout(2.5));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
-    robotCommands.put("MoveArmSpeaker", new MoveArmIntake(arm));
+    robotCommands.put("MoveArmIntake", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));
-    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.5));
-    robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm));
+    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.6));
+    robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm, intake));
     
     NamedCommands.registerCommands(robotCommands);
 
-    //autoChooser = AutoBuilder.buildAutoChooser();
-
-    // Another option that allows you to specify the default auto by its name
-    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
-
-    //SmartDashboard.putData("Auto Chooser", autoChooser);
+    
+    chooser = AutoBuilder.buildAutoChooser("default");
+        SmartDashboard.putData("Auto Choices", chooser);
     configureBindings();
     
   }
@@ -206,7 +203,7 @@ public class RobotContainer {
     operatorButtonA.onTrue(new MoveArmIntake(arm));
 
     //move arm
-    operatorBumperRight.whileTrue(new ScoreAmp(shooter, arm));
+    operatorBumperRight.onTrue(new ScoreAmp(shooter, arm, intake));
     operatorButtonY.onTrue(new MoveArmAmp(arm));
     operatorDPadDown.whileTrue(new SetClimberSensorMax(climber));
     operatorDPadUp.whileTrue(new SetClimberSensorMin(climber));
@@ -219,17 +216,8 @@ public class RobotContainer {
 
     //climber.setDefaultCommand(new MoveClimber(climber, operator.getRightY(), operator.getLeftY()));
     
-
-    // Blinkn based on beam break states
-    if(intake.isBeamBreakTriggered()) {
-      blinkin.setColor(Colors.GREEN);
-    } //else if (arm.isBeamBreakTriggered()) {
-      //blinkin.setColor(Colors.ORANGE);
-    //}
-     else {
-      blinkin.setBlinkinToAllianceColor();
-    }
-
+    
+    
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
@@ -242,9 +230,11 @@ public class RobotContainer {
     
     //return new ShootNoteSpeaker(shooter, arm);
     //return redAuto();
-    return blueAutoAmp();
-    
-    
+    //return blueAuto();
+    //return blueAutoAmp();
+    //return redAutoAmp();
+    //return new PathPlannerAuto("MidFront");
+    return chooser.getSelected();
   }
 
 
