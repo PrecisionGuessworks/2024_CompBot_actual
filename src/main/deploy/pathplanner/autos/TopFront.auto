@@ -14,13 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoteSpeaker"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
+            "name": "ShootNoteSpeakerTogether"
           }
         },
         {
@@ -58,6 +52,49 @@
           "type": "named",
           "data": {
             "name": "ShootNoteSpeaker"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top Front Far"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakePiece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Lineup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoteSpeakerTogether"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Backup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": " Top Front Run Far"
           }
         }
       ]
