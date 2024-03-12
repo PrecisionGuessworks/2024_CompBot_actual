@@ -75,7 +75,7 @@ public class RobotContainer {
   final double MaxSpeed = 5.0292; // 6 meters per second desired top speed
   final double MaxAngularRate = 2 * Math.PI; // Half a rotation per second max angular velocity
 
-  private static SendableChooser<Command> autoChooser;
+  private final SendableChooser<Command> autoPicker = new SendableChooser<>();
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   //CommandPS4Controller joystick = new CommandPS4Controller(0);
@@ -131,12 +131,9 @@ public class RobotContainer {
     NamedCommands.registerCommands(robotCommands);
 
     
-    autoChooser = new SendableChooser<Command>();
-    autoChooser.setDefaultOption("Amp 3.5 note", new PathPlannerAuto("TopFront"));
-    autoChooser.setDefaultOption("Middle 3.5 note", new PathPlannerAuto("MidFront"));
-    autoChooser.setDefaultOption("Load Station 3.5 note", new PathPlannerAuto("LowFront"));
-    autoChooser.setDefaultOption("Calibration Auto", new PathPlannerAuto("CaliAuto"));
-    SmartDashboard.putData("Auto mode", autoChooser);
+    // autoPicker = AutoBuilder.buildAutoChooser();
+    // SmartDashboard.putData("Auto Choices", autoPicker);
+    configureAutoPicker();
     configureBindings();
     
   }
@@ -179,6 +176,18 @@ public class RobotContainer {
 
       private final Trigger operatorDPadUp = new POVButton(operator, 0);
   
+  
+  public void configureAutoPicker(){
+    autoPicker.addOption("redAuto", redAuto());
+    autoPicker.addOption("B-2-6", new PathPlannerAuto("MidFront"));
+    autoPicker.addOption("A-1-4", new PathPlannerAuto("TopFront"));
+    //autoPicker.addOption("LowFront", new PathPlannerAuto("LowFront"));
+    autoPicker.addOption("CaliAuto", new PathPlannerAuto("CaliAuto"));
+    autoPicker.addOption("A-1", new PathPlannerAuto("OlderTopFront"));
+
+    autoPicker.setDefaultOption("blueAuto", blueAuto());
+    SmartDashboard.putData(autoPicker);
+  }
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -240,7 +249,7 @@ public class RobotContainer {
     //return blueAutoAmp();
     //return redAutoAmp();
     //return new PathPlannerAuto("MidFront");
-    return autoChooser.getSelected();
+    return autoPicker.getSelected();
   }
 
 

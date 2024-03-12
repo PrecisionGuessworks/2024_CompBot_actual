@@ -3,9 +3,9 @@
   "robotLength": 1.0668,
   "holonomicMode": true,
   "pathFolders": [
+    "Cali test",
     "Low Front",
     "Mid Front",
-    "Cali test",
     "Old only path autos",
     "Top Front"
   ],

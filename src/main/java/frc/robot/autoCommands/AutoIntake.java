@@ -46,7 +46,7 @@ public class AutoIntake extends Command{
       m_intakeSubsystem.startRollerSpin();
       m_shooter.Intake();
       
-      if (m_intakeSubsystem.isRollerStalled() || m_intakeSubsystem.isBeakBreakTriggered()) {
+      if (m_intakeSubsystem.isRollerStalled() || m_intakeSubsystem.isBeamBreakTriggered()) {
       
       m_intakeSubsystem.stopRoller();
       m_shooter.stopRoller();
