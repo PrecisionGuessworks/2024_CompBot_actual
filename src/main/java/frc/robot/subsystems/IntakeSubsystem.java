@@ -67,7 +67,7 @@ public class IntakeSubsystem  extends SubsystemBase{
           return m_rollerTimer.get() > Constants.Intake.Roller.rollerStallTime;
     }
 
-    public boolean isBeakBreakTriggered() {
+    public boolean isBeamBreakTriggered() {
       boolean beamBreakInput = m_intakeBeamBreakInput.get();
 
       return !beamBreakInput;

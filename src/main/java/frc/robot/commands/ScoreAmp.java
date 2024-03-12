@@ -39,7 +39,7 @@ public class ScoreAmp extends Command{
 
   
 
-    if (!m_intake.isBeakBreakTriggered()) {
+    if (!m_intake.isBeamBreakTriggered()) {
       
       shottimeout++;
            
