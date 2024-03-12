@@ -58,6 +58,7 @@ import frc.robot.commands.SetClimberSensorMin;
 import frc.robot.commands.MoveArmIntake;
 import frc.robot.commands.MoveArmIntakeAmp;
 import frc.robot.commands.ShootNoteSpeaker;
+import frc.robot.commands.ShootNoteSpeakerPodium;
 import frc.robot.commands.ShootNoteSpeakerTogether;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -90,9 +91,9 @@ public class RobotContainer {
   SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   Telemetry logger = new Telemetry(MaxSpeed);
 
-  //enable for testing once
+  /*  enable for testing once    */
 
-  PhotonCamera aprilCam = new PhotonCamera("OV2311");
+  //PhotonCamera aprilCam = new PhotonCamera("OV2311");
 
 
 
@@ -109,7 +110,7 @@ public class RobotContainer {
 
 /*  enable for testing once    */
 
-  PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
+  //PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
@@ -126,7 +127,7 @@ public class RobotContainer {
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));
     robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.2));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm, intake));
-    
+    robotCommands.put("ShootNoteSpeakerPodium", new ShootNoteSpeakerPodium(shooter, arm, intake  ).withTimeout(2.5));
     NamedCommands.registerCommands(robotCommands);
 
     
@@ -200,6 +201,7 @@ public class RobotContainer {
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
     bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
+    leftTrigger.onTrue(new ShootNoteSpeakerPodium(shooter, arm, intake));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));

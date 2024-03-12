@@ -229,6 +229,8 @@ public class Constants {
        
         public static final double launchVelocity = 400.0; // rads/s
         public static final double launchVelocityTolerance = 20.0; // rads/s
+        public static final double PodiumlaunchVelocity = 450.0; // rads/s
+        public static final double PodiumlaunchVelocityTolerance = 15.0; // rads/s
         public static final double ScoreAmpPower = 0.5;
         public static final double AmpVelocityTolerance = 10.0; // rads/s
 
@@ -309,7 +311,8 @@ public class Constants {
         public static final double AmpTimeoutMid = 37;
         public static final double eject = Units.degreesToRadians(30);
         public static final double ejectAngleTolerance = Units.degreesToRadians(3);
-
+        public static final double PodiumlaunchAngle = Units.degreesToRadians(65);
+        public static final double PodiumlaunchAngleTolerance = Units.degreesToRadians(3);
         //public static final TrapezoidProfile.State m_goal = new TrapezoidProfile.State(100, 0);
 
 
