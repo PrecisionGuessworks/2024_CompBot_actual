@@ -20,7 +20,7 @@ public class AutoAimPID extends Command{
     private final SwerveRequest.FieldCentric m_drive;
     private final PhotonCamera m_camera;
     private final PIDController turnController = new PIDController(1.0, 0, 0.1);
-    double rotationSpeed;
+    
     final double MaxAngularRate = 2 * Math.PI;
 
     public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive) {
@@ -43,7 +43,7 @@ public class AutoAimPID extends Command{
     // Called every time Command is scheduled
     var result = m_camera.getLatestResult();
     var alliance = DriverStation.getAlliance();
-    PhotonTrackedTarget target;
+    
     int speakerID = 7;
 
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
@@ -53,31 +53,19 @@ public class AutoAimPID extends Command{
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             speakerID = Fiducials.AprilTags.aprilTagFiducials[3].getID();
         }
+    
+    if (result.hasTargets()) {
+      var targetList = result.getTargets();
+      for (int i = 0; i < targetList.size(); i++) {
+        var target = targetList.get(i);
 
-        if (result.hasTargets()) {
-                List<PhotonTrackedTarget> targets = result.getTargets();
-                System.out.println(targets);
+        if (target.getFiducialId() == speakerID) {
+          double rotationSpeed = -turnController.calculate(target.getYaw(), 0);
+          m_swerve.applyRequest(() -> m_drive.withRotationalRate(rotationSpeed*MaxAngularRate));
 
-                for (int i = 0; i < targets.size(); i++) {
-                    int targetID = targets.get(i).getFiducialId();
-                    System.out.println("target ID "+targetID);
-                    if (targetID == speakerID) {
-                        target = targets.get(i);
-                        // Calculate angular turn power
-                // -1.0 required to ensure positive PID controller effort _increases_ yaw
-                        rotationSpeed = -turnController.calculate(target.getYaw(), 0);
-                        System.out.println("rotation speed "+rotationSpeed);
-                        m_swerve.applyRequest(() -> m_drive.withRotationalRate(rotationSpeed*MaxAngularRate));
-
-                    }
-                         
-                }
-            } 
-            else {
-                // If we have no targets, stay still.
-                rotationSpeed = 0;
-            }
-            ;
+        }
+      }
+    }    
   }
 
   @Override

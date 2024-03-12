@@ -46,6 +46,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.autoCommands.AutoIntake;
 import frc.robot.autoCommands.PathFollowWithEvents;
+import frc.robot.commands.AutoAimPID;
 import frc.robot.commands.AutoAimPose;
 import frc.robot.commands.EjectPiece;
 import frc.robot.commands.IntakePiece;
@@ -93,7 +94,7 @@ public class RobotContainer {
 
   /*  enable for testing once    */
 
-  //PhotonCamera aprilCam = new PhotonCamera("OV2311");
+  PhotonCamera aprilCam = new PhotonCamera("OV2311");
 
 
 
@@ -223,7 +224,7 @@ public class RobotContainer {
     operatorDPadDown.whileTrue(new SetClimberSensorMax(climber));
     operatorDPadUp.whileTrue(new SetClimberSensorMin(climber));
 
-    operatorRightTrigger.whileTrue(drivetrain.AutoAim());
+    operatorRightTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive));
 
     //buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 
