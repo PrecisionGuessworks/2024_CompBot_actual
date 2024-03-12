@@ -124,7 +124,7 @@ public class RobotContainer {
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("MoveArmIntake", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));
-    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.6));
+    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.2));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm, intake));
     
     NamedCommands.registerCommands(robotCommands);
@@ -178,11 +178,11 @@ public class RobotContainer {
   
   public void configureAutoPicker(){
     autoPicker.addOption("redAuto", redAuto());
-    autoPicker.addOption("MidFront", new PathPlannerAuto("MidFront"));
-    autoPicker.addOption("TopFront", new PathPlannerAuto("TopFront"));
+    autoPicker.addOption("B-2-6", new PathPlannerAuto("MidFront"));
+    autoPicker.addOption("A-1-4", new PathPlannerAuto("TopFront"));
     //autoPicker.addOption("LowFront", new PathPlannerAuto("LowFront"));
     autoPicker.addOption("CaliAuto", new PathPlannerAuto("CaliAuto"));
-    autoPicker.addOption("OlderTopFront", new PathPlannerAuto("OlderTopFront"));
+    autoPicker.addOption("A-1", new PathPlannerAuto("OlderTopFront"));
 
     autoPicker.setDefaultOption("blueAuto", blueAuto());
     SmartDashboard.putData(autoPicker);

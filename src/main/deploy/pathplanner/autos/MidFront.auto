@@ -24,47 +24,9 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Mid Front pickup"
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Mid Front Lineup"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakePiece"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoteSpeakerTogether"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Mid Front Back"
+            "pathName": "Mid Front pickup"
           }
         },
         {
@@ -74,41 +36,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mid Front Far"
+                  "pathName": "Mid Front Lineup"
                 }
               },
               {
-                "type": "sequential",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 3.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "IntakePiece"
-                      }
-                    }
-                  ]
+                  "name": "ShootNoteSpeakerTogether"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Mid Front Lineup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoteSpeakerTogether"
           }
         },
         {
@@ -120,7 +57,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Mid Front Run"
+            "pathName": "Mid Front Far"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Mid Front Lineup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNoteSpeakerTogether"
+                }
+              }
+            ]
           }
         }
       ]
