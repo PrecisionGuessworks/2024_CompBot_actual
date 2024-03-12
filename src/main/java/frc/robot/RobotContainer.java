@@ -74,7 +74,7 @@ public class RobotContainer {
   final double MaxSpeed = 5.0292; // 6 meters per second desired top speed
   final double MaxAngularRate = 2 * Math.PI; // Half a rotation per second max angular velocity
 
-  private final SendableChooser<Command> chooser;
+  private static SendableChooser<Command> autoChooser;
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   //CommandPS4Controller joystick = new CommandPS4Controller(0);
@@ -124,14 +124,18 @@ public class RobotContainer {
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("MoveArmIntake", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));
-    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.6));
+    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.2));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm, intake));
     
     NamedCommands.registerCommands(robotCommands);
 
     
-    chooser = AutoBuilder.buildAutoChooser("default");
-        SmartDashboard.putData("Auto Choices", chooser);
+    autoChooser = new SendableChooser<Command>();
+    autoChooser.setDefaultOption("Amp 3.5 note", new PathPlannerAuto("TopFront"));
+    autoChooser.setDefaultOption("Middle 3.5 note", new PathPlannerAuto("MidFront"));
+    autoChooser.setDefaultOption("Load Station 3.5 note", new PathPlannerAuto("LowFront"));
+    autoChooser.setDefaultOption("Calibration Auto", new PathPlannerAuto("CaliAuto"));
+    SmartDashboard.putData("Auto mode", autoChooser);
     configureBindings();
     
   }
@@ -234,7 +238,7 @@ public class RobotContainer {
     //return blueAutoAmp();
     //return redAutoAmp();
     //return new PathPlannerAuto("MidFront");
-    return chooser.getSelected();
+    return autoChooser.getSelected();
   }
 
 
