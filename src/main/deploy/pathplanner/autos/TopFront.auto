@@ -20,7 +20,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Top Front Backup"
+            "pathName": null
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Pickup Close"
           }
         },
         {
@@ -30,13 +36,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Top Pickup Close"
+                  "pathName": "Top Front Lineup"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakePiece"
+                  "name": "ShootNoteSpeakerTogether"
                 }
               }
             ]
@@ -45,13 +51,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Top Front Lineup"
+            "pathName": null
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ShootNoteSpeaker"
+            "pathName": "Top Front Far"
           }
         },
         {
@@ -61,34 +67,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Top Front Far"
+                  "pathName": "Top Front Lineup"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakePiece"
+                  "name": "ShootNoteSpeakerTogether"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Top Front Lineup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoteSpeakerTogether"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Top Front Backup"
           }
         }
       ]
