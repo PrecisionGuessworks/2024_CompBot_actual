@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.819499760826932,
-        "y": 7.575888776143035
+        "x": 1.8695056273361277,
+        "y": 7.459208420954914
       },
       "isLocked": false,
       "linkedName": "Top Lineup Start"
     },
     {
       "anchor": {
-        "x": 8.37026827353147,
-        "y": 7.417536865530584
+        "x": 8.361933962446603,
+        "y": 7.42587117661545
       },
       "prevControl": {
-        "x": 7.675796931966112,
-        "y": 7.433542077913258
+        "x": 7.667462620881245,
+        "y": 7.441876388998124
       },
       "nextControl": {
-        "x": 9.231965484027397,
-        "y": 7.397677663230806
+        "x": 9.223631172942529,
+        "y": 7.406011974315672
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 6.957886715773432
       },
       "prevControl": {
-        "x": 1.786162516487469,
-        "y": 7.5842230872279
+        "x": 1.8695056273361277,
+        "y": 7.442539798785181
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +57,25 @@
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.75,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakePiece"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.75,
     "maxAcceleration": 4.0,

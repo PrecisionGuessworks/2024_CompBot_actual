@@ -46,6 +46,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.autoCommands.AutoIntake;
 import frc.robot.autoCommands.PathFollowWithEvents;
+import frc.robot.commands.AutoAimPID;
 import frc.robot.commands.AutoAimPose;
 import frc.robot.commands.EjectPiece;
 import frc.robot.commands.IntakePiece;
@@ -58,6 +59,7 @@ import frc.robot.commands.SetClimberSensorMin;
 import frc.robot.commands.MoveArmIntake;
 import frc.robot.commands.MoveArmIntakeAmp;
 import frc.robot.commands.ShootNoteSpeaker;
+import frc.robot.commands.ShootNoteSpeakerPodium;
 import frc.robot.commands.ShootNoteSpeakerTogether;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -90,7 +92,7 @@ public class RobotContainer {
   SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   Telemetry logger = new Telemetry(MaxSpeed);
 
-  //enable for testing once
+  /*  enable for testing once    */
 
   PhotonCamera aprilCam = new PhotonCamera("OV2311");
 
@@ -109,7 +111,7 @@ public class RobotContainer {
 
 /*  enable for testing once    */
 
-  PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
+  //PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
@@ -126,7 +128,7 @@ public class RobotContainer {
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));
     robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.2));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm, intake));
-    
+    robotCommands.put("ShootNoteSpeakerPodium", new ShootNoteSpeakerPodium(shooter, arm, intake  ).withTimeout(2.5));
     NamedCommands.registerCommands(robotCommands);
 
     
@@ -178,12 +180,14 @@ public class RobotContainer {
   
   public void configureAutoPicker(){
     autoPicker.addOption("redAuto", redAuto());
-    autoPicker.addOption("B-2-6", new PathPlannerAuto("MidFront"));
     autoPicker.addOption("A-1-4", new PathPlannerAuto("TopFront"));
+    autoPicker.addOption("A-1-5", new PathPlannerAuto("TopFrontMid"));
+    autoPicker.addOption("B-2-6", new PathPlannerAuto("MidFront")); 
+    autoPicker.addOption("C-3-7", new PathPlannerAuto("LowFrontMid"));   
+    autoPicker.addOption("C-3-8", new PathPlannerAuto("LowFront")); 
     //autoPicker.addOption("LowFront", new PathPlannerAuto("LowFront"));
     autoPicker.addOption("CaliAuto", new PathPlannerAuto("CaliAuto"));
-    autoPicker.addOption("A-1", new PathPlannerAuto("OlderTopFront"));
-    autoPicker.setDefaultOption("ShootNoMove", new PathPlannerAuto("ShootNoMove"));
+    //autoPicker.addOption("A-1", new PathPlannerAuto("OlderTopFront"));
 
     //autoPicker.setDefaultOption("blueAuto", blueAuto());
     SmartDashboard.putData(autoPicker);
@@ -210,6 +214,7 @@ public class RobotContainer {
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
     bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
+    leftTrigger.onTrue(new ShootNoteSpeakerPodium(shooter, arm, intake));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
@@ -222,7 +227,7 @@ public class RobotContainer {
     operatorDPadDown.whileTrue(new SetClimberSensorMax(climber));
     operatorDPadUp.whileTrue(new SetClimberSensorMin(climber));
 
-    operatorRightTrigger.whileTrue(drivetrain.AutoAim());
+    operatorRightTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive));
 
     //buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 
