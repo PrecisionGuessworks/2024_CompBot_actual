@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.319793086290846,
-        "y": 0.8167624863126839
+        "x": 4.978203661991079,
+        "y": 0.1916891549519143
       },
       "isLocked": false,
       "linkedName": "Low Lineup"
@@ -52,8 +52,8 @@
         "y": 4.0838124315842546
       },
       "prevControl": {
-        "x": 5.136555572607697,
-        "y": 0.016668622165565875
+        "x": 5.061546772839739,
+        "y": -0.4333841764130228
       },
       "nextControl": null,
       "isLocked": false,
@@ -68,7 +68,7 @@
     },
     {
       "waypointRelativePos": 2,
-      "rotationDegrees": 9.211026540816706,
+      "rotationDegrees": 25.820991974189234,
       "rotateFast": false
     }
   ],

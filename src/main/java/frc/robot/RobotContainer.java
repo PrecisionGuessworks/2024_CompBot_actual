@@ -180,11 +180,14 @@ public class RobotContainer {
   
   public void configureAutoPicker(){
     autoPicker.addOption("redAuto", redAuto());
-    autoPicker.addOption("B-2-6", new PathPlannerAuto("MidFront"));
     autoPicker.addOption("A-1-4", new PathPlannerAuto("TopFront"));
+    autoPicker.addOption("A-1-5", new PathPlannerAuto("TopFrontMid"));
+    autoPicker.addOption("B-2-6", new PathPlannerAuto("MidFront")); 
+    autoPicker.addOption("C-3-7", new PathPlannerAuto("LowFrontMid"));   
+    autoPicker.addOption("C-3-8", new PathPlannerAuto("LowFront")); 
     //autoPicker.addOption("LowFront", new PathPlannerAuto("LowFront"));
     autoPicker.addOption("CaliAuto", new PathPlannerAuto("CaliAuto"));
-    autoPicker.addOption("A-1", new PathPlannerAuto("OlderTopFront"));
+    //autoPicker.addOption("A-1", new PathPlannerAuto("OlderTopFront"));
 
     autoPicker.setDefaultOption("blueAuto", blueAuto());
     SmartDashboard.putData(autoPicker);
