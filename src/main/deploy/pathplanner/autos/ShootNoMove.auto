@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.460038208296968,
-      "y": 5.54487565115481
+      "x": 1.4315252676063752,
+      "y": 5.5215057181637155
     },
     "rotation": 180.0
   },
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNoteSpeaker"
+            "name": "ShootNoteSpeakerTogether"
           }
         }
       ]
