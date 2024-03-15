@@ -154,7 +154,7 @@ public class Constants {
         public static final MechanismRatio motorRatio = new MechanismRatio(0, 0, 0);
     }
     public static final class Blinkin {
-        public static final int BLINKIN_ID = 9; // TODO: Where is this plugged in????
+        public static final int BLINKIN_ID = 9;
 }
     public static final class Intake {
         public static final class Roller {
@@ -170,6 +170,7 @@ public class Constants {
                 public static final double rollerStallTime = 0.1;
 
                 public static final int intakeBeamBreakInputChannel = 0;
+                public static final int lowerIntakeBeamBreakInpt = 1;
 
         }
         

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.Intake;
 import frc.robot.motorcontrol.TalonFx;
 import frc.robot.motorcontrol.configurations.TalonFxConfiguration;
 
@@ -22,6 +23,8 @@ public class IntakeSubsystem  extends SubsystemBase{
     private final DigitalInput m_intakeBeamBreakInput =
       new DigitalInput(Constants.Intake.Roller.intakeBeamBreakInputChannel);
   //private final MedianFilter m_intakeDistanceFilter = new MedianFilter(3);
+    private final DigitalInput m_lowerIntakeBeamBreakInpt = 
+      new DigitalInput(Constants.Intake.Roller.lowerIntakeBeamBreakInpt);
 
     private final Timer m_rollerTimer = new Timer();
 
@@ -69,6 +72,13 @@ public class IntakeSubsystem  extends SubsystemBase{
 
     public boolean isBeamBreakTriggered() {
       boolean beamBreakInput = m_intakeBeamBreakInput.get();
+
+      return !beamBreakInput;
+
+    }
+
+    public boolean isLowerBeamBreakTriggered() {
+      boolean beamBreakInput = m_lowerIntakeBeamBreakInpt.get();
 
       return !beamBreakInput;
 
