@@ -137,6 +137,14 @@ public class RobotContainer {
     configureAutoPicker();
     configureBindings();
     
+
+    if(intake.isLowerBeamBreakTriggered()){
+      blinkin.setColor(Colors.GREEN);
+    } else if (intake.isBeamBreakTriggered()) {
+      blinkin.setColor(Colors.ORANGE);
+    } else {
+      blinkin.setBlinkinToAllianceColor();
+    }
   }
   
   private final Trigger rightTrigger = new Trigger(() -> joystick.getRightTriggerAxis() > 0.2);
@@ -188,7 +196,7 @@ public class RobotContainer {
     //autoPicker.addOption("LowFront", new PathPlannerAuto("LowFront"));
     autoPicker.addOption("CaliAuto", new PathPlannerAuto("CaliAuto"));
     //autoPicker.addOption("A-1", new PathPlannerAuto("OlderTopFront"));
-
+    autoPicker.setDefaultOption("ShootNoMove", new PathPlannerAuto("ShootNoMove"));
     //autoPicker.setDefaultOption("blueAuto", blueAuto());
     SmartDashboard.putData(autoPicker);
   }
