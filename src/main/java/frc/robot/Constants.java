@@ -308,8 +308,8 @@ public class Constants {
         public static final double midpointAngle = Units.degreesToRadians(75); 
         public static final double midpointAngleTolerance = Units.degreesToRadians(5);
         public static final double ShootTimeout = 3;
-        public static final double AmpTimeout = 5;
-        public static final double AmpTimeoutMid = 12;
+        public static final double AmpTimeout = 6;
+        public static final double AmpTimeoutMid = 20;
         public static final double eject = Units.degreesToRadians(30);
         public static final double ejectAngleTolerance = Units.degreesToRadians(3);
         public static final double PodiumlaunchAngle = Units.degreesToRadians(65);

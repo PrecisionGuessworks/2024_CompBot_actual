@@ -8,23 +8,23 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0527431410192767,
-        "y": 7.500879976379242
+        "x": 0.8193824306430333,
+        "y": 7.68423482024629
       },
       "isLocked": false,
       "linkedName": "Top Lineup Start"
     },
     {
       "anchor": {
-        "x": 3.027974868132477,
+        "x": 2.9112945129443553,
         "y": 6.957886715773432
       },
       "prevControl": {
-        "x": 2.8964589778504637,
+        "x": 2.779778622662342,
         "y": 7.011203968590464
       },
       "nextControl": {
-        "x": 3.282974444798297,
+        "x": 3.1662940896101754,
         "y": 6.854508509017019
       },
       "isLocked": false,
@@ -36,8 +36,8 @@
         "y": 6.957886715773432
       },
       "prevControl": {
-        "x": 1.0777460742738738,
-        "y": 7.567554465058169
+        "x": 0.8110481195581676,
+        "y": 7.709237753500888
       },
       "nextControl": null,
       "isLocked": false,
@@ -89,10 +89,10 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.75,
+    "maxVelocity": 4.8,
     "maxAcceleration": 4.0,
     "maxAngularVelocity": 500.0,
-    "maxAngularAcceleration": 600.0
+    "maxAngularAcceleration": 550.0
   },
   "goalEndState": {
     "velocity": 0,

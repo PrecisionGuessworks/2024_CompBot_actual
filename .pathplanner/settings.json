@@ -10,9 +10,9 @@
     "Top Front"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 4.75,
+  "defaultMaxVel": 4.8,
   "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 500.0,
-  "defaultMaxAngAccel": 600.0,
+  "defaultMaxAngAccel": 550.0,
   "maxModuleSpeed": 5.0
 }
