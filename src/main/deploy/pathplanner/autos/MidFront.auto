@@ -24,22 +24,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Mid Front pickup"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakePiece"
-                }
-              }
-            ]
+            "pathName": "Mid Front pickup"
           }
         },
         {
@@ -68,22 +55,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Mid Front Far"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakePiece"
-                }
-              }
-            ]
+            "pathName": "Mid Front Far"
           }
         },
         {
