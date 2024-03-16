@@ -348,4 +348,9 @@ public class Constants {
         public static final double minPosition = -32.0;
         public static final double maxSpeed = 0.4; //speed gain
     }
+
+    public static final class ShotCalc {
+        public static final double autoAimTargetYaw = Units.degreesToRadians(0.0);
+        public static final double autoAimTargetYawTol = Units.degreesToRadians(5.0);
+    }
 }

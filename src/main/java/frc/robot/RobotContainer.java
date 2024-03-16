@@ -235,7 +235,7 @@ public class RobotContainer {
     operatorDPadDown.whileTrue(new SetClimberSensorMax(climber));
     operatorDPadUp.whileTrue(new SetClimberSensorMin(climber));
 
-    operatorRightTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive));
+    operatorRightTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive, arm, shooter, intake));
 
     //buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 

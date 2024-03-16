@@ -52,17 +52,19 @@ public class ShootNoteSpeakerTogether extends Command{
           m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
           }
           
-    } else{
+    } 
+    
+    else{
       
        m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
 
-    if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance)) {
-       // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
-        shottimeout = 0;
-        m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
-        
-        
-    }
+      if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance)) {
+        // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
+          shottimeout = 0;
+          m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
+          
+          
+      }
     }
     
 
