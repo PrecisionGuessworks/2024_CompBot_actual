@@ -24,9 +24,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Top Pickup Close"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top Pickup Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakePiece"
+                }
+              }
+            ]
           }
         },
         {
@@ -55,9 +68,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Top Front Far"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top Front Far"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakePiece"
+                }
+              }
+            ]
           }
         },
         {

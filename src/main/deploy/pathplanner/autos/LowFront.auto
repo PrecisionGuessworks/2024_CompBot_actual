@@ -24,9 +24,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Low Close"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Low Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakePiece"
+                }
+              }
+            ]
           }
         },
         {
@@ -55,9 +68,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Low Far"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Low Far"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakePiece"
+                }
+              }
+            ]
           }
         },
         {
