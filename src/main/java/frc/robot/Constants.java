@@ -238,6 +238,7 @@ public class Constants {
         public static final double intakeFeedVelocity = 80; // rad/s
         public static final double scoreAmpFeedVelocity = 80; // rad/s
         public static final double scoreSpeakerFeedVelocity = 160; // rad/s
+        public static final double ejectVelocity = 150.0;
         
         
     }
@@ -347,5 +348,11 @@ public class Constants {
         public static final double maxPosition = 0;
         public static final double minPosition = -32.0;
         public static final double maxSpeed = 0.4; //speed gain
+    }
+
+    public static final class ShotCalc {
+        public static final double autoAimTargetYaw = Units.degreesToRadians(0.0);
+        public static final double autoAimTargetYawTol = Units.degreesToRadians(5.0);
+        public static final double speakerHeight = 3.5; //meters
     }
 }

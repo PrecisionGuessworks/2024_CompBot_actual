@@ -5,6 +5,9 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,9 +17,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.ShotDistTable;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -27,16 +32,23 @@ import frc.robot.vision.Fiducials;
 public class AutoAimPose extends Command{
     private final CommandSwerveDrivetrain m_swerve;
     private final PhotonCamera m_camera;
-    private double CAMERA_HEIGHT_METERS = 0;
-    private final ArmSubsystem m_armSubsystem;
-    private final ShooterSubsystem m_shooterSubsystem;
+    private final ArmSubsystem m_arm;
+    private final ShooterSubsystem m_shooter;
+    private final SwerveRequest.FieldCentric m_drive;
+    private final double MaxAngularRate = 2 * Math.PI;
+    private final double MaxSpeed = 5.0292; 
+    private boolean inRange = false;
+    private final XboxController m_joystick;
+    
+    private final PIDController turnController = new PIDController(1.0, 0, 0.1);
 
-    public AutoAimPose(CommandSwerveDrivetrain swerve, PhotonCamera camera, ArmSubsystem arm, ShooterSubsystem shooter, Transform3d robotToCam) {
+    public AutoAimPose(CommandSwerveDrivetrain swerve, PhotonCamera camera, ArmSubsystem arm, ShooterSubsystem shooter, Transform3d robotToCam, SwerveRequest.FieldCentric drive, XboxController joystick) {
         m_swerve = swerve;
         m_camera = camera;
-        m_armSubsystem = arm;
-        m_shooterSubsystem = shooter;
-        CAMERA_HEIGHT_METERS = robotToCam.getZ();
+        m_arm = arm;
+        m_shooter = shooter;
+        m_drive = drive;
+        m_joystick = joystick;
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(swerve, arm, shooter);
 
@@ -45,59 +57,115 @@ public class AutoAimPose extends Command{
     @Override
   public void initialize() {
     // Called when the command is initially scheduled.
-    m_shooterSubsystem.setFeedVelocity(0);
-    m_shooterSubsystem.setLaunchVelocity(Constants.Shooter.launchVelocity);
+    m_shooter.setFeedVelocity(0);
+    m_shooter.setLaunchVelocity(Constants.Shooter.ejectVelocity);
   }
 
   @Override
   public void execute() {
     // Called every time Command is scheduled
-    var result = m_camera.getLatestResult();
-    boolean hasTargets = result.hasTargets();
     var alliance = DriverStation.getAlliance();
     Pose3d tag_pose = new Pose3d();
 
+    int speakerID = 7;
+
+
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
             tag_pose = Fiducials.AprilTags.aprilTagFiducials[6].getPose();
+            speakerID = Fiducials.AprilTags.aprilTagFiducials[6].getID();
         }
 
         if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             tag_pose = Fiducials.AprilTags.aprilTagFiducials[3].getPose();
+            speakerID = Fiducials.AprilTags.aprilTagFiducials[3].getID();
         }
 
     
     double filteredAngle = Constants.Arm.intakeAngle;
+    double shotVelo = Constants.Shooter.ejectVelocity;
     Pose2d robotPose = m_swerve.getState().Pose;
     
 
     Translation2d tagPose2d = new Translation2d(tag_pose.getX(), tag_pose.getY());
     Translation2d tagVector = tagPose2d.minus(robotPose.getTranslation());
-    final double goalDistance = tagVector.getNorm();
+    double goalDistance = tagVector.getNorm();
 
-    double armTheta = Math.atan2(((tag_pose.getZ()+1.2)-CAMERA_HEIGHT_METERS), goalDistance);
+    if (goalDistance < ShotDistTable.maxArmDist) {
+      filteredAngle = Math.atan2(Constants.ShotCalc.speakerHeight, goalDistance);
+      shotVelo = Constants.Shooter.PodiumlaunchVelocity;
 
-    filteredAngle = Math.max(Math.min(armTheta, Constants.Arm.maxAngle), Constants.Arm.intakeAngle);
-
-    m_armSubsystem.setArmAngle(filteredAngle);
-
-    if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(filteredAngle, Constants.Arm.launchAngleTolerance)) {
-       // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
-        
-        m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
     }
+
+    else {
+      filteredAngle = Constants.Arm.eject;
+      shotVelo = Constants.Shooter.ejectVelocity;
+    }
+
+    if (goalDistance < ShotDistTable.maxShotDist) {
+      inRange = true;
+    }
+
+    else {
+      inRange = false;
+    }
+
+    var result = m_camera.getLatestResult();
+
+    m_shooter.setLaunchVelocity(shotVelo);
+    m_arm.setArmAngle(filteredAngle);
+    
+ 
+    if (result.hasTargets()) {
+      var targetList = result.getTargets();
+      for (int i = 0; i < targetList.size(); i++) {
+        var target = targetList.get(i);
+
+        if (target.getFiducialId() == speakerID) {
+          double rotationSpeed = -turnController.calculate(target.getYaw(), 0);
+          m_swerve.applyRequest(() -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed) // Drive forward with
+                                                                                           // negative Y (forward)
+            .withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(rotationSpeed*MaxAngularRate));
+
+          if (withinAngleTolerance(target.getYaw(), Constants.ShotCalc.autoAimTargetYaw, Constants.ShotCalc.autoAimTargetYawTol)) {
+
+            if ( m_shooter.isAtLaunchVelocity(shotVelo, Constants.Shooter.PodiumlaunchVelocityTolerance) 
+            && m_arm.isAtAngle(filteredAngle, Constants.Arm.PodiumlaunchAngleTolerance)
+            && inRange) {
+              // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
+              
+                m_shooter.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
+                   
+            }   
+        }
+      }
+      else {
+
+        m_swerve.applyRequest(() -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed) // Drive forward with
+                                                                                           // negative Y (forward)
+            .withVelocityY(-m_joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-m_joystick.getRightX() * MaxAngularRate)); // Drive counterclockwise with negative X (left)
+        
+      }
+    }
+    } 
   }
+  
 
   @Override
   public void end(boolean interrupted) {
     //Called when command ends or is interrupted
-    m_shooterSubsystem.setFeedVelocity(0);
-    m_shooterSubsystem.setLaunchVelocity(0);
+    m_shooter.setFeedVelocity(0);
+    m_shooter.setLaunchVelocity(0);
   }
 
   @Override
   public boolean isFinished() {
     //Called when Command is finished
     return false;
+  }
+
+  public boolean withinAngleTolerance(double yaw, double targetYaw, double targetYawTol) {
+    return (Math.abs(targetYaw - yaw) <= targetYawTol);
   }
     
 
