@@ -53,6 +53,8 @@ import frc.robot.commands.IntakePiece;
 import frc.robot.commands.MoveArmAmp;
 import frc.robot.commands.MoveArmSpeaker;
 import frc.robot.commands.MoveClimber;
+import frc.robot.commands.PanicIntakePiece;
+import frc.robot.commands.PanicShootNoteSpeakerTogether;
 import frc.robot.commands.ScoreAmp;
 import frc.robot.commands.SetClimberSensorMax;
 import frc.robot.commands.SetClimberSensorMin;
@@ -106,7 +108,7 @@ public class RobotContainer {
   ShooterSubsystem shooter = new ShooterSubsystem();
   ArmSubsystem arm = new ArmSubsystem();
   ClimberSubsystem climber = new ClimberSubsystem();
-  BlinkinSubsystem blinkin = new BlinkinSubsystem();
+  //BlinkinSubsystem blinkin = new BlinkinSubsystem();
 
 
 /*  enable for testing once    */
@@ -137,14 +139,14 @@ public class RobotContainer {
     configureAutoPicker();
     configureBindings();
     
-
+    /*
     if(intake.isLowerBeamBreakTriggered()){
       blinkin.setColor(Colors.GREEN);
     } else if (intake.isBeamBreakTriggered()) {
       blinkin.setColor(Colors.ORANGE);
     } else {
       blinkin.setBlinkinToAllianceColor();
-    }
+    }*/
   }
   
   private final Trigger rightTrigger = new Trigger(() -> joystick.getRightTriggerAxis() > 0.2);
@@ -196,6 +198,7 @@ public class RobotContainer {
     //autoPicker.addOption("LowFront", new PathPlannerAuto("LowFront"));
     autoPicker.addOption("CaliAuto", new PathPlannerAuto("CaliAuto"));
     //autoPicker.addOption("A-1", new PathPlannerAuto("OlderTopFront"));
+    autoPicker.addOption("ShootNoMove", new PathPlannerAuto("ShootNoMove"));
     autoPicker.setDefaultOption("ShootNoMove", new PathPlannerAuto("ShootNoMove"));
     //autoPicker.setDefaultOption("blueAuto", blueAuto());
     SmartDashboard.putData(autoPicker);
@@ -243,6 +246,8 @@ public class RobotContainer {
 
     //climber.setDefaultCommand(new MoveClimber(climber, operator.getRightY(), operator.getLeftY()));
     
+    buttonX.whileTrue(new PanicShootNoteSpeakerTogether(shooter, arm, intake));
+    buttonB.whileTrue(new PanicIntakePiece(intake, shooter, arm));
     
     
     if (Utils.isSimulation()) {
