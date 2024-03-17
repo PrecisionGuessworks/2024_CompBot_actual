@@ -37,36 +37,14 @@ public class ShootNoteSpeakerTogether extends Command{
 
   @Override
   public void execute() {
-   
-    if (!m_intake.isBeamBreakTriggered()) {
-      
-        shottimeout++;
-      
-      
-      
-      if (shottimeout >= Constants.Arm.ShootTimeout){
-          isfirst = false;
-          pastin = false;
-          m_shooterSubsystem.setFeedVelocity(0);
-          m_shooterSubsystem.setLaunchVelocity(0);
-          m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
-          }
-          
-    } else{
-      
-       m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
+    m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
 
     if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance)) {
        // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
-        shottimeout = 0;
+        
         m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
         
-        
     }
-    }
-    
-
-    
 
     // Called every time Command is scheduled
   }
