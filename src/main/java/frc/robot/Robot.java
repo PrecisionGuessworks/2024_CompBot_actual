@@ -59,14 +59,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-// if(intake.isBeamBreakTriggered()) {
-//       blinkin.setColor(Colors.GREEN);
-//     } //else if (arm.isBeamBreakTriggered()) {
-//       //blinkin.setColor(Colors.ORANGE);
-//     //}
-//      else {
-//       blinkin.setBlinkinToAllianceColor();
-//     }
+
 
   }
 
