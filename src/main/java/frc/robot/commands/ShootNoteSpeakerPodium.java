@@ -30,46 +30,28 @@ public class ShootNoteSpeakerPodium extends Command{
   public void initialize() {
     //m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
     m_shooterSubsystem.setFeedVelocity(0);
-    m_shooterSubsystem.setLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity);
+    m_shooterSubsystem.setLaunchVelocity(Constants.Shooter.launchVelocity);
 
     // Called when the command is initially scheduled.
   }
 
   @Override
   public void execute() {
-   
-    if (!m_intake.isBeamBreakTriggered()) {
-      
-        shottimeout++;
-      
-      
-      
-      if (shottimeout >= Constants.Arm.ShootTimeout){
-          isfirst = false;
-          pastin = false;
-          m_shooterSubsystem.setFeedVelocity(0);
-          m_shooterSubsystem.setLaunchVelocity(0);
-          m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
-          }
-          
-    } else{
-      
-       m_armSubsystem.setArmAngle(Constants.Arm.PodiumlaunchAngle);
+    m_armSubsystem.setArmAngle(Constants.Arm.PodiumlaunchAngle);
 
-    if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity, Constants.Shooter.PodiumlaunchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.PodiumlaunchAngle, Constants.Arm.PodiumlaunchAngleTolerance)) {
+    if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.PodiumlaunchAngle, Constants.Arm.PodiumlaunchAngleTolerance)) {
        // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
-        shottimeout = 0;
+        
         m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
         
-        
     }
-    }
-    
-
-    
 
     // Called every time Command is scheduled
-  }
+  } 
+    
+
+    
+
 
   @Override
   public void end(boolean interrupted) {

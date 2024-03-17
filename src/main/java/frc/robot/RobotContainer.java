@@ -127,10 +127,10 @@ public class RobotContainer {
     robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm).withTimeout(2.5));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("MoveArmIntake", new MoveArmIntake(arm));
-    robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));
-    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.4));
+    robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(1.8));
+    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(1.8));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm, intake));
-    robotCommands.put("ShootNoteSpeakerPodium", new ShootNoteSpeakerPodium(shooter, arm, intake  ).withTimeout(2.4));
+    robotCommands.put("ShootNoteSpeakerPodium", new ShootNoteSpeakerPodium(shooter, arm, intake  ).withTimeout(1.8));
     NamedCommands.registerCommands(robotCommands);
 
     
@@ -224,8 +224,8 @@ public class RobotContainer {
     //shoot da note
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
-    bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
-    leftTrigger.onTrue(new ShootNoteSpeakerPodium(shooter, arm, intake));
+    bumperRight.whileTrue(new ShootNoteSpeaker(shooter, arm));
+    leftTrigger.whileTrue(new ShootNoteSpeakerPodium(shooter, arm, intake));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
