@@ -221,8 +221,8 @@ public class RobotContainer {
     //shoot da note
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
-    bumperRight.onTrue(new ShootNoteSpeaker(shooter, arm));
-    leftTrigger.onTrue(new ShootNoteSpeaker(shooter, arm));
+    bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
+    leftTrigger.onTrue(new ShootNoteSpeakerPodium(shooter, arm, intake));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));

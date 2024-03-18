@@ -12,14 +12,14 @@ public class ShootNoteSpeakerTogether extends Command{
     private final ShooterSubsystem m_shooterSubsystem;
     private final ArmSubsystem m_armSubsystem;
     private final IntakeSubsystem m_intake;
-    int shottimeout = 0;
-    boolean pastin = false;
-    boolean isfirst = false;
+   
+    private final Timer m_shotTimer = new Timer();
 
     public ShootNoteSpeakerTogether(ShooterSubsystem shooterSubsystem, ArmSubsystem armSubsystem, IntakeSubsystem intake) {
         m_shooterSubsystem = shooterSubsystem;
         m_armSubsystem = armSubsystem;
         m_intake = intake;
+        //m_shotTimer.start();
         //m_armSubsystem = armSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(shooterSubsystem, armSubsystem, intake);
@@ -28,6 +28,7 @@ public class ShootNoteSpeakerTogether extends Command{
 
     @Override
   public void initialize() {
+    m_shotTimer.reset();
     //m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
     m_shooterSubsystem.setFeedVelocity(0);
     m_shooterSubsystem.setLaunchVelocity(Constants.Shooter.launchVelocity);
@@ -38,32 +39,29 @@ public class ShootNoteSpeakerTogether extends Command{
   @Override
   public void execute() {
    
-    if (!m_intake.isBeamBreakTriggered()) {
-      
-        shottimeout++;
-      
-      
-      
-      if (shottimeout >= Constants.Arm.ShootTimeout){
-          isfirst = false;
-          pastin = false;
-          m_shooterSubsystem.setFeedVelocity(0);
-          m_shooterSubsystem.setLaunchVelocity(0);
-          m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
-          }
+    
           
-    } else{
+    
       
-       m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
+    m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
 
-    if ( m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance)) {
+    if (m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance)) {
        // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
-        shottimeout = 0;
-        m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
+       m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
+       m_shotTimer.start();
+        
         
         
     }
+
+    if (m_shotTimer.hasElapsed(0.3)) {
+      m_shooterSubsystem.setFeedVelocity(0);
+      m_shooterSubsystem.setLaunchVelocity(0);
+      m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
+      
+        
     }
+
     
 
     
