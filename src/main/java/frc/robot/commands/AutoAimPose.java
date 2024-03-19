@@ -19,6 +19,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.ShotDistTable;
@@ -39,6 +40,7 @@ public class AutoAimPose extends Command{
     private final double MaxSpeed = 5.0292; 
     private boolean inRange = false;
     private final XboxController m_joystick;
+    private final Timer m_shotTimer = new Timer();
     
     private final PIDController turnController = new PIDController(1.0, 0, 0.1);
 
@@ -59,6 +61,7 @@ public class AutoAimPose extends Command{
     // Called when the command is initially scheduled.
     m_shooter.setFeedVelocity(0);
     m_shooter.setLaunchVelocity(Constants.Shooter.ejectVelocity);
+    m_shotTimer.reset();
   }
 
   @Override
@@ -134,6 +137,7 @@ public class AutoAimPose extends Command{
               // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
               
                 m_shooter.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
+                m_shotTimer.start();
                    
             }   
         }
@@ -148,6 +152,13 @@ public class AutoAimPose extends Command{
       }
     }
     } 
+    
+    if (m_shotTimer.hasElapsed(0.3)) {
+      m_shooter.setFeedVelocity(0);
+      m_shooter.setLaunchVelocity(0);
+      m_arm.setArmAngle(Constants.Arm.intakeAngle);
+
+    }
   }
   
 
