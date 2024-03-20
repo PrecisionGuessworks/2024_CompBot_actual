@@ -81,8 +81,10 @@ public class PresPoseEstimator  extends SubsystemBase{
 
             try {
                Pose3d tagPose = m_aprilTagFieldLayout.getTagPose(target.getFiducialId()).get();
+               System.out.println("Tag idc"+ target.getFiducialId());
               robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), tagPose, camToRobot).toPose2d();
 
+              //System.out.println("Calculated Photon Pose: "+ robotPose);
             }
 
             catch (NoSuchElementException e) {
@@ -95,7 +97,7 @@ public class PresPoseEstimator  extends SubsystemBase{
                     robotPose, imageCaptureTime);
 
 
-            System.out.println("Photon Pose: "+ robotPose);
+            System.out.println("Updated Photon Pose: "+ robotPose);
             
         }
 

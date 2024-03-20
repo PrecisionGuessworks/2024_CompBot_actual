@@ -61,6 +61,7 @@ import frc.robot.commands.MoveArmIntakeAmp;
 import frc.robot.commands.ShootNoteSpeaker;
 import frc.robot.commands.ShootNoteSpeakerPodium;
 import frc.robot.commands.ShootNoteSpeakerTogether;
+import frc.robot.commands.TurnTest;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -111,7 +112,7 @@ public class RobotContainer {
 
 /*  enable for testing once    */
 
-  //PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
+  PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
@@ -222,7 +223,7 @@ public class RobotContainer {
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
     bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
-    leftTrigger.onTrue(new ShootNoteSpeakerPodium(shooter, arm, intake));
+    leftTrigger.whileTrue(new TurnTest(drivetrain, drive, joystick));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));

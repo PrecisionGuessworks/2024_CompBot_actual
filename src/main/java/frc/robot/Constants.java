@@ -169,8 +169,8 @@ public class Constants {
                 public static final double rollerStallSpeed = Math.PI * Math.PI * (1.0 / 32.0);
                 public static final double rollerStallTime = 0.1;
 
-                public static final int intakeBeamBreakInputChannel = 0;
-                public static final int lowerIntakeBeamBreakInpt = 1;
+                public static final int intakeBeamBreakInputChannel = 6;
+                public static final int lowerIntakeBeamBreakInpt = 7;
 
         }
         
@@ -283,7 +283,7 @@ public class Constants {
 
               //  public static final Constraints leftPivotTrapConstraintsDown = new Constraints(leftPivotVelocityConstraintDown, leftPivotAccelerationConstraintDown);
 
-                public static final ArmFeedforward leftFeedForward = new ArmFeedforward(0.02, 0.92, 1.35, 0.06);
+                public static final ArmFeedforward leftFeedForward = new ArmFeedforward(0.015, 0.94, 1.39, 0.1);
              
         }
 
@@ -294,15 +294,15 @@ public class Constants {
                 
         }
 
-        public static final double minAngle = Units.degreesToRadians(0);
+        public static final double minAngle = Units.degreesToRadians(2);
         public static final double maxAngle = Units.degreesToRadians(110);
         public static final double startingAngle = minAngle;
-        public static final double intakeAngle = Units.degreesToRadians(3);
+        public static final double intakeAngle = Units.degreesToRadians(5);
         public static final double intakeAngleTolerance = Units.degreesToRadians(8);
 
         public static final double launchAngle = Units.degreesToRadians(74);
         public static final double ampPreAngle = Units.degreesToRadians(80);
-        public static final double launchAngleTolerance = Units.degreesToRadians(3);
+        public static final double launchAngleTolerance = Units.degreesToRadians(5);
         public static final double scoreAmpArmAngle = Units.degreesToRadians(110); // rads
         public static final double moveAmpArmAngle = Units.degreesToRadians(65); 
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads

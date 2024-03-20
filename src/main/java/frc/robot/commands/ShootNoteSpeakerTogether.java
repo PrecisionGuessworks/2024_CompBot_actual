@@ -53,11 +53,14 @@ public class ShootNoteSpeakerTogether extends Command{
         
         
     }
+    //System.out.println("timer value: "+m_shotTimer.get());
 
     if (m_shotTimer.hasElapsed(0.3)) {
+      m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
       m_shooterSubsystem.setFeedVelocity(0);
       m_shooterSubsystem.setLaunchVelocity(0);
-      m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
+      
+      m_shotTimer.stop();
       
         
     }
@@ -71,9 +74,10 @@ public class ShootNoteSpeakerTogether extends Command{
 
   @Override
   public void end(boolean interrupted) {
+    m_armSubsystem.setArmAngle((Constants.Arm.intakeAngle));
     m_shooterSubsystem.setFeedVelocity(0);
     m_shooterSubsystem.setLaunchVelocity(0);
-    //m_armSubsystem.setArmAngle((Constants.Arm.intakeAngle));
+    
 
     //Called when command ends or is interrupted
   }

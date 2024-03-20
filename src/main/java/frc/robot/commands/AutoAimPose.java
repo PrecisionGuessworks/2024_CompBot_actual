@@ -1,5 +1,6 @@
 package frc.robot.commands;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
@@ -122,12 +123,15 @@ public class AutoAimPose extends Command{
       var targetList = result.getTargets();
       for (int i = 0; i < targetList.size(); i++) {
         var target = targetList.get(i);
+        System.out.println("target id"+ target.getFiducialId());
 
         if (target.getFiducialId() == speakerID) {
+          System.out.println("tag yaw: "+ target.getYaw());
           double rotationSpeed = -turnController.calculate(target.getYaw(), 0);
-          m_swerve.applyRequest(() -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed) // Drive forward with
-                                                                                           // negative Y (forward)
-            .withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(rotationSpeed*MaxAngularRate));
+
+          Supplier<SwerveRequest> requestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(rotationSpeed*MaxAngularRate);
+          m_swerve.setControl(requestSupplier.get());
+          
 
           if (withinAngleTolerance(target.getYaw(), Constants.ShotCalc.autoAimTargetYaw, Constants.ShotCalc.autoAimTargetYawTol)) {
 
@@ -144,10 +148,8 @@ public class AutoAimPose extends Command{
       }
       else {
 
-        m_swerve.applyRequest(() -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed) // Drive forward with
-                                                                                           // negative Y (forward)
-            .withVelocityY(-m_joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-            .withRotationalRate(-m_joystick.getRightX() * MaxAngularRate)); // Drive counterclockwise with negative X (left)
+       Supplier<SwerveRequest> requestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-m_joystick.getRightX()*MaxAngularRate);
+          m_swerve.setControl(requestSupplier.get());
         
       }
     }
@@ -157,6 +159,8 @@ public class AutoAimPose extends Command{
       m_shooter.setFeedVelocity(0);
       m_shooter.setLaunchVelocity(0);
       m_arm.setArmAngle(Constants.Arm.intakeAngle);
+      m_shotTimer.stop();
+
 
     }
   }
