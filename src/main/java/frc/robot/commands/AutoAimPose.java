@@ -161,6 +161,7 @@ public class AutoAimPose extends Command{
       m_shooter.setFeedVelocity(0);
       m_shooter.setLaunchVelocity(0);
       m_shotTimer.stop();
+      m_shotTimer.reset();
 
 
     }
