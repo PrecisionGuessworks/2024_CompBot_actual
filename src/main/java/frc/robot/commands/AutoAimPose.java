@@ -156,9 +156,9 @@ public class AutoAimPose extends Command{
     } 
     
     if (m_shotTimer.hasElapsed(0.3)) {
+      m_arm.setArmAngle(Constants.Arm.intakeAngle);
       m_shooter.setFeedVelocity(0);
       m_shooter.setLaunchVelocity(0);
-      m_arm.setArmAngle(Constants.Arm.intakeAngle);
       m_shotTimer.stop();
 
 

@@ -38,43 +38,34 @@ public class ShootNoteSpeakerTogether extends Command{
 
   @Override
   public void execute() {
-   
-    
-          
-    
+     if (m_shotTimer.hasElapsed(0.3)) {
+      m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
+      m_shooterSubsystem.setFeedVelocity(0);
+      m_shooterSubsystem.setLaunchVelocity(0);
       
-    m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
+      m_shotTimer.stop();     
+        
+    }
+    
+    else {
+
+       m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
 
     if (m_shooterSubsystem.isAtLaunchVelocity(Constants.Shooter.launchVelocity, Constants.Shooter.launchVelocityTolerance) && m_armSubsystem.isAtAngle(Constants.Arm.launchAngle, Constants.Arm.launchAngleTolerance)) {
        // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
        m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
        m_shotTimer.start();
-        
-        
-        
+    }            
     }
     //System.out.println("timer value: "+m_shotTimer.get());
 
-    if (m_shotTimer.hasElapsed(0.3)) {
-      m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
-      m_shooterSubsystem.setFeedVelocity(0);
-      m_shooterSubsystem.setLaunchVelocity(0);
-      
-      m_shotTimer.stop();
-      
-        
-    }
-
-    
-
-    
 
     // Called every time Command is scheduled
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_armSubsystem.setArmAngle((Constants.Arm.intakeAngle));
+    //m_armSubsystem.setArmAngle((Constants.Arm.intakeAngle));
     m_shooterSubsystem.setFeedVelocity(0);
     m_shooterSubsystem.setLaunchVelocity(0);
     

@@ -11,6 +11,7 @@ import org.photonvision.PhotonUtils;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -49,6 +50,7 @@ public class PresPoseEstimator  extends SubsystemBase{
       m_photonCamera = photonCamera;
       m_swerveDrivetrain = swerveDrivetrain;
       m_aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+      m_aprilTagFieldLayout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
       robotToCam = RToCam;
       camToRobot = CToRobot;
     
@@ -73,6 +75,7 @@ public class PresPoseEstimator  extends SubsystemBase{
     public void periodic() {
         var res = m_photonCamera.getLatestResult();
         
+        
         if (res.hasTargets()) {
             Pose2d robotPose = m_swerveDrivetrain.getState().Pose;
             var target = res.getBestTarget();
@@ -81,7 +84,7 @@ public class PresPoseEstimator  extends SubsystemBase{
 
             try {
                Pose3d tagPose = m_aprilTagFieldLayout.getTagPose(target.getFiducialId()).get();
-               System.out.println("Tag idc"+ target.getFiducialId());
+               System.out.println("Tag id"+ target.getFiducialId());
               robotPose = PhotonUtils.estimateFieldToRobotAprilTag(target.getBestCameraToTarget(), tagPose, camToRobot).toPose2d();
 
               //System.out.println("Calculated Photon Pose: "+ robotPose);
