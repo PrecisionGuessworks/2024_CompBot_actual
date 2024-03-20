@@ -42,6 +42,7 @@ public class AutoAimPose extends Command{
     private boolean inRange = false;
     private final XboxController m_joystick;
     private final Timer m_shotTimer = new Timer();
+    private final ShotDistTable shotTable = new ShotDistTable();
     
     private final PIDController turnController = new PIDController(1.0, 0, 0.1);
 
@@ -95,7 +96,7 @@ public class AutoAimPose extends Command{
     double goalDistance = tagVector.getNorm();
 
     if (goalDistance < ShotDistTable.maxArmDist) {
-      filteredAngle = Math.atan2(Constants.ShotCalc.speakerHeight, goalDistance);
+      filteredAngle = shotTable.calculate(goalDistance);
       shotVelo = Constants.Shooter.PodiumlaunchVelocity;
 
     }
