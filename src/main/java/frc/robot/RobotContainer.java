@@ -29,6 +29,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -67,6 +68,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.PresPoseEstimator;
+import frc.robot.subsystems.PresPoseEstimatorMulti;
 //import frc.robot.subsystems.PresPoseEstimator;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.Blinkin;
@@ -112,8 +114,9 @@ public class RobotContainer {
 
 /*  enable for testing once    */
 
-  PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
+  //PresPoseEstimator poseEstimator = new PresPoseEstimator(aprilCam, drivetrain, robotToCam, camToRobot);
 
+ 
   Map<String, Command> robotCommands  = new HashMap<String, Command>();
 
   
@@ -223,7 +226,7 @@ public class RobotContainer {
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
     bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
-    leftTrigger.whileTrue(new TurnTest(drivetrain, drive, joystick));
+    leftTrigger.whileTrue(new AutoAimPose(drivetrain, aprilCam, arm, shooter, robotToCam, drive, joystick));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));

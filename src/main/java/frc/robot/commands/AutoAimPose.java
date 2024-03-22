@@ -37,14 +37,14 @@ public class AutoAimPose extends Command{
     private final ArmSubsystem m_arm;
     private final ShooterSubsystem m_shooter;
     private final SwerveRequest.FieldCentric m_drive;
-    private final double MaxAngularRate = 2 * Math.PI;
+    private final double MaxAngularRate =   0.5 * Math.PI;
     private final double MaxSpeed = 5.0292; 
     private boolean inRange = false;
     private final XboxController m_joystick;
     private final Timer m_shotTimer = new Timer();
     private final ShotDistTable shotTable = new ShotDistTable();
     
-    private final PIDController turnController = new PIDController(1.0, 0, 0.1);
+    private final PIDController turnController = new PIDController(0.05, 0, 0.1);
 
     public AutoAimPose(CommandSwerveDrivetrain swerve, PhotonCamera camera, ArmSubsystem arm, ShooterSubsystem shooter, Transform3d robotToCam, SwerveRequest.FieldCentric drive, XboxController joystick) {
         m_swerve = swerve;
@@ -96,7 +96,8 @@ public class AutoAimPose extends Command{
     double goalDistance = tagVector.getNorm();
 
     if (goalDistance < ShotDistTable.maxArmDist) {
-      filteredAngle = shotTable.calculate(goalDistance);
+      //filteredAngle = shotTable.calculate(goalDistance);
+      filteredAngle = Math.atan2(3, goalDistance);
       shotVelo = Constants.Shooter.PodiumlaunchVelocity;
 
     }
@@ -118,7 +119,10 @@ public class AutoAimPose extends Command{
 
     m_shooter.setLaunchVelocity(shotVelo);
     m_arm.setArmAngle(filteredAngle);
-    
+        
+      
+    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-m_joystick.getRightX()*MaxAngularRate);
+    m_swerve.setControl(regRequestSupplier.get());
  
     if (result.hasTargets()) {
       var targetList = result.getTargets();
@@ -128,7 +132,8 @@ public class AutoAimPose extends Command{
 
         if (target.getFiducialId() == speakerID) {
           System.out.println("tag yaw: "+ target.getYaw());
-          double rotationSpeed = -turnController.calculate(target.getYaw(), 0);
+          double rotationSpeed = turnController.calculate(target.getYaw(), 0);
+          System.out.println("rotationSpeed: "+ rotationSpeed);
 
           Supplier<SwerveRequest> requestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(rotationSpeed*MaxAngularRate);
           m_swerve.setControl(requestSupplier.get());
@@ -147,12 +152,7 @@ public class AutoAimPose extends Command{
             }   
         }
       }
-      else {
-
-       Supplier<SwerveRequest> requestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-m_joystick.getRightX()*MaxAngularRate);
-          m_swerve.setControl(requestSupplier.get());
-        
-      }
+      
     }
     } 
     

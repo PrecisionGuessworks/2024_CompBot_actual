@@ -101,11 +101,11 @@ public class PresPoseEstimator  extends SubsystemBase{
             
 
 
-            System.out.println("Updated Photon Pose: "+ robotPose);
+            //System.out.println("Updated Photon Pose: "+ robotPose);
             
         }
 
-        System.out.println("Acutal Pose:  "+ m_swerveDrivetrain.getState().Pose);
+        //System.out.println("Acutal Pose:  "+ m_swerveDrivetrain.getState().Pose);
 
         
       // This method will be called once per scheduler run

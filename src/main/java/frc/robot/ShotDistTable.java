@@ -11,7 +11,7 @@ public class ShotDistTable {
     
 
     public ShotDistTable() {
-        shotTableAngles.put(0.8, 74.0);
+        shotTableAngles.put(0.0, 94.0);
         shotTableAngles.put(4.0, 45.0);
     }
 

@@ -169,7 +169,7 @@ public class Constants {
                 public static final double rollerStallSpeed = Math.PI * Math.PI * (1.0 / 32.0);
                 public static final double rollerStallTime = 0.1;
 
-                public static final int intakeBeamBreakInputChannel = 6;
+                public static final int intakeBeamBreakInputChannel = 1;
                 public static final int lowerIntakeBeamBreakInpt = 7;
 
         }
@@ -308,9 +308,9 @@ public class Constants {
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads
         public static final double midpointAngle = Units.degreesToRadians(75); 
         public static final double midpointAngleTolerance = Units.degreesToRadians(5);
-        public static final double ShootTimeout = 3;
-        public static final double AmpTimeout = 6;
-        public static final double AmpTimeoutMid = 20;
+        public static final double ShootTimeout = 4;
+        public static final double AmpTimeout = 20;
+        public static final double AmpTimeoutMid = 40;
         public static final double eject = Units.degreesToRadians(30);
         public static final double ejectAngleTolerance = Units.degreesToRadians(3);
         public static final double PodiumlaunchAngle = Units.degreesToRadians(65);
