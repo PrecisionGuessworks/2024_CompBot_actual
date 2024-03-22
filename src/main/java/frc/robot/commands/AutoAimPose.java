@@ -53,6 +53,7 @@ public class AutoAimPose extends Command{
         m_shooter = shooter;
         m_drive = drive;
         m_joystick = joystick;
+        turnController.enableContinuousInput(0.0, 1.0);
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(swerve, arm, shooter);
 
@@ -84,6 +85,24 @@ public class AutoAimPose extends Command{
             tag_pose = Fiducials.AprilTags.aprilTagFiducials[3].getPose();
             speakerID = Fiducials.AprilTags.aprilTagFiducials[3].getID();
         }
+
+        if (m_shotTimer.hasElapsed(0.3)) {
+      
+          m_arm.setArmAngle(Constants.Arm.intakeAngle);
+          m_shooter.setFeedVelocity(0);
+          m_shooter.setLaunchVelocity(0);
+    
+          if (m_shotTimer.hasElapsed(0.7)) {
+            m_shotTimer.stop();
+            m_shotTimer.reset();
+          }
+          
+          
+          //m_shotTimer.reset();     
+            
+        }
+
+    else {
 
     
     double filteredAngle = Constants.Arm.intakeAngle;
@@ -155,16 +174,8 @@ public class AutoAimPose extends Command{
       
     }
     } 
+  }
     
-    if (m_shotTimer.hasElapsed(0.3)) {
-      m_arm.setArmAngle(Constants.Arm.intakeAngle);
-      m_shooter.setFeedVelocity(0);
-      m_shooter.setLaunchVelocity(0);
-      m_shotTimer.stop();
-      m_shotTimer.reset();
-
-
-    }
   }
   
 

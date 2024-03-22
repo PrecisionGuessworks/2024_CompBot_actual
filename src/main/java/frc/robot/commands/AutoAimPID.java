@@ -1,5 +1,6 @@
 package frc.robot.commands;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -9,6 +10,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -29,17 +31,23 @@ public class AutoAimPID extends Command{
     private final IntakeSubsystem m_intake;
     int shottimeout = 0;
     
+    private final double MaxSpeed = 5.0292; 
+    private boolean inRange = false;
+    private final XboxController m_joystick;
+    
     final double MaxAngularRate = 2 * Math.PI;
 
-    public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake) {
+    public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
         m_swerve = swerve;
         m_camera = camera;
         m_drive = drive;
         m_arm = arm;
         m_shooter = shooter;
         m_intake = intake;
+        m_joystick = joystick;
+        turnController.enableContinuousInput(0.0, 1.0);
     // Use addRequirements() here to declare subsystem dependencies.
-        addRequirements(swerve, arm, shooter, intake);
+        addRequirements(arm, shooter, intake);
 
     }
 
@@ -68,18 +76,34 @@ public class AutoAimPID extends Command{
             speakerID = Fiducials.AprilTags.aprilTagFiducials[3].getID();
         }
     
+    
+
+    m_shooter.setLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity);
+    m_arm.setArmAngle(Constants.Arm.PodiumlaunchAngle);
+        
+      
+    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-m_joystick.getRightX()*MaxAngularRate);
+    m_swerve.setControl(regRequestSupplier.get());
+ 
     if (result.hasTargets()) {
       var targetList = result.getTargets();
       for (int i = 0; i < targetList.size(); i++) {
         var target = targetList.get(i);
+        System.out.println("target id"+ target.getFiducialId());
 
         if (target.getFiducialId() == speakerID) {
-          double rotationSpeed = -turnController.calculate(target.getYaw(), 0);
-          m_swerve.applyRequest(() -> m_drive.withRotationalRate(rotationSpeed*MaxAngularRate));
+          System.out.println("tag yaw: "+ target.getYaw());
+          double rotationSpeed = turnController.calculate(target.getYaw(), 0);
+          System.out.println("rotationSpeed: "+ rotationSpeed);
+
+          Supplier<SwerveRequest> requestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(rotationSpeed*MaxAngularRate);
+          m_swerve.setControl(requestSupplier.get());
+          
 
           if (withinAngleTolerance(target.getYaw(), Constants.ShotCalc.autoAimTargetYaw, Constants.ShotCalc.autoAimTargetYawTol)) {
 
-            if ( m_shooter.isAtLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity, Constants.Shooter.PodiumlaunchVelocityTolerance) && m_arm.isAtAngle(Constants.Arm.PodiumlaunchAngle, Constants.Arm.PodiumlaunchAngleTolerance)) {
+            if ( m_shooter.isAtLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity, Constants.Shooter.PodiumlaunchVelocityTolerance) 
+            && m_arm.isAtAngle(Constants.Arm.PodiumlaunchAngle, Constants.Arm.PodiumlaunchAngleTolerance)) {
               // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
               
                 m_shooter.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
@@ -87,6 +111,7 @@ public class AutoAimPID extends Command{
             }   
         }
       }
+      
     }
     } 
     // Called every time Command is scheduled

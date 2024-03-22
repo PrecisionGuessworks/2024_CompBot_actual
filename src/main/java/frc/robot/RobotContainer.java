@@ -226,7 +226,7 @@ public class RobotContainer {
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
     bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
-    leftTrigger.whileTrue(new AutoAimPose(drivetrain, aprilCam, arm, shooter, robotToCam, drive, joystick));
+    leftTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive, arm, shooter, intake, joystick));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
