@@ -27,7 +27,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.vision.Fiducials;
 
 
-public class AutoAimPID extends Command{
+public class AutoAimAbhi extends Command{
     private final CommandSwerveDrivetrain m_swerve;
     private final ArmSubsystem m_arm;
     private final ShooterSubsystem m_shooter;
@@ -42,10 +42,8 @@ public class AutoAimPID extends Command{
     private final XboxController m_joystick;
     
     final double MaxAngularRate =  2 * Math.PI;
-    private Rotation2d deltaTheta;
-    private Rotation2d targetAngle;
 
-    public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
+    public AutoAimAbhi(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
         m_swerve = swerve;
         m_camera = camera;
         m_drive = drive;
@@ -62,9 +60,25 @@ public class AutoAimPID extends Command{
     @Override
   public void initialize() {
     // Called when the command is initially scheduled.
+    //m_arm.setArmAngle(Constants.Arm.PodiumlaunchAngle);
+    //m_shooter.setLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity);
+    
+        
+        
+        // if(currentAlliance.equals(DriverStation.Alliance.Blue)) {
+        //     goalPose = new Pose2d(new Translation2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42)), new Rotation2d(Units.degreesToRadians(180)));
+        // }
+        // else {
+        //     goalPose = new Pose2d(new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42)), new Rotation2d(0));
+        // }
+    
+  }
+
+  @Override
+  public void execute() {
     Pose2d goalPose = null;
     
-  final var robotPose = m_swerve.getState().Pose;
+     
     
     var alliance = DriverStation.getAlliance();
     
@@ -78,29 +92,32 @@ public class AutoAimPID extends Command{
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             goalPose = Fiducials.AprilTags.aprilTagFiducials[3].getPose().toPose2d();
         }
-
-        final var startingAngle = robotPose.getRotation();
-        final var endAngle = goalPose.getTranslation().minus(robotPose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(180.0));
-        deltaTheta = endAngle.minus(startingAngle);
-
-        targetAngle = Rotation2d.fromDegrees(m_swerve.getRotation3d().toRotation2d().getDegrees() + deltaTheta.getDegrees());
     
-  }
+    
+    
+    var startRobotPose = m_swerve.getState().Pose;
 
-  
+    Translation2d tagToRobotVector = (goalPose.getTranslation()).minus(startRobotPose.getTranslation());
 
-  @Override
-  public void execute() {
+    var robotAngle = startRobotPose.getRotation().getRadians();
 
-     var currentAngle = m_swerve.getState().Pose.getRotation();
+    Translation2d robotVector = new Translation2d(Math.cos(robotAngle), Math.sin(robotAngle));
 
-       var requestedAngularVelocity = Rotation2d.fromDegrees(MathUtil.clamp(
-            turnController.calculate(currentAngle.getDegrees(), targetAngle.getDegrees()),
-            -Units.radiansToDegrees(MaxAngularRate),
-            Units.radiansToDegrees(MaxAngularRate)
-        ));
+    var dotVec = (robotVector.getX()*tagToRobotVector.getX()) + (robotVector.getY()*tagToRobotVector.getY());
+
+    var magRobotVec = robotVector.getNorm();
+    var magTagToRobotVector = tagToRobotVector.getNorm();
+
+
+    var targetAngle = Math.acos(dotVec / (magRobotVec * magTagToRobotVector));
+
+    System.out.println("targetAngle: "+Units.radiansToDegrees(targetAngle));
+
+
+    var requestedAngularVelocity = turnController.calculate(targetAngle, 0);
+
          
-    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(requestedAngularVelocity.getRadians());
+    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-requestedAngularVelocity*MaxAngularRate);
     m_swerve.setControl(regRequestSupplier.get());
 
         

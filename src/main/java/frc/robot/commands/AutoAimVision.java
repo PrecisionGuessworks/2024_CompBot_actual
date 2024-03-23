@@ -1,6 +1,5 @@
 package frc.robot.commands;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.photonvision.PhotonCamera;
@@ -8,12 +7,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController;
@@ -27,13 +21,13 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.vision.Fiducials;
 
 
-public class AutoAimPID extends Command{
+public class AutoAimVision extends Command{
     private final CommandSwerveDrivetrain m_swerve;
     private final ArmSubsystem m_arm;
     private final ShooterSubsystem m_shooter;
     private final SwerveRequest.FieldCentric m_drive;
     private final PhotonCamera m_camera;
-    private final PIDController turnController = new PIDController(1.0, 0, 0.0);
+    private final PIDController turnController = new PIDController(2.0, 0, 0.1);
     private final IntakeSubsystem m_intake;
     int shottimeout = 0;
     
@@ -41,11 +35,9 @@ public class AutoAimPID extends Command{
     private boolean inRange = false;
     private final XboxController m_joystick;
     
-    final double MaxAngularRate =  2 * Math.PI;
-    private Rotation2d deltaTheta;
-    private Rotation2d targetAngle;
+    final double MaxAngularRate = 0.8 * Math.PI;
 
-    public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
+    public AutoAimVision(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
         m_swerve = swerve;
         m_camera = camera;
         m_drive = drive;
@@ -53,7 +45,7 @@ public class AutoAimPID extends Command{
         m_shooter = shooter;
         m_intake = intake;
         m_joystick = joystick;
-        turnController.enableContinuousInput(0.0, 1.0);
+      turnController.enableContinuousInput(0.0, 1.0);
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(arm, shooter, intake);
 
@@ -62,48 +54,57 @@ public class AutoAimPID extends Command{
     @Override
   public void initialize() {
     // Called when the command is initially scheduled.
-    Pose2d goalPose = null;
-    
-  final var robotPose = m_swerve.getState().Pose;
-    
-    var alliance = DriverStation.getAlliance();
-    
-    
-    //int speakerID = 7;
-
-    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
-            goalPose = Fiducials.AprilTags.aprilTagFiducials[6].getPose().toPose2d();
-        }
-
-    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-            goalPose = Fiducials.AprilTags.aprilTagFiducials[3].getPose().toPose2d();
-        }
-
-        final var startingAngle = robotPose.getRotation();
-        final var endAngle = goalPose.getTranslation().minus(robotPose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(180.0));
-        deltaTheta = endAngle.minus(startingAngle);
-
-        targetAngle = Rotation2d.fromDegrees(m_swerve.getRotation3d().toRotation2d().getDegrees() + deltaTheta.getDegrees());
+    //m_arm.setArmAngle(Constants.Arm.PodiumlaunchAngle);
+    //m_shooter.setLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity);
     
   }
 
-  
-
   @Override
   public void execute() {
+    
+     //m_arm.setArmAngle(Constants.Arm.PodiumlaunchAngle);
+     var result = m_camera.getLatestResult();
+    var alliance = DriverStation.getAlliance();
+    
+    int speakerID = 7;
 
-     var currentAngle = m_swerve.getState().Pose.getRotation();
+    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+            speakerID = Fiducials.AprilTags.aprilTagFiducials[6].getID();
+        }
 
-       var requestedAngularVelocity = Rotation2d.fromDegrees(MathUtil.clamp(
-            turnController.calculate(currentAngle.getDegrees(), targetAngle.getDegrees()),
-            -Units.radiansToDegrees(MaxAngularRate),
-            Units.radiansToDegrees(MaxAngularRate)
-        ));
-         
-    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(requestedAngularVelocity.getRadians());
-    m_swerve.setControl(regRequestSupplier.get());
+    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+            speakerID = Fiducials.AprilTags.aprilTagFiducials[3].getID();
+        }
+    
+    
 
+    //m_shooter.setLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity);
+    //m_arm.setArmAngle(Constants.Arm.PodiumlaunchAngle);
         
+      
+    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-m_joystick.getRightX()*MaxAngularRate);
+    m_swerve.setControl(regRequestSupplier.get());
+ 
+    if (result.hasTargets()) {
+      var targetList = result.getTargets();
+      for (int i = 0; i < targetList.size(); i++) {
+        var target = targetList.get(i);
+        System.out.println("target id"+ target.getFiducialId());
+
+        if (target.getFiducialId() == speakerID) {
+          System.out.println("tag yaw: "+ target.getYaw());
+          double rotationSpeed = turnController.calculate(target.getYaw(), 0);
+          System.out.println("rotationSpeed: "+ rotationSpeed);
+
+          Supplier<SwerveRequest> requestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(rotationSpeed*MaxAngularRate);
+          m_swerve.setControl(requestSupplier.get());
+          
+
+          
+      }
+      
+    }
+    } 
     // Called every time Command is scheduled
        
   }

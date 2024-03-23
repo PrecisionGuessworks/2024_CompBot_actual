@@ -28,7 +28,7 @@ public class ShootNoteSpeakerTogether extends Command{
 
     @Override
   public void initialize() {
-    //m_shotTimer.reset();
+    m_shotTimer.reset();
     //m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
     m_shooterSubsystem.setFeedVelocity(0);
     m_shooterSubsystem.setLaunchVelocity(Constants.Shooter.launchVelocity);

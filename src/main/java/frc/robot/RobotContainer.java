@@ -49,6 +49,7 @@ import frc.robot.autoCommands.AutoIntake;
 import frc.robot.autoCommands.PathFollowWithEvents;
 import frc.robot.commands.AutoAimPID;
 import frc.robot.commands.AutoAimPose;
+import frc.robot.commands.AutoAimVision;
 import frc.robot.commands.EjectPiece;
 import frc.robot.commands.IntakePiece;
 import frc.robot.commands.MoveArmAmp;
@@ -226,7 +227,8 @@ public class RobotContainer {
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
     bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
-    leftTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive, arm, shooter, intake, joystick));
+    leftTrigger.whileTrue(new AutoAimVision(drivetrain, aprilCam, drive, arm, shooter, intake, joystick));
+    //leftTrigger.whileTrue(new TurnTest(drivetrain, drive, joystick));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
