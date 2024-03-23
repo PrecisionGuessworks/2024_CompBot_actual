@@ -1,5 +1,6 @@
 package frc.robot.commands;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.photonvision.PhotonCamera;
@@ -7,7 +8,12 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.XboxController;
@@ -27,7 +33,7 @@ public class AutoAimPID extends Command{
     private final ShooterSubsystem m_shooter;
     private final SwerveRequest.FieldCentric m_drive;
     private final PhotonCamera m_camera;
-    private final PIDController turnController = new PIDController(1.0, 0, 0.1);
+    private final PIDController turnController = new PIDController(1.0, 0, 0.0);
     private final IntakeSubsystem m_intake;
     int shottimeout = 0;
     
@@ -35,7 +41,7 @@ public class AutoAimPID extends Command{
     private boolean inRange = false;
     private final XboxController m_joystick;
     
-    final double MaxAngularRate = 2 * Math.PI;
+    final double MaxAngularRate =  2 * Math.PI;
 
     public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
         m_swerve = swerve;
@@ -55,65 +61,68 @@ public class AutoAimPID extends Command{
   public void initialize() {
     // Called when the command is initially scheduled.
     //m_arm.setArmAngle(Constants.Arm.PodiumlaunchAngle);
-    m_shooter.setLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity);
+    //m_shooter.setLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity);
+    
+        
+        
+        // if(currentAlliance.equals(DriverStation.Alliance.Blue)) {
+        //     goalPose = new Pose2d(new Translation2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42)), new Rotation2d(Units.degreesToRadians(180)));
+        // }
+        // else {
+        //     goalPose = new Pose2d(new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42)), new Rotation2d(0));
+        // }
+
+        
+        
+
     
   }
 
   @Override
   public void execute() {
+    Pose2d goalPose = null;
     
-     m_arm.setArmAngle(Constants.Arm.PodiumlaunchAngle);
-     var result = m_camera.getLatestResult();
+     
+    
     var alliance = DriverStation.getAlliance();
     
-    int speakerID = 7;
+    
+    //int speakerID = 7;
 
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
-            speakerID = Fiducials.AprilTags.aprilTagFiducials[6].getID();
+            goalPose = Fiducials.AprilTags.aprilTagFiducials[6].getPose().toPose2d();
         }
 
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
-            speakerID = Fiducials.AprilTags.aprilTagFiducials[3].getID();
+            goalPose = Fiducials.AprilTags.aprilTagFiducials[3].getPose().toPose2d();
         }
     
     
+    var robotPose = m_swerve.getState().Pose;
+    var startingAngle = robotPose.getRotation();
+    var endAngle = goalPose.getTranslation().minus(robotPose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(180.0));
+    var deltaTheta = endAngle.minus(startingAngle);
 
-    m_shooter.setLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity);
-    m_arm.setArmAngle(Constants.Arm.PodiumlaunchAngle);
-        
-      
-    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-m_joystick.getRightX()*MaxAngularRate);
-    m_swerve.setControl(regRequestSupplier.get());
+    var targetAngle = Rotation2d.fromDegrees(Units.radiansToDegrees(m_swerve.getRotation3d().toRotation2d().getDegrees()) + deltaTheta.getDegrees());
+    
+    
  
-    if (result.hasTargets()) {
-      var targetList = result.getTargets();
-      for (int i = 0; i < targetList.size(); i++) {
-        var target = targetList.get(i);
-        System.out.println("target id"+ target.getFiducialId());
+    var currentAngle = m_swerve.getRotation3d().toRotation2d();
 
-        if (target.getFiducialId() == speakerID) {
-          System.out.println("tag yaw: "+ target.getYaw());
-          double rotationSpeed = turnController.calculate(target.getYaw(), 0);
-          System.out.println("rotationSpeed: "+ rotationSpeed);
+    var requestedAngularVelocity = Rotation2d.fromDegrees(MathUtil.clamp(
+            turnController.calculate(currentAngle.getDegrees(), targetAngle.getDegrees()),
+            -Units.radiansToDegrees(MaxAngularRate),
+            Units.radiansToDegrees(MaxAngularRate)
+        ));
 
-          Supplier<SwerveRequest> requestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(rotationSpeed*MaxAngularRate);
-          m_swerve.setControl(requestSupplier.get());
-          
+    System.out.println("Target Angle: "+ targetAngle);
+    System.out.println("Anglular Velo: "+requestedAngularVelocity);
 
-          if (withinAngleTolerance(target.getYaw(), Constants.ShotCalc.autoAimTargetYaw, Constants.ShotCalc.autoAimTargetYawTol)) {
+         
+    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-requestedAngularVelocity.getRadians());
+    m_swerve.setControl(regRequestSupplier.get());
 
-            if ( m_shooter.isAtLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity, Constants.Shooter.PodiumlaunchVelocityTolerance) 
-            && m_arm.isAtAngle(Constants.Arm.PodiumlaunchAngle, Constants.Arm.PodiumlaunchAngleTolerance)) {
-              // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
-              
-                m_shooter.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
-                   
-            }   
-        }
-      }
-      
-    }
-    } 
+        
     // Called every time Command is scheduled
        
   }

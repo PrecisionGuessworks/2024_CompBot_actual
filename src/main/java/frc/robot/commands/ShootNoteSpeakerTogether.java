@@ -44,9 +44,9 @@ public class ShootNoteSpeakerTogether extends Command{
       m_shooterSubsystem.setFeedVelocity(0);
       m_shooterSubsystem.setLaunchVelocity(0);
 
-      if (m_shotTimer.hasElapsed(0.7)) {
+      if (m_shotTimer.hasElapsed(1.0)) {
         m_shotTimer.stop();
-        m_shotTimer.reset();
+        //m_shotTimer.reset();
       }
       
       

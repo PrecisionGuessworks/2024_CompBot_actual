@@ -54,7 +54,7 @@ public class PresPoseEstimatorMulti implements Runnable {
 
   @Override
   public void run() {
-    System.out.println("Robot Pose: "+m_swerveDrivetrain.getState().Pose);
+    //System.out.println("Robot Pose: "+m_swerveDrivetrain.getState().Pose);
     // Get AprilTag data
     if (photonPoseEstimator != null && photonCamera != null) {
       var photonResults = photonCamera.getLatestResult();
