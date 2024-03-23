@@ -128,9 +128,9 @@ public class RobotContainer {
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("MoveArmIntake", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(1.8));
-    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(1.8));
+    robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.5));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm, intake));
-    robotCommands.put("ShootNoteSpeakerPodium", new ShootNoteSpeakerPodium(shooter, arm, intake  ).withTimeout(1.8));
+    robotCommands.put("ShootNoteSpeakerPodium", new ShootNoteSpeakerPodium(shooter, arm, intake  ).withTimeout(2.5));
     NamedCommands.registerCommands(robotCommands);
 
     
