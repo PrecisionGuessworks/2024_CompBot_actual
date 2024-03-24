@@ -11,8 +11,11 @@ import frc.robot.Constants;
 import frc.robot.Constants.Intake;
 import frc.robot.motorcontrol.TalonFx;
 import frc.robot.motorcontrol.configurations.TalonFxConfiguration;
+import frc.robot.subsystems.Blinkin.BlinkinSubsystem;
+import frc.robot.subsystems.Blinkin.Colors;
 
 public class IntakeSubsystem  extends SubsystemBase{
+    private BlinkinSubsystem blinkin = new BlinkinSubsystem();
 
     private final TalonFx m_rollerMotor = new TalonFx(
       Constants.Intake.Roller.rollerMotorID, 
@@ -84,9 +87,20 @@ public class IntakeSubsystem  extends SubsystemBase{
 
     }
 
+    public void runIntakeLEDs(){
+      if(isBeamBreakTriggered()) {
+        blinkin.setColor(Colors.ORANGE);
+      } else if (isLowerBeamBreakTriggered()){
+        blinkin.setColor(Colors.GREEN);
+      } else {
+        blinkin.setBlinkinToAllianceColor();
+      }
+    }
+
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Intake Roller: Current", m_rollerMotor.getStatorCurrent());
+        runIntakeLEDs();
       // This method will be called once per scheduler run
     }
   
