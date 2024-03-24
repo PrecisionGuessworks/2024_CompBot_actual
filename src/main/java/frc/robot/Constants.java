@@ -169,7 +169,7 @@ public class Constants {
                 public static final double rollerStallSpeed = Math.PI * Math.PI * (1.0 / 32.0);
                 public static final double rollerStallTime = 0.1;
 
-                public static final int intakeBeamBreakInputChannel = 6;
+                public static final int intakeBeamBreakInputChannel = 1;
                 public static final int lowerIntakeBeamBreakInpt = 7;
 
         }
@@ -238,6 +238,7 @@ public class Constants {
         public static final double intakeFeedVelocity = 80; // rad/s
         public static final double scoreAmpFeedVelocity = 80; // rad/s
         public static final double scoreSpeakerFeedVelocity = 160; // rad/s
+        public static final double ejectVelocity = 150.0;
         
         
     }
@@ -282,7 +283,7 @@ public class Constants {
 
               //  public static final Constraints leftPivotTrapConstraintsDown = new Constraints(leftPivotVelocityConstraintDown, leftPivotAccelerationConstraintDown);
 
-                public static final ArmFeedforward leftFeedForward = new ArmFeedforward(0.02, 0.92, 1.35, 0.06);
+                public static final ArmFeedforward leftFeedForward = new ArmFeedforward(0.015, 0.94, 1.39, 0.1);
              
         }
 
@@ -293,10 +294,10 @@ public class Constants {
                 
         }
 
-        public static final double minAngle = Units.degreesToRadians(0);
+        public static final double minAngle = Units.degreesToRadians(2);
         public static final double maxAngle = Units.degreesToRadians(110);
         public static final double startingAngle = minAngle;
-        public static final double intakeAngle = Units.degreesToRadians(3);
+        public static final double intakeAngle = Units.degreesToRadians(5);
         public static final double intakeAngleTolerance = Units.degreesToRadians(8);
 
         public static final double launchAngle = Units.degreesToRadians(74);
@@ -308,8 +309,8 @@ public class Constants {
         public static final double midpointAngle = Units.degreesToRadians(75); 
         public static final double midpointAngleTolerance = Units.degreesToRadians(5);
         public static final double ShootTimeout = 4;
-        public static final double AmpTimeout = 6;
-        public static final double AmpTimeoutMid = 20;
+        public static final double AmpTimeout = 20;
+        public static final double AmpTimeoutMid = 40;
         public static final double eject = Units.degreesToRadians(30);
         public static final double ejectAngleTolerance = Units.degreesToRadians(3);
         public static final double PodiumlaunchAngle = Units.degreesToRadians(65);
@@ -347,5 +348,11 @@ public class Constants {
         public static final double maxPosition = 0;
         public static final double minPosition = -32.0;
         public static final double maxSpeed = 0.4; //speed gain
+    }
+
+    public static final class ShotCalc {
+        public static final double autoAimTargetYaw = Units.degreesToRadians(0.0);
+        public static final double autoAimTargetYawTol = Units.degreesToRadians(5.0);
+        public static final double speakerHeight = 3.5; //meters
     }
 }

@@ -28,7 +28,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.vision.Fiducials;
 
 
-public class AutoAimPID extends Command{
+public class AutoAimAbhi extends Command{
     private final CommandSwerveDrivetrain m_swerve;
     private final ArmSubsystem m_arm;
     private final ShooterSubsystem m_shooter;
@@ -44,7 +44,7 @@ public class AutoAimPID extends Command{
     
     final double MaxAngularRate =  0.8 * Math.PI;
 
-    public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
+    public AutoAimAbhi(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
         m_swerve = swerve;
         m_camera = camera;
         m_drive = drive;
@@ -98,21 +98,16 @@ public class AutoAimPID extends Command{
     
     var startRobotPose = m_swerve.getState().Pose;
 
-    Translation2d robotPoseTranslation = startRobotPose.getTranslation();
-
-    //Translation2d tagToRobotVector = (goalPose.getTranslation()).minus(startRobotPose.getTranslation());
+    Translation2d tagToRobotVector = (goalPose.getTranslation()).minus(startRobotPose.getTranslation());
 
     var robotAngle = startRobotPose.getRotation().getRadians();
 
     Translation2d robotVector = new Translation2d(Math.cos(robotAngle), Math.sin(robotAngle));
 
-    Translation2d tagTranslation = goalPose.getTranslation();
-    
-    var angle1 = Math.atan2(robotVector.getY()-tagTranslation.getY(), robotVector.getX()-tagTranslation.getX());
-    var angle2 = Math.atan2(robotPoseTranslation.getY()-tagTranslation.getY(), tagTranslation.getX()-robotPoseTranslation.getX()-tagTranslation.getX());
+    Translation2d tagToRobotHeadingVector = goalPose.getTranslation().minus(robotVector);
 
-    var targetAngle = angle2 - angle1;
-    /* var dotVec = (robotVector.getX()*tagToRobotVector.getX()) + (robotVector.getY()*tagToRobotVector.getY());
+
+    var dotVec = (robotVector.getX()*tagToRobotVector.getX()) + (robotVector.getY()*tagToRobotVector.getY());
 
 
     var magRobotVec = robotVector.getNorm();
@@ -121,18 +116,23 @@ public class AutoAimPID extends Command{
     System.out.println("robotAngle: "+ robotAngle);
 
 
-    var targetAngle = Math.acos(dotVec / (magRobotVec * magTagToRobotVector)); */
+    var targetAngle = Math.acos(dotVec / (magRobotVec * magTagToRobotVector));
 
     System.out.println("targetAngle: "+Units.radiansToDegrees(targetAngle));
 
 
     var requestedAngularVelocity = (turnController.calculate(targetAngle, 0));
 
+    
+
+    
+
     System.out.println("rotationSpeed: "+ requestedAngularVelocity);
 
          
     Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-requestedAngularVelocity*MaxAngularRate);
     m_swerve.setControl(regRequestSupplier.get());
+
         
     // Called every time Command is scheduled
        
