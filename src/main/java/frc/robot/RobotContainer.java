@@ -47,6 +47,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.autoCommands.AutoIntake;
 import frc.robot.autoCommands.PathFollowWithEvents;
+import frc.robot.commands.AutoAimAbhi;
 import frc.robot.commands.AutoAimPID;
 import frc.robot.commands.AutoAimPose;
 import frc.robot.commands.AutoAimVision;
@@ -228,6 +229,7 @@ public class RobotContainer {
 
     bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
     leftTrigger.whileTrue(new AutoAimVision(drivetrain, aprilCam, drive, arm, shooter, intake, joystick));
+    leftTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive, arm, shooter, intake, joystick));
     //leftTrigger.whileTrue(new TurnTest(drivetrain, drive, joystick));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece

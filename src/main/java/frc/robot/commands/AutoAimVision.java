@@ -27,7 +27,7 @@ public class AutoAimVision extends Command{
     private final ShooterSubsystem m_shooter;
     private final SwerveRequest.FieldCentric m_drive;
     private final PhotonCamera m_camera;
-    private final PIDController turnController = new PIDController(2.0, 0, 0.1);
+    private final PIDController turnController = new PIDController(0.5, 0, 0.4);
     private final IntakeSubsystem m_intake;
     int shottimeout = 0;
     
@@ -35,7 +35,7 @@ public class AutoAimVision extends Command{
     private boolean inRange = false;
     private final XboxController m_joystick;
     
-    final double MaxAngularRate = 0.8 * Math.PI;
+    final double MaxAngularRate = 0.4 * Math.PI;
 
     public AutoAimVision(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
         m_swerve = swerve;
@@ -45,7 +45,7 @@ public class AutoAimVision extends Command{
         m_shooter = shooter;
         m_intake = intake;
         m_joystick = joystick;
-      turnController.enableContinuousInput(0.0, 1.0);
+      //turnController.enableContinuousInput(0.0, 1.0);
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(arm, shooter, intake);
 

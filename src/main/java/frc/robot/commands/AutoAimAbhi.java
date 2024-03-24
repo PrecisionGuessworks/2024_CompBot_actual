@@ -9,6 +9,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -33,7 +34,7 @@ public class AutoAimAbhi extends Command{
     private final ShooterSubsystem m_shooter;
     private final SwerveRequest.FieldCentric m_drive;
     private final PhotonCamera m_camera;
-    private final PIDController turnController = new PIDController(1.0, 0, 0.0);
+    private final PIDController turnController = new PIDController(0.5, 0, 0.0);
     private final IntakeSubsystem m_intake;
     int shottimeout = 0;
     
@@ -41,7 +42,7 @@ public class AutoAimAbhi extends Command{
     private boolean inRange = false;
     private final XboxController m_joystick;
     
-    final double MaxAngularRate =  2 * Math.PI;
+    final double MaxAngularRate =  0.8 * Math.PI;
 
     public AutoAimAbhi(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
         m_swerve = swerve;
@@ -51,7 +52,7 @@ public class AutoAimAbhi extends Command{
         m_shooter = shooter;
         m_intake = intake;
         m_joystick = joystick;
-        turnController.enableContinuousInput(0.0, 1.0);
+        //turnController.enableContinuousInput(0.0, 1.0);
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(arm, shooter, intake);
 
@@ -103,10 +104,16 @@ public class AutoAimAbhi extends Command{
 
     Translation2d robotVector = new Translation2d(Math.cos(robotAngle), Math.sin(robotAngle));
 
+    Translation2d tagToRobotHeadingVector = goalPose.getTranslation().minus(robotVector);
+
+
     var dotVec = (robotVector.getX()*tagToRobotVector.getX()) + (robotVector.getY()*tagToRobotVector.getY());
+
 
     var magRobotVec = robotVector.getNorm();
     var magTagToRobotVector = tagToRobotVector.getNorm();
+
+    System.out.println("robotAngle: "+ robotAngle);
 
 
     var targetAngle = Math.acos(dotVec / (magRobotVec * magTagToRobotVector));
@@ -114,7 +121,13 @@ public class AutoAimAbhi extends Command{
     System.out.println("targetAngle: "+Units.radiansToDegrees(targetAngle));
 
 
-    var requestedAngularVelocity = turnController.calculate(targetAngle, 0);
+    var requestedAngularVelocity = (turnController.calculate(targetAngle, 0));
+
+    
+
+    
+
+    System.out.println("rotationSpeed: "+ requestedAngularVelocity);
 
          
     Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-requestedAngularVelocity*MaxAngularRate);
@@ -141,7 +154,6 @@ public class AutoAimAbhi extends Command{
   public boolean withinAngleTolerance(double yaw, double targetYaw, double targetYawTol) {
     return (Math.abs(targetYaw - yaw) <= targetYawTol);
   }
-    
 
 
     

@@ -42,7 +42,7 @@ public class AutoAimPose extends Command{
     private boolean inRange = false;
     private final XboxController m_joystick;
     private final Timer m_shotTimer = new Timer();
-    private final ShotDistTable shotTable = new ShotDistTable();
+    private ShotDistTable shotTable = new ShotDistTable();
     
     private final PIDController turnController = new PIDController(0.05, 0, 0.1);
 
@@ -86,24 +86,7 @@ public class AutoAimPose extends Command{
             speakerID = Fiducials.AprilTags.aprilTagFiducials[3].getID();
         }
 
-        if (m_shotTimer.hasElapsed(0.3)) {
-      
-          m_arm.setArmAngle(Constants.Arm.intakeAngle);
-          m_shooter.setFeedVelocity(0);
-          m_shooter.setLaunchVelocity(0);
-    
-          if (m_shotTimer.hasElapsed(0.7)) {
-            m_shotTimer.stop();
-            m_shotTimer.reset();
-          }
-          
-          
-          //m_shotTimer.reset();     
-            
-        }
-
-    else {
-
+       
     
     double filteredAngle = Constants.Arm.intakeAngle;
     double shotVelo = Constants.Shooter.ejectVelocity;
@@ -134,48 +117,13 @@ public class AutoAimPose extends Command{
       inRange = false;
     }
 
-    var result = m_camera.getLatestResult();
+    
 
     m_shooter.setLaunchVelocity(shotVelo);
     m_arm.setArmAngle(filteredAngle);
         
       
-    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-m_joystick.getRightX()*MaxAngularRate);
-    m_swerve.setControl(regRequestSupplier.get());
- 
-    if (result.hasTargets()) {
-      var targetList = result.getTargets();
-      for (int i = 0; i < targetList.size(); i++) {
-        var target = targetList.get(i);
-        System.out.println("target id"+ target.getFiducialId());
-
-        if (target.getFiducialId() == speakerID) {
-          System.out.println("tag yaw: "+ target.getYaw());
-          double rotationSpeed = turnController.calculate(target.getYaw(), 0);
-          System.out.println("rotationSpeed: "+ rotationSpeed);
-
-          Supplier<SwerveRequest> requestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(rotationSpeed*MaxAngularRate);
-          m_swerve.setControl(requestSupplier.get());
-          
-
-          if (withinAngleTolerance(target.getYaw(), Constants.ShotCalc.autoAimTargetYaw, Constants.ShotCalc.autoAimTargetYawTol)) {
-
-            if ( m_shooter.isAtLaunchVelocity(shotVelo, Constants.Shooter.PodiumlaunchVelocityTolerance) 
-            && m_arm.isAtAngle(filteredAngle, Constants.Arm.PodiumlaunchAngleTolerance)
-            && inRange) {
-              // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
-              
-                m_shooter.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
-                m_shotTimer.start();
-                   
-            }   
-        }
-      }
-      
-    }
-    } 
-  }
-    
+  
   }
   
 

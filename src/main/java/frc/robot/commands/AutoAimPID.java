@@ -9,6 +9,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -33,7 +34,7 @@ public class AutoAimPID extends Command{
     private final ShooterSubsystem m_shooter;
     private final SwerveRequest.FieldCentric m_drive;
     private final PhotonCamera m_camera;
-    private final PIDController turnController = new PIDController(1.0, 0, 0.0);
+    private final PIDController turnController = new PIDController(0.5, 0, 0.0);
     private final IntakeSubsystem m_intake;
     int shottimeout = 0;
     
@@ -41,9 +42,7 @@ public class AutoAimPID extends Command{
     private boolean inRange = false;
     private final XboxController m_joystick;
     
-    final double MaxAngularRate =  2 * Math.PI;
-    private Rotation2d deltaTheta;
-    private Rotation2d targetAngle;
+    final double MaxAngularRate =  0.8 * Math.PI;
 
     public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
         m_swerve = swerve;
@@ -53,7 +52,7 @@ public class AutoAimPID extends Command{
         m_shooter = shooter;
         m_intake = intake;
         m_joystick = joystick;
-        turnController.enableContinuousInput(0.0, 1.0);
+        //turnController.enableContinuousInput(0.0, 1.0);
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(arm, shooter, intake);
 
@@ -62,9 +61,25 @@ public class AutoAimPID extends Command{
     @Override
   public void initialize() {
     // Called when the command is initially scheduled.
+    //m_arm.setArmAngle(Constants.Arm.PodiumlaunchAngle);
+    //m_shooter.setLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity);
+    
+        
+        
+        // if(currentAlliance.equals(DriverStation.Alliance.Blue)) {
+        //     goalPose = new Pose2d(new Translation2d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42)), new Rotation2d(Units.degreesToRadians(180)));
+        // }
+        // else {
+        //     goalPose = new Pose2d(new Translation2d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42)), new Rotation2d(0));
+        // }
+    
+  }
+
+  @Override
+  public void execute() {
     Pose2d goalPose = null;
     
-  final var robotPose = m_swerve.getState().Pose;
+     
     
     var alliance = DriverStation.getAlliance();
     
@@ -78,31 +93,46 @@ public class AutoAimPID extends Command{
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             goalPose = Fiducials.AprilTags.aprilTagFiducials[3].getPose().toPose2d();
         }
-
-        final var startingAngle = robotPose.getRotation();
-        final var endAngle = goalPose.getTranslation().minus(robotPose.getTranslation()).getAngle().plus(Rotation2d.fromDegrees(180.0));
-        deltaTheta = endAngle.minus(startingAngle);
-
-        targetAngle = Rotation2d.fromDegrees(m_swerve.getRotation3d().toRotation2d().getDegrees() + deltaTheta.getDegrees());
     
-  }
+    
+    
+    var startRobotPose = m_swerve.getState().Pose;
 
-  
+    Translation2d robotPoseTranslation = startRobotPose.getTranslation();
 
-  @Override
-  public void execute() {
+    //Translation2d tagToRobotVector = (goalPose.getTranslation()).minus(startRobotPose.getTranslation());
 
-     var currentAngle = m_swerve.getState().Pose.getRotation();
+    var robotAngle = startRobotPose.getRotation().getRadians();
 
-       var requestedAngularVelocity = Rotation2d.fromDegrees(MathUtil.clamp(
-            turnController.calculate(currentAngle.getDegrees(), targetAngle.getDegrees()),
-            -Units.radiansToDegrees(MaxAngularRate),
-            Units.radiansToDegrees(MaxAngularRate)
-        ));
+    Translation2d robotVector = new Translation2d(Math.cos(robotAngle), Math.sin(robotAngle));
+
+    Translation2d tagTranslation = goalPose.getTranslation();
+    
+    var angle1 = Math.atan2(robotVector.getY()-tagTranslation.getY(), robotVector.getX()-tagTranslation.getX());
+    var angle2 = Math.atan2(robotPoseTranslation.getY()-tagTranslation.getY(), tagTranslation.getX()-robotPoseTranslation.getX()-tagTranslation.getX());
+
+    var targetAngle = angle2 - angle1;
+    /* var dotVec = (robotVector.getX()*tagToRobotVector.getX()) + (robotVector.getY()*tagToRobotVector.getY());
+
+
+    var magRobotVec = robotVector.getNorm();
+    var magTagToRobotVector = tagToRobotVector.getNorm();
+
+    System.out.println("robotAngle: "+ robotAngle);
+
+
+    var targetAngle = Math.acos(dotVec / (magRobotVec * magTagToRobotVector)); */
+
+    System.out.println("targetAngle: "+Units.radiansToDegrees(targetAngle));
+
+
+    var requestedAngularVelocity = (turnController.calculate(targetAngle, 0));
+
+    System.out.println("rotationSpeed: "+ requestedAngularVelocity);
+
          
-    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(requestedAngularVelocity.getRadians());
+    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-requestedAngularVelocity*MaxAngularRate);
     m_swerve.setControl(regRequestSupplier.get());
-
         
     // Called every time Command is scheduled
        
@@ -124,7 +154,6 @@ public class AutoAimPID extends Command{
   public boolean withinAngleTolerance(double yaw, double targetYaw, double targetYawTol) {
     return (Math.abs(targetYaw - yaw) <= targetYawTol);
   }
-    
 
 
     
