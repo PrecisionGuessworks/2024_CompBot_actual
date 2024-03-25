@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -42,6 +43,8 @@ public class AutoAimPID extends Command{
     private final double MaxSpeed = 5.0292; 
     private boolean inRange = false;
     private final XboxController m_joystick;
+    private final Timer m_shotTimer = new Timer();
+    private ShotDistTable shotTable = new ShotDistTable();
     
     final double MaxAngularRate =  0.8 * Math.PI;
 
@@ -61,6 +64,8 @@ public class AutoAimPID extends Command{
 
     @Override
   public void initialize() {
+    m_shooter.setFeedVelocity(0);
+    m_shooter.setLaunchVelocity(Constants.Shooter.ejectVelocity);
     // Called when the command is initially scheduled.
     //m_arm.setArmAngle(Constants.Arm.PodiumlaunchAngle);
     //m_shooter.setLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity);
@@ -136,7 +141,7 @@ public class AutoAimPID extends Command{
     double goalDistance = tagToRobotVector.getNorm();
 
     if (goalDistance <=ShotDistTable.maxArmDist) {
-      //filteredAngle = shotTable.calculate(goalDistance);
+      filteredAngle = shotTable.calculate(goalDistance);
       filteredAngle = Math.atan2(2.3, goalDistance);
       shotVelo = Constants.Shooter.PodiumlaunchVelocity;
 
