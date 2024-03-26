@@ -142,7 +142,7 @@ public class AutoAimPID extends Command{
 
     if (goalDistance <=ShotDistTable.maxArmDist) {
       filteredAngle = shotTable.calculate(goalDistance);
-      filteredAngle = Math.atan2(2.3, goalDistance);
+      //filteredAngle = Math.atan2(2.3, goalDistance);
       shotVelo = Constants.Shooter.PodiumlaunchVelocity;
 
     }

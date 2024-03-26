@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.TreeMap;
 
 public class ShotDistTable {
-    public static final double maxShotDist = 4.0; //meters
-    public static final double maxArmDist = 6.0; //meters
+    public static final double maxShotDist = 3.0; //meters
+    public static final double maxArmDist = 4.0; //meters
     public TreeMap<Double, Double> shotTableAngles = new TreeMap<Double,Double>();
     
 
@@ -16,8 +16,8 @@ public class ShotDistTable {
 
         shotTableAngles.put(0.0, 94.0);
         shotTableAngles.put(0.8, 74.0);
-        shotTableAngles.put(3.8, 47.2);
-        shotTableAngles.put(4.0, 45.0);
+        shotTableAngles.put(2.8, 47.2);
+        shotTableAngles.put(3.0, 45.0);
         
     }
 
