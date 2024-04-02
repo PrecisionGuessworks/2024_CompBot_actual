@@ -64,7 +64,7 @@ public class ShootNoteSpeakerTogether extends Command{
        m_shotTimer.start();
     }            
     }
-    System.out.println("timer value: "+m_shotTimer.get());
+    //System.out.println("timer value: "+m_shotTimer.get());
 
 
     // Called every time Command is scheduled
