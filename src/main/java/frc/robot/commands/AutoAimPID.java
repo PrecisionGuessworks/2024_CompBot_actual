@@ -140,7 +140,7 @@ public class AutoAimPID extends Command{
 
     double goalDistance = tagToRobotVector.getNorm();
 
-    if (goalDistance <=ShotDistTable.maxArmDist) {
+    if (goalDistance <= ShotDistTable.maxArmDist) {
       filteredAngle = shotTable.calculate(goalDistance);
       //filteredAngle = Math.atan2(2.3, goalDistance);
       shotVelo = Constants.Shooter.PodiumlaunchVelocity;
@@ -162,8 +162,9 @@ public class AutoAimPID extends Command{
 
     
 
-    m_shooter.setLaunchVelocity(shotVelo);
+    
     m_arm.setArmAngle(filteredAngle);
+    m_shooter.setLaunchVelocity(shotVelo);
 
          
     Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-requestedAngularVelocity*MaxAngularRate);

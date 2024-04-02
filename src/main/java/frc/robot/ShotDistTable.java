@@ -8,7 +8,7 @@ import java.util.TreeMap;
 
 public class ShotDistTable {
     public static final double maxShotDist = 3.0; //meters
-    public static final double maxArmDist = 4.0; //meters
+    public static final double maxArmDist = 3.0; //meters
     public TreeMap<Double, Double> shotTableAngles = new TreeMap<Double,Double>();
     
 

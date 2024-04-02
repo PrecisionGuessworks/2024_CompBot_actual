@@ -66,16 +66,6 @@ public class ScoreAmp extends Command{
     } 
 
     }
-    
-      
-        
-           
-    
-
-   
-    
-  
-  
   }
 
   @Override
