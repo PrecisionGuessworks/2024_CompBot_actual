@@ -46,7 +46,7 @@ public class AutoAimPID extends Command{
     private final Timer m_shotTimer = new Timer();
     private ShotDistTable shotTable = new ShotDistTable();
     
-    final double MaxAngularRate =  0.8 * Math.PI;
+    final double MaxAngularRate =  2 * Math.PI;
 
     public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
         m_swerve = swerve;

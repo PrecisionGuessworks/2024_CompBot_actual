@@ -40,20 +40,21 @@ public class ScoreAmp extends Command{
   public void execute() {
     // Called every time Command is scheduled
 
-  
-    if (m_shotTimer.hasElapsed(Constants.Arm.AmpTimeout)) {
+     if (m_shotTimer.hasElapsed(1.5)) {
+          m_shotTimer.stop();
+        }
+      else if (m_shotTimer.hasElapsed(Constants.Arm.AmpTimeoutMid)) {
+        m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
+        //m_shotTimer.reset();
+
+       
+      }
+      else if (m_shotTimer.hasElapsed(Constants.Arm.AmpTimeout)) {
       m_armSubsystem.setArmAngle(Constants.Arm.ampPreAngle);
       m_shooterSubsystem.setFeedVelocity(0);
       m_shooterSubsystem.setLaunchVelocity(0);
 
-      if (m_shotTimer.hasElapsed(Constants.Arm.AmpTimeoutMid)) {
-        m_armSubsystem.setArmAngle(Constants.Arm.intakeAngle);
-        //m_shotTimer.reset();
-
-        if (m_shotTimer.hasElapsed(1.5)) {
-          m_shotTimer.stop();
-        }
-      }
+      
     }
 
     else {
