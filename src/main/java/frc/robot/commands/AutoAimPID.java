@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants;
 import frc.robot.ShotDistTable;
 import frc.robot.subsystems.ArmSubsystem;
@@ -48,6 +49,7 @@ public class AutoAimPID extends Command{
     private double maxShotDist = 3.0; //meters
     
     final double MaxAngularRate =  1.4 * Math.PI;
+ 
 
     public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
         m_swerve = swerve;
@@ -57,6 +59,7 @@ public class AutoAimPID extends Command{
         m_shooter = shooter;
         m_intake = intake;
         m_joystick = joystick;
+        
         //turnController.enableContinuousInput(0.0, 1.0);
     // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(arm, shooter, intake);
@@ -85,6 +88,7 @@ public class AutoAimPID extends Command{
 
   @Override
   public void execute() {
+    final boolean isBPressed = m_joystick.getBButton();
     Pose2d goalPose = null;
     
      
@@ -166,7 +170,8 @@ public class AutoAimPID extends Command{
     }
 
     
-
+  System.out.println("Distance from speaker: "+ goalDistance);
+  System.out.println("Arm Angle: "+ filteredAngle);
     
    m_arm.setArmAngle(filteredAngle);
     m_shooter.setLaunchVelocity(shotVelo);
@@ -176,6 +181,9 @@ public class AutoAimPID extends Command{
     m_swerve.setControl(regRequestSupplier.get());
         
     // Called every time Command is scheduled
+    if (isBPressed) {
+      m_shooter.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
+    }
 
   if (inRange) {
     if (withinAngleTolerance(targetAngle, 0, Constants.ShotCalc.autoAimTargetYawTol)) {
@@ -187,6 +195,7 @@ public class AutoAimPID extends Command{
     }
 
   }
+  
 
    
        

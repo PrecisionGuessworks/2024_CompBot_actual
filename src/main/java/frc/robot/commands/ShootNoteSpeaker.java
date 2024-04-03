@@ -24,7 +24,7 @@ public class ShootNoteSpeaker extends Command{
     @Override
   public void initialize() {
     //m_armSubsystem.setArmAngle(Constants.Arm.launchAngle);
-    m_shooterSubsystem.setFeedVelocity(0);
+    m_shooterSubsystem.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
     m_shooterSubsystem.setLaunchVelocity(Constants.Shooter.launchVelocity);
 
     // Called when the command is initially scheduled.
