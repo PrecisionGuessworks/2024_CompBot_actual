@@ -211,7 +211,7 @@ public class RobotContainer {
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
     bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
-    leftTrigger.onTrue(new ShootNoteSpeakerPodium(shooter, arm, intake));
+    leftTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive, arm, shooter, intake, joystick));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
@@ -224,7 +224,7 @@ public class RobotContainer {
     operatorDPadDown.whileTrue(new SetClimberSensorMax(climber));
     operatorDPadUp.whileTrue(new SetClimberSensorMin(climber));
 
-    operatorRightTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive));
+    operatorRightTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive, arm, shooter, intake, joystick));
 
     //buttonB.whileTrue(drivetrain.followTrajectoryCommand());
 

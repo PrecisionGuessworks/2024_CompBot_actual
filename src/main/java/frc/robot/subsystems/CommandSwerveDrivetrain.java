@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import java.util.function.Supplier;
 
+import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
@@ -21,10 +22,14 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -42,15 +47,32 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
 
+    PhotonCamera aprilCam = new PhotonCamera("OV2311");
+
+
+
+    Transform3d robotToCam = new Transform3d(new Translation3d(0, 0.44, 0.37), new Rotation3d(0,Units.degreesToRadians(15),0));
+    Transform3d camToRobot = new Transform3d(new Translation3d(0, -0.44, -0.37), new Rotation3d(0,Units.degreesToRadians(-15),0));
+
+    private final PresPoseEstimatorMulti poseEstimator = new PresPoseEstimatorMulti(aprilCam, robotToCam, this);
+
+       private final Notifier allNotifier = new Notifier(() -> {poseEstimator.run();});
+
+
+
     
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
         configurePathPlanner();
+        allNotifier.setName("runAll");
+        allNotifier.startPeriodic(0.02);
     }
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         configurePathPlanner();
+        allNotifier.setName("runAll");
+        allNotifier.startPeriodic(0.02);
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -68,8 +90,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             this::seedFieldRelative,  // Consumer for seeding pose against auto
             this::getCurrentRobotChassisSpeeds,
             (speeds)->this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the robot
-            new HolonomicPathFollowerConfig(new PIDConstants(5, 0.05, 0.2),
-                                            new PIDConstants(5, 0.01, 0.1),
+            new HolonomicPathFollowerConfig(new PIDConstants(5, 0, 0.2),
+                                            new PIDConstants(3, 0, 0.25),
                                             TunerConstants.kSpeedAt12VoltsMps,
                                             driveBaseRadius,
                                             new ReplanningConfig()),
