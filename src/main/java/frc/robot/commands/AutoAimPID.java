@@ -45,8 +45,9 @@ public class AutoAimPID extends Command{
     private final XboxController m_joystick;
     private final Timer m_shotTimer = new Timer();
     private ShotDistTable shotTable = new ShotDistTable();
+    private double maxShotDist = 3.0; //meters
     
-    final double MaxAngularRate =  2 * Math.PI;
+    final double MaxAngularRate =  1.4 * Math.PI;
 
     public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
         m_swerve = swerve;
@@ -64,6 +65,7 @@ public class AutoAimPID extends Command{
 
     @Override
   public void initialize() {
+    inRange = false;
     m_shooter.setFeedVelocity(0);
     //m_shooter.setLaunchVelocity(Constants.Shooter.ejectVelocity);
     // Called when the command is initially scheduled.
@@ -142,7 +144,7 @@ public class AutoAimPID extends Command{
 
     double goalDistance = tagToRobotVector.getNorm();
 
-    if (goalDistance <= 3.0) {
+    if (goalDistance <= maxShotDist) {
       filteredAngle = Units.degreesToRadians(shotTable.calculate(goalDistance));
       System.out.println("angle calc: "+Units.radiansToDegrees(filteredAngle));
       //filteredAngle = Math.atan2(2.3, goalDistance);
@@ -155,7 +157,7 @@ public class AutoAimPID extends Command{
       shotVelo = Constants.Shooter.ejectVelocity;
     }
 
-    if (goalDistance <= 3.0) {
+    if (goalDistance <= maxShotDist) {
       inRange = true;
     }
 
@@ -175,13 +177,18 @@ public class AutoAimPID extends Command{
         
     // Called every time Command is scheduled
 
-   if (withinAngleTolerance(targetAngle, 0, Constants.ShotCalc.autoAimTargetYawTol)) {
+  if (inRange) {
+    if (withinAngleTolerance(targetAngle, 0, Constants.ShotCalc.autoAimTargetYawTol)) {
       if (m_shooter.isAtLaunchVelocity(shotVelo, Constants.Shooter.launchVelocityTolerance) && m_arm.isAtAngle(filteredAngle, Constants.Arm.launchAngleTolerance)) {
         // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
         m_shooter.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
         
      }         
     }
+
+  }
+
+   
        
   }
 
