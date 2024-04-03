@@ -17,9 +17,11 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.ShotDistTable;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -41,6 +43,8 @@ public class AutoAimPID extends Command{
     private final double MaxSpeed = 5.0292; 
     private boolean inRange = false;
     private final XboxController m_joystick;
+    private final Timer m_shotTimer = new Timer();
+    private ShotDistTable shotTable = new ShotDistTable();
     
     final double MaxAngularRate =  0.8 * Math.PI;
 
@@ -60,6 +64,8 @@ public class AutoAimPID extends Command{
 
     @Override
   public void initialize() {
+    m_shooter.setFeedVelocity(0);
+    m_shooter.setLaunchVelocity(Constants.Shooter.ejectVelocity);
     // Called when the command is initially scheduled.
     //m_arm.setArmAngle(Constants.Arm.PodiumlaunchAngle);
     //m_shooter.setLaunchVelocity(Constants.Shooter.PodiumlaunchVelocity);
@@ -94,13 +100,15 @@ public class AutoAimPID extends Command{
             goalPose = Fiducials.AprilTags.aprilTagFiducials[3].getPose().toPose2d();
         }
     
+    double filteredAngle = Constants.Arm.intakeAngle;
+    double shotVelo = Constants.Shooter.ejectVelocity;
     
     
     var startRobotPose = m_swerve.getState().Pose;
 
     Translation2d robotPoseTranslation = startRobotPose.getTranslation();
 
-    //Translation2d tagToRobotVector = (goalPose.getTranslation()).minus(startRobotPose.getTranslation());
+    Translation2d tagToRobotVector = (goalPose.getTranslation()).minus(startRobotPose.getTranslation());
 
     var robotAngle = startRobotPose.getRotation().getRadians();
 
@@ -130,11 +138,47 @@ public class AutoAimPID extends Command{
 
     System.out.println("rotationSpeed: "+ requestedAngularVelocity);
 
+    double goalDistance = tagToRobotVector.getNorm();
+
+    if (goalDistance <= ShotDistTable.maxArmDist) {
+      filteredAngle = shotTable.calculate(goalDistance);
+      //filteredAngle = Math.atan2(2.3, goalDistance);
+      shotVelo = Constants.Shooter.PodiumlaunchVelocity;
+
+    }
+
+    else {
+      filteredAngle = Constants.Arm.eject;
+      shotVelo = Constants.Shooter.ejectVelocity;
+    }
+
+    if (goalDistance <= ShotDistTable.maxShotDist) {
+      inRange = true;
+    }
+
+    else {
+      inRange = false;
+    }
+
+    
+
+    
+    m_arm.setArmAngle(filteredAngle);
+    m_shooter.setLaunchVelocity(shotVelo);
+
          
     Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-requestedAngularVelocity*MaxAngularRate);
     m_swerve.setControl(regRequestSupplier.get());
         
     // Called every time Command is scheduled
+
+    if (withinAngleTolerance(targetAngle, 0, Constants.ShotCalc.autoAimTargetYawTol)) {
+      if (m_shooter.isAtLaunchVelocity(shotVelo, Constants.Shooter.launchVelocityTolerance) && m_arm.isAtAngle(filteredAngle, Constants.Arm.launchAngleTolerance)) {
+        // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
+        m_shooter.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
+        
+     }         
+    }
        
   }
 
