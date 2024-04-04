@@ -232,11 +232,11 @@ public class Constants {
         public static final double launchVelocityTolerance = 20.0; // rads/s
         public static final double PodiumlaunchVelocity = 450.0; // rads/s
         public static final double PodiumlaunchVelocityTolerance = 15.0; // rads/s
-        public static final double ScoreAmpPower = 0.5;
+        public static final double ScoreAmpPower = 0.7;
         public static final double AmpVelocityTolerance = 10.0; // rads/s
 
         public static final double intakeFeedVelocity = 80; // rad/s
-        public static final double scoreAmpFeedVelocity = 80; // rad/s
+        public static final double scoreAmpFeedVelocity = 120; // rad/s
         public static final double scoreSpeakerFeedVelocity = 160; // rad/s
         public static final double ejectVelocity = 150.0;
         
@@ -297,7 +297,7 @@ public class Constants {
         public static final double minAngle = Units.degreesToRadians(2);
         public static final double maxAngle = Units.degreesToRadians(110);
         public static final double startingAngle = minAngle;
-        public static final double intakeAngle = Units.degreesToRadians(5);
+        public static final double intakeAngle = Units.degreesToRadians(3.5);
         public static final double intakeAngleTolerance = Units.degreesToRadians(8);
 
         public static final double launchAngle = Units.degreesToRadians(74);

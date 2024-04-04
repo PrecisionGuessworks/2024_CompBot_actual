@@ -37,7 +37,7 @@ public class AutoAimPID extends Command{
     private final ShooterSubsystem m_shooter;
     private final SwerveRequest.FieldCentric m_drive;
     private final PhotonCamera m_camera;
-    private final PIDController turnController = new PIDController(0.5, 0, 0.0);
+    private final PIDController turnController = new PIDController(1.0, 0, 0.1);
     private final IntakeSubsystem m_intake;
     int shottimeout = 0;
     
@@ -45,13 +45,14 @@ public class AutoAimPID extends Command{
     private boolean inRange = false;
     private final XboxController m_joystick;
     private final Timer m_shotTimer = new Timer();
-    private ShotDistTable shotTable = new ShotDistTable();
-    private double maxShotDist = 3.0; //meters
+    private final ShotDistTable shotTable;
+    //private ShotDistTable shotTable = new ShotDistTable();
+    private double maxShotDist = 4.0; //meters
     
     final double MaxAngularRate =  1.4 * Math.PI;
  
 
-    public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick) {
+    public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick, ShotDistTable Table) {
         m_swerve = swerve;
         m_camera = camera;
         m_drive = drive;
@@ -59,6 +60,7 @@ public class AutoAimPID extends Command{
         m_shooter = shooter;
         m_intake = intake;
         m_joystick = joystick;
+        shotTable = Table;
         
         //turnController.enableContinuousInput(0.0, 1.0);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -68,6 +70,7 @@ public class AutoAimPID extends Command{
 
     @Override
   public void initialize() {
+    m_shotTimer.reset();
     inRange = false;
     m_shooter.setFeedVelocity(0);
     //m_shooter.setLaunchVelocity(Constants.Shooter.ejectVelocity);
@@ -90,6 +93,7 @@ public class AutoAimPID extends Command{
   public void execute() {
     final boolean isBPressed = m_joystick.getBButton();
     Pose2d goalPose = null;
+    Translation2d tagTranslation = null;
     
      
     
@@ -100,6 +104,7 @@ public class AutoAimPID extends Command{
 
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
             goalPose = Fiducials.AprilTags.aprilTagFiducials[6].getPose().toPose2d();
+            tagTranslation = new Translation2d(goalPose.getX() , goalPose.getY() + Units.inchesToMeters(22));
         }
 
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
@@ -113,14 +118,15 @@ public class AutoAimPID extends Command{
     var startRobotPose = m_swerve.getState().Pose;
 
     Translation2d robotPoseTranslation = startRobotPose.getTranslation();
+    
 
-    Translation2d tagToRobotVector = (goalPose.getTranslation()).minus(startRobotPose.getTranslation());
+    Translation2d tagToRobotVector = tagTranslation.minus(startRobotPose.getTranslation());
 
     var robotAngle = startRobotPose.getRotation().getRadians();
 
     Translation2d robotVector = new Translation2d(Math.cos(robotAngle), Math.sin(robotAngle));
 
-    Translation2d tagTranslation = goalPose.getTranslation();
+    
 
     
     
@@ -144,7 +150,7 @@ public class AutoAimPID extends Command{
 
     var requestedAngularVelocity = (turnController.calculate(targetAngle, 0));
 
-    System.out.println("rotationSpeed: "+ requestedAngularVelocity);
+    System.out.println("rotationSpeed: "+ Units.radiansToDegrees(requestedAngularVelocity));
 
     double goalDistance = tagToRobotVector.getNorm();
 
@@ -172,15 +178,26 @@ public class AutoAimPID extends Command{
     
   System.out.println("Distance from speaker: "+ goalDistance);
   System.out.println("Arm Angle: "+ filteredAngle);
-    
-   m_arm.setArmAngle(filteredAngle);
-    m_shooter.setLaunchVelocity(shotVelo);
 
-         
-    Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-requestedAngularVelocity*MaxAngularRate);
+  Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-requestedAngularVelocity*MaxAngularRate);
     m_swerve.setControl(regRequestSupplier.get());
         
-    // Called every time Command is scheduled
+
+  if (m_shotTimer.hasElapsed(0.3)) {
+    m_arm.setArmAngle(Constants.Arm.intakeAngle);
+      m_shooter.setFeedVelocity(0);
+      m_shooter.setLaunchVelocity(0);
+
+      if (m_shotTimer.hasElapsed(1.0)) {
+        m_shotTimer.stop();
+        //m_shotTimer.reset();
+      }
+
+  }
+  else {
+    m_arm.setArmAngle(filteredAngle);
+    m_shooter.setLaunchVelocity(shotVelo);
+
     if (isBPressed) {
       m_shooter.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
     }
@@ -190,11 +207,21 @@ public class AutoAimPID extends Command{
       if (m_shooter.isAtLaunchVelocity(shotVelo, Constants.Shooter.launchVelocityTolerance) && m_arm.isAtAngle(filteredAngle, Constants.Arm.launchAngleTolerance)) {
         // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
         m_shooter.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
+        m_shotTimer.start();
         
      }         
     }
 
   }
+
+  }
+    
+   
+
+         
+    
+    // Called every time Command is scheduled
+    
   
 
    

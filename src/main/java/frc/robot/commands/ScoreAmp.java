@@ -40,7 +40,7 @@ public class ScoreAmp extends Command{
   public void execute() {
     // Called every time Command is scheduled
 
-     if (m_shotTimer.hasElapsed(2.0)) {
+     if (m_shotTimer.hasElapsed(2.2)) {
           m_shotTimer.stop();
         }
       else if (m_shotTimer.hasElapsed(1.2)) {
