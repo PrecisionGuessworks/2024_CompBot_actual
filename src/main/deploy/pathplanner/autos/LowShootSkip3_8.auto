@@ -20,19 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Low Shoot#1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoteSpeakerTogether"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Low Shoot#3"
+            "pathName": "Shoot#2Skip3"
           }
         },
         {
