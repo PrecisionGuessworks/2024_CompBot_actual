@@ -5,7 +5,7 @@
       "x": 0.7856743713487427,
       "y": 6.730454660909323
     },
-    "rotation": -120.67728002179645
+    "rotation": -118.95099520746676
   },
   "command": {
     "type": "sequential",
@@ -20,32 +20,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Top Front Backup"
+            "pathName": "Top Shoot #1"
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Top Pickup Close"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakePiece"
-                }
-              }
-            ]
+            "name": "ShootNoteSpeakerTogether"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Top Front Lineup"
+            "pathName": "Top Shoot #3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoteSpeakerTogether"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Shoot #4"
           }
         },
         {
@@ -57,6 +56,6 @@
       ]
     }
   },
-  "folder": "Other",
+  "folder": "Shoot",
   "choreoAuto": false
 }

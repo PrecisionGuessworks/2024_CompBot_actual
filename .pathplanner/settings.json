@@ -4,12 +4,19 @@
   "holonomicMode": true,
   "pathFolders": [
     "Cali test",
+    "Top Shoot",
     "Low Front",
+    "Low Shoot",
     "Mid Front",
+    "Mid Shoot",
     "Old only path autos",
     "Top Front"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Front",
+    "Shoot",
+    "Other"
+  ],
   "defaultMaxVel": 4.25,
   "defaultMaxAccel": 3.75,
   "defaultMaxAngVel": 500.0,

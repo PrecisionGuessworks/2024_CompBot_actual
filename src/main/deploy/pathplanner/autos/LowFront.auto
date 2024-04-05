@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8027138084733018,
-      "y": 4.367179008469692
+      "x": 1.454186775040217,
+      "y": 5.558985493605505
     },
     "rotation": 122.59258147259929
   },
@@ -82,6 +82,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Front",
   "choreoAuto": false
 }
