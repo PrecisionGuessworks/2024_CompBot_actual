@@ -50,6 +50,7 @@ public class AutoAimPID extends Command{
     private double maxShotDist = 4.0; //meters
     
     final double MaxAngularRate =  1.4 * Math.PI;
+    private int allianceFlip = 1;
  
 
     public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick, ShotDistTable Table) {
@@ -95,6 +96,7 @@ public class AutoAimPID extends Command{
     Pose2d goalPose = null;
     Translation2d tagTranslation = null;
     
+    
      
     
     var alliance = DriverStation.getAlliance();
@@ -105,10 +107,13 @@ public class AutoAimPID extends Command{
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
             goalPose = Fiducials.AprilTags.aprilTagFiducials[6].getPose().toPose2d();
             tagTranslation = new Translation2d(goalPose.getX() , goalPose.getY() + Units.inchesToMeters(22));
+            allianceFlip = 1;
         }
 
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             goalPose = Fiducials.AprilTags.aprilTagFiducials[3].getPose().toPose2d();
+            tagTranslation = new Translation2d(goalPose.getX() , goalPose.getY() - Units.inchesToMeters(22));
+            allianceFlip = -1;
         }
     
     double filteredAngle = Constants.Arm.intakeAngle;
@@ -179,7 +184,7 @@ public class AutoAimPID extends Command{
   System.out.println("Distance from speaker: "+ goalDistance);
   System.out.println("Arm Angle: "+ filteredAngle);
 
-  Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed).withVelocityY(-m_joystick.getLeftX() * MaxSpeed).withRotationalRate(-requestedAngularVelocity*MaxAngularRate);
+  Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed * allianceFlip).withVelocityY(-m_joystick.getLeftX() * MaxSpeed * allianceFlip).withRotationalRate(-requestedAngularVelocity*MaxAngularRate * allianceFlip);
     m_swerve.setControl(regRequestSupplier.get());
         
 

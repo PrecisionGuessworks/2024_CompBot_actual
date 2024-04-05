@@ -28,6 +28,8 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -71,6 +73,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.Constants.Blinkin;
 import frc.robot.subsystems.Blinkin.BlinkinSubsystem;
 import frc.robot.subsystems.Blinkin.Colors;
+import frc.robot.vision.Fiducials;
 
 public class RobotContainer {
   final double MaxSpeed = 5.0292; // 6 meters per second desired top speed
@@ -192,12 +195,29 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+    
+
+    var alliance = DriverStation.getAlliance();
+
+    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+      drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
             .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
+            
+        }
+
+    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+      drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+        drivetrain.applyRequest(() -> drive.withVelocityX(joystick.getLeftY() * MaxSpeed) // Drive forward with
+                                                                                           // negative Y (forward)
+            .withVelocityY(joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+        ));
+            
+        }
 
     buttonY.whileTrue(drivetrain.applyRequest(() -> brake));
     buttonA.whileTrue(drivetrain
