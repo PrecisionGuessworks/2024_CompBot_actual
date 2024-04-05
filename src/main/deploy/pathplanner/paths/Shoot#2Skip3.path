@@ -1,0 +1,118 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.8027138084733018,
+        "y": 4.367179008469692
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.341207349081365,
+        "y": 0.5139784946236563
+      },
+      "isLocked": false,
+      "linkedName": "Low Start"
+    },
+    {
+      "anchor": {
+        "x": 6.85742104817543,
+        "y": 1.6855981711963421
+      },
+      "prevControl": {
+        "x": 6.4576919820506316,
+        "y": 1.5546524426382184
+      },
+      "nextControl": {
+        "x": 7.261427413736838,
+        "y": 1.8179450840526652
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.263364660062654,
+        "y": 2.4299212598425193
+      },
+      "prevControl": {
+        "x": 8.125527051054103,
+        "y": 2.4183589504234857
+      },
+      "nextControl": {
+        "x": 8.36615032004229,
+        "y": 2.438543286973376
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.0393192786333882,
+        "y": 3.119109304883553
+      },
+      "prevControl": {
+        "x": 5.665125730251461,
+        "y": -0.18210143086952912
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Low Shoot"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": 18.296475369429924,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2.3000000000000003,
+      "rotationDegrees": 38.6490273050403,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.2000000000000002,
+      "rotationDegrees": 30.22476850007806,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.0999999999999999,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakePiece"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.25,
+    "maxAcceleration": 3.75,
+    "maxAngularVelocity": 500.0,
+    "maxAngularAcceleration": 530.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 122.47119229084856,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Low Shoot",
+  "previewStartingState": {
+    "rotation": 122.66091272167385,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
