@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7027020754549118,
-        "y": 4.367179008469692
+        "x": 0.7610422530489726,
+        "y": 4.317173141960498
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3194410957349825,
-        "y": 3.8421174101231443
+        "x": 1.377781273329043,
+        "y": 3.7921115436139505
       },
       "isLocked": false,
       "linkedName": "Low Start"
@@ -59,10 +59,10 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.75,
-    "maxAcceleration": 3.5,
-    "maxAngularVelocity": 350.0,
-    "maxAngularAcceleration": 500.0
+    "maxVelocity": 4.25,
+    "maxAcceleration": 3.75,
+    "maxAngularVelocity": 500.0,
+    "maxAngularAcceleration": 530.0
   },
   "goalEndState": {
     "velocity": 0,

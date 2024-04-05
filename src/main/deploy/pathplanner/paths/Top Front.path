@@ -199,7 +199,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Old only path autos",
   "previewStartingState": {
     "rotation": -122.34744349944198,
     "velocity": 0
