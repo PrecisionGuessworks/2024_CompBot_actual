@@ -145,7 +145,7 @@ public class AutoAimPID extends Command{
     var magRobotVec = robotVector.getNorm();
     var magTagToRobotVector = tagToRobotVector.getNorm();
 
-    System.out.println("robotAngle: "+ robotAngle);
+    //System.out.println("robotAngle: "+ robotAngle);
 
 
     var targetAngle = Math.asin(crossVec / (magRobotVec * magTagToRobotVector)); 
@@ -155,7 +155,7 @@ public class AutoAimPID extends Command{
 
     var requestedAngularVelocity = (turnController.calculate(targetAngle, 0));
 
-    System.out.println("rotationSpeed: "+ Units.radiansToDegrees(requestedAngularVelocity));
+    //System.out.println("rotationSpeed: "+ Units.radiansToDegrees(requestedAngularVelocity));
 
     double goalDistance = tagToRobotVector.getNorm();
 
