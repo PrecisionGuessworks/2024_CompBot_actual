@@ -133,6 +133,7 @@ public class RobotContainer {
     robotCommands.put("ShootNoteSpeakerTogether", new ShootNoteSpeakerTogether(shooter, arm, intake  ).withTimeout(2.2));
     robotCommands.put("ScoreAmp", new ScoreAmp(shooter, arm, intake));
     robotCommands.put("ShootNoteSpeakerPodium", new ShootNoteSpeakerPodium(shooter, arm, intake  ).withTimeout(2.5));
+    robotCommands.put("AutoAimPID", new AutoAimPID(drivetrain, aprilCam, drive, arm, shooter, intake, joystick, shotTable).withTimeout(2.7));
     NamedCommands.registerCommands(robotCommands);
 
     

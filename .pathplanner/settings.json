@@ -5,9 +5,11 @@
   "pathFolders": [
     "Cali test",
     "Low Front",
+    "Low Shoot",
     "Mid Front",
     "Old only path autos",
-    "Top Front"
+    "Top Front",
+    "Top Shoot"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.75,
