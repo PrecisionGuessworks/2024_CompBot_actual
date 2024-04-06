@@ -42,6 +42,8 @@ public class ShotDistTable {
         shotTableAngles.put(3.6, 56.5);
         shotTableAngles.put(3.8, 56.1);
         shotTableAngles.put(4.0, 30.0);
+
+        //pull up
         
     }
 
