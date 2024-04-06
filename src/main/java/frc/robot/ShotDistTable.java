@@ -30,17 +30,17 @@ public class ShotDistTable {
         shotTableAngles.put(2.1, 59.9);
         shotTableAngles.put(2.2, 59.5);
         shotTableAngles.put(2.3, 59.0);
-        shotTableAngles.put(2.4, 57.6);
-        shotTableAngles.put(2.5, 57.4);
-        shotTableAngles.put(2.6, 57.2);
-        shotTableAngles.put(2.7, 56.7);
-        shotTableAngles.put(2.8, 56.4);
-        shotTableAngles.put(2.9, 55.7);
-        shotTableAngles.put(3.0, 55.2);
-        shotTableAngles.put(3.2, 54.8);
-        shotTableAngles.put(3.4, 54.4);
-        shotTableAngles.put(3.6, 54.0);
-        shotTableAngles.put(3.8, 53.5);
+        shotTableAngles.put(2.4, 58.6);
+        shotTableAngles.put(2.5, 58.2);
+        shotTableAngles.put(2.6, 57.8);
+        shotTableAngles.put(2.7, 57.4);
+        shotTableAngles.put(2.8, 57.0);
+        shotTableAngles.put(2.9, 56.7);
+        shotTableAngles.put(3.0, 56.4);
+        shotTableAngles.put(3.2, 56.1);
+        shotTableAngles.put(3.4, 55.8);
+        shotTableAngles.put(3.6, 55.5);
+        shotTableAngles.put(3.8, 55.1);
         shotTableAngles.put(4.0, 30.0);
         
     }
