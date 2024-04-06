@@ -184,7 +184,7 @@ public class AutoAimPID extends Command{
   System.out.println("Distance from speaker: "+ goalDistance);
   System.out.println("Arm Angle: "+ filteredAngle);
 
-  Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed * allianceFlip).withVelocityY(-m_joystick.getLeftX() * MaxSpeed * allianceFlip).withRotationalRate(-requestedAngularVelocity*MaxAngularRate * allianceFlip);
+  Supplier<SwerveRequest> regRequestSupplier =  () -> m_drive.withVelocityX(-m_joystick.getLeftY() * MaxSpeed ).withVelocityY(-m_joystick.getLeftX() * MaxSpeed ).withRotationalRate(-requestedAngularVelocity*MaxAngularRate);
     m_swerve.setControl(regRequestSupplier.get());
         
 
@@ -212,7 +212,7 @@ public class AutoAimPID extends Command{
       if (m_shooter.isAtLaunchVelocity(shotVelo, Constants.Shooter.launchVelocityTolerance) && m_arm.isAtAngle(filteredAngle, Constants.Arm.launchAngleTolerance)) {
         // m_armSubsystem.resetEncoders(Constants.Arm.launchAngle);
         m_shooter.setFeedVelocity(Constants.Shooter.scoreSpeakerFeedVelocity);
-        m_shotTimer.start();
+        //m_shotTimer.start();
         
      }         
     }

@@ -15,32 +15,32 @@ public class ShotDistTable {
     public ShotDistTable() {
 
         shotTableAngles.put(0.0, 80.0);
-        shotTableAngles.put(0.6, 74.0);
-        shotTableAngles.put(0.7, 73.0);
-        shotTableAngles.put(0.9, 70.0);
-        shotTableAngles.put(1.2, 68.0);
-        shotTableAngles.put(1.3, 67.0);
-        shotTableAngles.put(1.4, 65.7);
-        shotTableAngles.put(1.5, 64.7);
-        shotTableAngles.put(1.6, 63.7);
-        shotTableAngles.put(1.7, 62.5);
-        shotTableAngles.put(1.8, 62.0);
-        shotTableAngles.put(1.9, 61.5);
-        shotTableAngles.put(2.0, 60.5);
-        shotTableAngles.put(2.1, 59.9);
-        shotTableAngles.put(2.2, 59.5);
-        shotTableAngles.put(2.3, 59.0);
-        shotTableAngles.put(2.4, 57.6);
-        shotTableAngles.put(2.5, 57.4);
-        shotTableAngles.put(2.6, 57.2);
-        shotTableAngles.put(2.7, 56.7);
-        shotTableAngles.put(2.8, 56.4);
-        shotTableAngles.put(2.9, 55.7);
-        shotTableAngles.put(3.0, 55.2);
-        shotTableAngles.put(3.2, 54.8);
-        shotTableAngles.put(3.4, 54.4);
-        shotTableAngles.put(3.6, 54.0);
-        shotTableAngles.put(3.8, 53.5);
+        shotTableAngles.put(0.6, 75.0);
+        shotTableAngles.put(0.7, 74.0);
+        shotTableAngles.put(0.9, 73.0);
+        shotTableAngles.put(1.2, 70.0);
+        shotTableAngles.put(1.3, 69.0);
+        shotTableAngles.put(1.4, 67.7);
+        shotTableAngles.put(1.5, 66.7);
+        shotTableAngles.put(1.6, 65.7);
+        shotTableAngles.put(1.7, 64.5);
+        shotTableAngles.put(1.8, 64.0);
+        shotTableAngles.put(1.9, 63.5);
+        shotTableAngles.put(2.0, 62.5);
+        shotTableAngles.put(2.1, 61.9);
+        shotTableAngles.put(2.2, 61.5);
+        shotTableAngles.put(2.3, 61.0);
+        shotTableAngles.put(2.4, 60.6);
+        shotTableAngles.put(2.5, 60.2);
+        shotTableAngles.put(2.6, 59.8);
+        shotTableAngles.put(2.7, 59.4);
+        shotTableAngles.put(2.8, 59.0);
+        shotTableAngles.put(2.9, 58.7);
+        shotTableAngles.put(3.0, 58.4);
+        shotTableAngles.put(3.2, 57.1);
+        shotTableAngles.put(3.4, 56.8);
+        shotTableAngles.put(3.6, 56.5);
+        shotTableAngles.put(3.8, 56.1);
         shotTableAngles.put(4.0, 30.0);
         
     }

@@ -195,8 +195,14 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
+        drivetrain.applyRequest(() -> drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with
+                                                                                           // negative Y (forward)
+            .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+        ));
     
-
+/* 
     var alliance = DriverStation.getAlliance();
 
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
@@ -217,7 +223,7 @@ public class RobotContainer {
             .withRotationalRate(joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ));
             
-        }
+        } */
 
     buttonY.whileTrue(drivetrain.applyRequest(() -> brake));
     buttonA.whileTrue(drivetrain
