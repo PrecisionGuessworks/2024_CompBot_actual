@@ -19,7 +19,7 @@ import frc.robot.motorcontrol.devices.CANDeviceID;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class Constants {
-    public static final String kCanivoreName = "canivore";
+    public static final String kCanivoreName = "rio";
     public static final String kRioName = "rio";
     public static final class Swerve {
         public class TunerConstants {

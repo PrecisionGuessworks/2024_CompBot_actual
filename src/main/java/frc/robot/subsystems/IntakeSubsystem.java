@@ -10,9 +10,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.motorcontrol.TalonFx;
 import frc.robot.motorcontrol.configurations.TalonFxConfiguration;
+import frc.robot.subsystems.CANdle.CANdleSubsystem;
+import frc.robot.subsystems.CANdle.Colors;
 
 public class IntakeSubsystem  extends SubsystemBase{
-
+    private CANdleSubsystem candle = new CANdleSubsystem();
     private final TalonFx m_rollerMotor = new TalonFx(
       Constants.Intake.Roller.rollerMotorID, 
       Constants.Intake.Roller.rollerMotorRatio,
@@ -74,9 +76,21 @@ public class IntakeSubsystem  extends SubsystemBase{
 
     }
 
+    public void runIntakeLEDs(){
+      if(isBeamBreakTriggered()) {
+        candle.setColor(Colors.GREEN);
+      } else {
+        candle.setCANdleToAllianceColor();
+      }
+    }
+
+    public void disableLEDs(){
+      candle.setColor(Colors.WHITE);
+    }
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Intake Roller: Current", m_rollerMotor.getStatorCurrent());
+        runIntakeLEDs();
       // This method will be called once per scheduler run
     }
   
@@ -84,6 +98,7 @@ public class IntakeSubsystem  extends SubsystemBase{
     @Override
     public void simulationPeriodic() {
       // This method will be called once per scheduler run during simulation
+      
     }
     // --- END STUFF FOR SIMULATION ---
   }
