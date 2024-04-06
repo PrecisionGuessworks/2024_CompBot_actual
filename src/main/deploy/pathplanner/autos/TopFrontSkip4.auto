@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7925662517991702,
-      "y": 4.366539666412666
+      "x": 0.7856743713487427,
+      "y": 6.730454660909323
     },
-    "rotation": 122.59258147259929
+    "rotation": -120.67728002179645
   },
   "command": {
     "type": "sequential",
@@ -20,13 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Low Backup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Low Close"
+            "pathName": "Top Front Backup"
           }
         },
         {
@@ -36,13 +30,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Low Lineup"
+                  "pathName": "Top Pickup Close"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ShootNoteSpeakerTogether"
+                  "name": "IntakePiece"
                 }
               }
             ]
@@ -51,13 +45,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Low Backup"
+            "pathName": "Top Front Lineup"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Low Far"
+            "name": "ShootNoteSpeaker"
           }
         },
         {
@@ -67,16 +61,34 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Low Lineup"
+                  "pathName": "Top Front Far Skip 4"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ShootNoteSpeakerTogether"
+                  "name": "IntakePiece"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Lineup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoteSpeakerTogether"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Backup"
           }
         }
       ]
