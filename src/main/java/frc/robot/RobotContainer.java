@@ -127,6 +127,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm).withTimeout(2.5));
+    robotCommands.put("IntakeQuick", new IntakePiece(intake, shooter, arm).withTimeout(0.2));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("MoveArmIntake", new MoveArmIntake(arm));
     robotCommands.put("ShootNoteSpeaker", new ShootNoteSpeaker(shooter, arm).withTimeout(2.5));

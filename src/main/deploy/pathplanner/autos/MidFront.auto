@@ -18,6 +18,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "IntakeQuick"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Mid Front Back"
