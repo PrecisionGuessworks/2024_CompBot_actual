@@ -49,7 +49,7 @@ public class ScoreAmp extends Command{
 
        
       }
-      else if (m_shotTimer.hasElapsed(0.6)) {
+      else if (m_shotTimer.hasElapsed(0.8)) {
       m_armSubsystem.setArmAngle(Constants.Arm.ampPreAngle);
       m_shooterSubsystem.setFeedVelocity(0);
       m_shooterSubsystem.setLaunchVelocity(0);

@@ -12,6 +12,18 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ShootNoteSpeakerTogether"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeQuick"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Low Backup"
@@ -20,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Low Close"
+            "pathName": "Low Far Skip"
           }
         },
         {
@@ -45,26 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Low Far"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Low Lineup"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNoteSpeakerTogether"
-                }
-              }
-            ]
+            "pathName": "Low Run"
           }
         }
       ]

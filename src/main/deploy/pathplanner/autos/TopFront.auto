@@ -30,34 +30,9 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Top Pickup Close"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakePiece"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Top Front Lineup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoteSpeaker"
+            "pathName": "Top Pickup Close"
           }
         },
         {
@@ -67,34 +42,47 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Top Front Far"
+                  "pathName": "Top Front Lineup"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakePiece"
+                  "name": "ShootNoteSpeakerTogether"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Top Front Lineup"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootNoteSpeakerTogether"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "Top Front Backup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Far"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top Front Lineup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNoteSpeakerTogether"
+                }
+              }
+            ]
           }
         }
       ]

@@ -71,7 +71,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
         configurePathPlanner();
-        allNotifier.setName("runAll");
+      allNotifier.setName("runAll");
         allNotifier.startPeriodic(0.02);
     }
 

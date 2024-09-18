@@ -50,10 +50,11 @@ public class AutoAimPID extends Command{
     private double maxShotDist = 4.0; //meters
     
     final double MaxAngularRate =  1.4 * Math.PI;
-    private int allianceFlip = 1;
+    //private int allianceFlip = 1;
+    private int flip = 1;
  
 
-    public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick, ShotDistTable Table) {
+    public AutoAimPID(CommandSwerveDrivetrain swerve, PhotonCamera camera, SwerveRequest.FieldCentric drive, ArmSubsystem  arm, ShooterSubsystem shooter, IntakeSubsystem intake, XboxController joystick, ShotDistTable Table, int allianceFlip) {
         m_swerve = swerve;
         m_camera = camera;
         m_drive = drive;
@@ -62,6 +63,7 @@ public class AutoAimPID extends Command{
         m_intake = intake;
         m_joystick = joystick;
         shotTable = Table;
+        flip = allianceFlip;
         
         //turnController.enableContinuousInput(0.0, 1.0);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -107,13 +109,13 @@ public class AutoAimPID extends Command{
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
             goalPose = Fiducials.AprilTags.aprilTagFiducials[6].getPose().toPose2d();
             tagTranslation = new Translation2d(goalPose.getX() , goalPose.getY() + Units.inchesToMeters(22));
-            allianceFlip = 1;
+           // allianceFlip = 1;
         }
 
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             goalPose = Fiducials.AprilTags.aprilTagFiducials[3].getPose().toPose2d();
             tagTranslation = new Translation2d(goalPose.getX() , goalPose.getY() - Units.inchesToMeters(22));
-            allianceFlip = -1;
+            //allianceFlip = -1;
         }
     
     double filteredAngle = Constants.Arm.intakeAngle;

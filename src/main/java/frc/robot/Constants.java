@@ -19,7 +19,7 @@ import frc.robot.motorcontrol.devices.CANDeviceID;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class Constants {
-    public static final String kCanivoreName = "rio";
+    public static final String kCanivoreName = "canivore";  //   canivore
     public static final String kRioName = "rio";
     public static final class Swerve {
         public class TunerConstants {
@@ -302,7 +302,7 @@ public class Constants {
 
         public static final double launchAngle = Units.degreesToRadians(74);
         public static final double ampPreAngle = Units.degreesToRadians(80);
-        public static final double launchAngleTolerance = Units.degreesToRadians(5);
+        public static final double launchAngleTolerance = Units.degreesToRadians(3.2);
         public static final double scoreAmpArmAngle = Units.degreesToRadians(110); // rads
         public static final double moveAmpArmAngle = Units.degreesToRadians(65); 
         public static final double scoreAmpArmAngleTolerance = Units.degreesToRadians(5); // rads

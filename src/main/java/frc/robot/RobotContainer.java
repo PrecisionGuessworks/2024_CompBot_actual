@@ -94,6 +94,7 @@ public class RobotContainer {
   SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
   Telemetry logger = new Telemetry(MaxSpeed);
+  private int allianceFlip = 1;
 
   /*  enable for testing once    */
 
@@ -140,6 +141,18 @@ public class RobotContainer {
     // autoPicker = AutoBuilder.buildAutoChooser();
     // SmartDashboard.putData("Auto Choices", autoPicker);
     configureAutoPicker();
+    var alliance = DriverStation.getAlliance();
+
+    if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
+      allianceFlip = -1;
+            
+        }
+
+    if (alliance.isPresent() && alliance.get() == Alliance.Red) {
+     
+            allianceFlip = 1;
+        }
+
     configureBindings();
     
   }
@@ -190,8 +203,11 @@ public class RobotContainer {
     //autoPicker.addOption("LowFront", new PathPlannerAuto("LowFront"));
     autoPicker.addOption("CaliAuto", new PathPlannerAuto("CaliAuto"));
     autoPicker.addOption("A-1", new PathPlannerAuto("OlderTopFront"));
-
+    autoPicker.addOption("C-3-8", new PathPlannerAuto("LowFront"));
+    autoPicker.addOption("C-8-7", new PathPlannerAuto("LowFrontSkip3"));
+    autoPicker.addOption("C-7", new PathPlannerAuto("LowFrontSkip38"));
     autoPicker.setDefaultOption("blueAuto", blueAuto());
+    autoPicker.setDefaultOption("ShootNoMove", new ShootNoteSpeakerTogether(shooter, arm,intake).withTimeout(4.5));
     SmartDashboard.putData(autoPicker);
   }
 
@@ -239,7 +255,7 @@ public class RobotContainer {
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
 
     bumperRight.onTrue(new ShootNoteSpeakerTogether(shooter, arm, intake));
-    leftTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive, arm, shooter, intake, joystick, shotTable));
+    leftTrigger.whileTrue(new AutoAimPID(drivetrain, aprilCam, drive, arm, shooter, intake, joystick, shotTable, allianceFlip));
     //bumperRight.onFalse(new MoveArmIntake(arm));
     //intake piece
     rightTrigger.whileTrue(new IntakePiece(intake, shooter, arm));
@@ -278,6 +294,7 @@ public class RobotContainer {
     //return blueAutoAmp();
     //return redAutoAmp();
     //return new PathPlannerAuto("MidFront");
+    
     return autoPicker.getSelected();
   }
 
