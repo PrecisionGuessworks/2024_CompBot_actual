@@ -106,13 +106,13 @@ public class AutoAimPID extends Command{
 
     if (alliance.isPresent() && alliance.get() == Alliance.Blue) {
             goalPose = Fiducials.AprilTags.aprilTagFiducials[6].getPose().toPose2d();
-            tagTranslation = new Translation2d(goalPose.getX() , goalPose.getY() + Units.inchesToMeters(22));
+            tagTranslation = new Translation2d(goalPose.getX() , goalPose.getY());
             allianceFlip = 1;
         }
 
     if (alliance.isPresent() && alliance.get() == Alliance.Red) {
             goalPose = Fiducials.AprilTags.aprilTagFiducials[3].getPose().toPose2d();
-            tagTranslation = new Translation2d(goalPose.getX() , goalPose.getY() - Units.inchesToMeters(22));
+            tagTranslation = new Translation2d(goalPose.getX() , goalPose.getY());
             allianceFlip = -1;
         }
     
