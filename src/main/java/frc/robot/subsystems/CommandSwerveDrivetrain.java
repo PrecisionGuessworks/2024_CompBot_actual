@@ -51,8 +51,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
 
 
-    Transform3d robotToCam = new Transform3d(new Translation3d(Units.inchesToMeters(16), 0, Units.inchesToMeters(14.5)), new Rotation3d(0,Units.degreesToRadians(20),0));
-    Transform3d camToRobot = new Transform3d(new Translation3d(-Units.inchesToMeters(16), 0, -Units.inchesToMeters(14.5)), new Rotation3d(0,Units.degreesToRadians(-20),0));
+    Transform3d robotToCam = new Transform3d(new Translation3d(Units.inchesToMeters(16), 0, Units.inchesToMeters(14.5)), new Rotation3d(0,Units.degreesToRadians(25),0));
+    Transform3d camToRobot = new Transform3d(new Translation3d(-Units.inchesToMeters(16), 0, -Units.inchesToMeters(14.5)), new Rotation3d(0,Units.degreesToRadians(-25),0));
 
     private final PresPoseEstimatorMulti poseEstimator = new PresPoseEstimatorMulti(aprilCam, robotToCam, this);
 
