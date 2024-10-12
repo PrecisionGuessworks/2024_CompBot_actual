@@ -12,9 +12,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Low Backup"
+            "name": "ShootNoteSpeakerTogether"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeQuick"
           }
         },
         {
@@ -24,15 +30,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Low Lineup"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Low Backup"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Low Lineup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNoteSpeakerTogether"
+                }
+              }
+            ]
           }
         },
         {
@@ -42,9 +55,28 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Low Lineup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNoteSpeakerTogether"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Low Lineup"
+            "pathName": "Low Run"
           }
         }
       ]

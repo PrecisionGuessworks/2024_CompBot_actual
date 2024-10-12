@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7856743713487427,
-      "y": 6.730454660909323
+      "x": 0.8408094149521632,
+      "y": 6.702887139107612
     },
     "rotation": -120.67728002179645
   },
@@ -26,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Top Front Backup"
+            "pathName": "Top Pickup Close"
           }
         },
         {
@@ -36,13 +36,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Top Pickup Close"
+                  "pathName": "Top Front Lineup"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IntakePiece"
+                  "name": "ShootNoteSpeakerTogether"
                 }
               }
             ]
@@ -51,13 +51,32 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Top Front Lineup"
+            "pathName": "Top Front Far low"
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ShootNoteSpeakerTogether"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top Front Lineup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNoteSpeakerTogether"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Run Far"
           }
         }
       ]

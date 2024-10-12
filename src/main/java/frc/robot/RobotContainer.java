@@ -127,7 +127,7 @@ public class RobotContainer {
   private Command runAuto = drivetrain.getAutoPath("CommandTest");
 
   public RobotContainer() {
-    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm).withTimeout(2.5));
+    robotCommands.put("IntakePiece", new IntakePiece(intake, shooter,arm).withTimeout(3.0)); //used to be 2.5 incase it does not work
     robotCommands.put("IntakeQuick", new IntakePiece(intake, shooter, arm).withTimeout(0.2));
     robotCommands.put("MoveArmSpeaker", new MoveArmSpeaker(arm));
     robotCommands.put("MoveArmIntake", new MoveArmIntake(arm));
@@ -186,13 +186,19 @@ public class RobotContainer {
   
   public void configureAutoPicker(){
     autoPicker.addOption("redAuto", redAuto());
-    autoPicker.addOption("B-2-6", new PathPlannerAuto("MidFront"));
+    autoPicker.addOption("blueAuto", blueAuto());
     autoPicker.addOption("A-1-4", new PathPlannerAuto("TopFront"));
+    autoPicker.addOption("A-1-5", new PathPlannerAuto("TopFrontskipT"));
+    autoPicker.addOption("B-2-6", new PathPlannerAuto("MidFront"));
+    autoPicker.addOption("C-3-7", new PathPlannerAuto("LowFrontskipB"));
+    autoPicker.addOption("C-3-8", new PathPlannerAuto("LowFront"));
+    autoPicker.addOption("C-7-8", new PathPlannerAuto("LowFrontskipc"));
+    autoPicker.addOption("C-8-7", new PathPlannerAuto("LowFrontskipcflipped"));
     //autoPicker.addOption("LowFront", new PathPlannerAuto("LowFront"));
-    autoPicker.addOption("CaliAuto", new PathPlannerAuto("CaliAuto"));
+    //autoPicker.addOption("CaliAuto", new PathPlannerAuto("CaliAuto"));
     autoPicker.addOption("A-1", new PathPlannerAuto("OlderTopFront"));
-
-    autoPicker.setDefaultOption("blueAuto", blueAuto());
+    autoPicker.setDefaultOption("ShootNoMove", new PathPlannerAuto("ShootNoMove"));
+    
     SmartDashboard.putData(autoPicker);
   }
 

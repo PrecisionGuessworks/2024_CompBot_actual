@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8063500127000255,
-        "y": 7.612615358564052
+        "x": 2.425941918550505,
+        "y": 7.833155532977734
       },
       "isLocked": false,
       "linkedName": "Top Start Blue"
     },
     {
       "anchor": {
-        "x": 8.37026827353147,
-        "y": 7.417536865530584
+        "x": 8.325391584116502,
+        "y": 5.786267039200745
       },
       "prevControl": {
-        "x": 7.675796931966112,
-        "y": 7.433542077913258
+        "x": 7.429447125560918,
+        "y": 6.28248243163153
       },
       "nextControl": {
-        "x": 9.231965484027397,
-        "y": 7.397677663230806
+        "x": 9.079397019316108,
+        "y": 5.368664028936348
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 6.944102954872577
       },
       "prevControl": {
-        "x": 1.8757569623430275,
-        "y": 7.570439326327045
+        "x": 5.513504360347656,
+        "y": 7.57126407586662
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,25 +47,30 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.05,
-      "rotationDegrees": -122.7384282836105,
-      "rotateFast": true
+      "rotationDegrees": -120.39312127020892,
+      "rotateFast": false
     },
     {
-      "waypointRelativePos": 1.7,
-      "rotationDegrees": 0,
-      "rotateFast": true
+      "waypointRelativePos": 0.85,
+      "rotationDegrees": -23.543426733704088,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.6,
+      "rotationDegrees": -20.060642716162324,
+      "rotateFast": false
     },
     {
       "waypointRelativePos": 0.15,
       "rotationDegrees": 0,
-      "rotateFast": false
+      "rotateFast": true
     }
   ],
   "constraintZones": [
     {
       "name": "New Constraints Zone",
       "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.25,
+      "maxWaypointRelativePos": 0.15,
       "constraints": {
         "maxVelocity": 2.0,
         "maxAcceleration": 3.0,
@@ -77,7 +82,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.65,
+      "waypointRelativePos": 0.4,
       "command": {
         "type": "parallel",
         "data": {
