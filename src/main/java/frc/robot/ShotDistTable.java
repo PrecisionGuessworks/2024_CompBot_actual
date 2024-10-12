@@ -10,8 +10,9 @@ public class ShotDistTable {
     public double maxShotDist = 3.0; //meters
     public double maxArmDist = 3.0; //meters
     public TreeMap<Double, Double> shotTableAngles = new TreeMap<Double,Double>();
+    
 
-public ShotDistTable() { 
+    public ShotDistTable() {
 
         shotTableAngles.put(0.0, 80.0);
         shotTableAngles.put(0.6, 75.0);
@@ -43,12 +44,8 @@ public ShotDistTable() {
         shotTableAngles.put(4.0, 30.0);
         
     }
-    
-    // 16 inch = 0.4064 meter
+
     public double calculate(double distance) {
-
-        distance = distance + 0.4064; //THIS IS DUMB BUT A QUICK FIX THAT MIGHT WORK IF WE CANT FIX SHOTCALC
-
         Object[] shotKeys =  shotTableAngles.keySet().toArray();
         //System.out.println(Arrays.toString(shotKeys));
         double lowBound = (double)shotKeys[0];
