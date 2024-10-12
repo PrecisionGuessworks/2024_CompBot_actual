@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8408094149521632,
-        "y": 6.702887139107612
+        "x": 0.895944458555584,
+        "y": 6.957886715773432
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.957971382609432,
-        "y": 7.688426043518754
+        "x": 1.0527431410192767,
+        "y": 7.500879976379242
       },
       "isLocked": false,
-      "linkedName": "Top Start Blue"
+      "linkedName": "Top Lineup Start"
     },
     {
       "anchor": {
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 0.9855389044111423,
-        "y": 6.944102954872577
+        "x": 0.895944458555584,
+        "y": 6.957886715773432
       },
       "prevControl": {
-        "x": 1.1233765134196936,
-        "y": 7.571264075861485
+        "x": 1.0777460742738738,
+        "y": 7.567554465058169
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,28 +57,10 @@
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.3,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakePiece"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.6,
+    "maxVelocity": 4.8,
+    "maxAcceleration": 3.6,
     "maxAngularVelocity": 350.0,
     "maxAngularAcceleration": 500.0
   },
@@ -93,5 +75,5 @@
     "rotation": -117.34987578006991,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

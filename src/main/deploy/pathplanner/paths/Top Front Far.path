@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8408094149521632,
-        "y": 6.702887139107612
+        "x": 0.895944458555584,
+        "y": 6.957886715773432
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8063500127000255,
-        "y": 7.612615358564052
+        "x": 1.819499760826932,
+        "y": 7.575888776143035
       },
       "isLocked": false,
-      "linkedName": "Top Start Blue"
+      "linkedName": "Top Lineup Start"
     },
     {
       "anchor": {
@@ -32,67 +32,32 @@
     },
     {
       "anchor": {
-        "x": 0.9855389044111423,
-        "y": 6.944102954872577
+        "x": 0.895944458555584,
+        "y": 6.957886715773432
       },
       "prevControl": {
-        "x": 1.8757569623430275,
-        "y": 7.570439326327045
+        "x": 1.786162516487469,
+        "y": 7.5842230872279
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Top Lineup Start"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.05,
-      "rotationDegrees": -122.7384282836105,
+      "waypointRelativePos": 0.1,
+      "rotationDegrees": 0.0,
       "rotateFast": true
     },
     {
       "waypointRelativePos": 1.7,
       "rotationDegrees": 0,
       "rotateFast": true
-    },
-    {
-      "waypointRelativePos": 0.15,
-      "rotationDegrees": 0,
-      "rotateFast": false
     }
   ],
-  "constraintZones": [
-    {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.25,
-      "constraints": {
-        "maxVelocity": 2.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 350.0,
-        "maxAngularAcceleration": 500.0
-      }
-    }
-  ],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.65,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "IntakePiece"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "constraintZones": [],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.8,
     "maxAcceleration": 3.6,
