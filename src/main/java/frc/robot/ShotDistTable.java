@@ -46,6 +46,7 @@ public class ShotDistTable {
     }
 
     public double calculate(double distance) {
+        distance = distance + 0.4064; //THIS IS DUMB BUT A QUICK FIX THAT MIGHT WORK IF WE CANT FIX SHOTCALC
         Object[] shotKeys =  shotTableAngles.keySet().toArray();
         //System.out.println(Arrays.toString(shotKeys));
         double lowBound = (double)shotKeys[0];

@@ -191,8 +191,10 @@ public class RobotContainer {
     //autoPicker.addOption("LowFront", new PathPlannerAuto("LowFront"));
     autoPicker.addOption("CaliAuto", new PathPlannerAuto("CaliAuto"));
     autoPicker.addOption("A-1", new PathPlannerAuto("OlderTopFront"));
-
-    autoPicker.setDefaultOption("blueAuto", blueAuto());
+    autoPicker.addOption("C-7-8", new PathPlannerAuto("LowFrontskipclose"));
+    autoPicker.addOption("C-3-8", new PathPlannerAuto("LowFront"));
+    autoPicker.setDefaultOption("ShootNoMove", new PathPlannerAuto("ShootNoMove"));
+    autoPicker.addOption("blueAuto", blueAuto());
     SmartDashboard.putData(autoPicker);
   }
 

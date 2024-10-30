@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7110363865397776,
-      "y": 4.408850563894021
+      "x": 0.7913611817198578,
+      "y": 4.361831681056846
     },
     "rotation": 122.59258147259929
   },
@@ -39,7 +39,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Low Close"
+            "pathName": "Low Far skip"
           }
         },
         {
