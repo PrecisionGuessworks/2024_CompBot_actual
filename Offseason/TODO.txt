@@ -1,54 +1,51 @@
 TODO:
 
--tune vision to real world
+- Everything
 
-autos
--close and far 4 piece + subs
--maybe middle hug sides 2 piece
 
 
 ------------------------------- Controller Layouts --------------------------------------
 
 Driver:
 
-A: -                 Arm Test
-B: -                 Wrist Test
-X: -                 Algae Wack
-Y: -                 Elevator Test
+A: -                 Amp
+B: -                 Spit
+X: -                 Mini shot
+Y: -                 Arm Test temp
 
-Left Bumper: Left Score
-Right Bumper: Right Score
+Left Bumper: Autoaim Score
+Right Bumper: Pass and Normal Score
 
-Left Trigger: Slow Mode
-Right Trigger: Coral Intake
+Left Trigger: Stow
+Right Trigger: Intake
 
-Back Button: Enable Auto Line up 
+Back Button: -
 Start Button: Zero heading
 
 Left Stick: X,Y Drive
 Right Stick: Rotation Drive
 
-D-Pad: L1 - L4 Set position
+D-Pad: Set snap rotation
 
 ---------------------------------------
 
-Operator:
+Operator: Only for training and sim
 
-A: Algae Wack
-B: -
+A: Remove limits
+B: Enable limits and zero
 X: -
-Y: Set Elevator to Coral Jam Height
+Y: -
 
 Left Bumper: -
 Right Bumper: Stow all
 
-Left Trigger: -
+Left Trigger: Enable CLimb
 Right Trigger: -
 
-Back Button: Disable Elevator  
+Back Button: -
 Start Button: -
 
-Left Stick: X: -
-Right Stick: Coral Intake Manual - Need to Hold Down stick
+Left Stick: Left climber
+Right Stick: Right climber
 
-D-Pad: L1 - L4 Set position
+D-Pad: -

@@ -20,16 +20,16 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 
 public class ClimberSubsystem extends SubsystemBase {
-  private final QuixTalonFX m_motor =
+  private final QuixTalonFX m_rightmotor =
       new QuixTalonFX(
-          Constants.Climber.motorID,
-          Constants.Climber.motorRatio,
+          Constants.Climber.rightmotorID,
+          Constants.Climber.rightmotorRatio,
           QuixTalonFX.makeDefaultConfig()
               .setBrakeMode()
               .setSupplyCurrentLimit(40.0)
               .setStatorCurrentLimit(60.0)
-              .setInverted(Constants.Climber.motorInvert)
-              .setPIDConfig(Constants.Climber.motorPositionSlot, Constants.Climber.motorPIDConfig)
+              .setInverted(Constants.Climber.rightmotorInvert)
+              .setPIDConfig(Constants.Climber.rightmotorPositionSlot, Constants.Climber.rightmotorPIDConfig)
               .setMotionMagicConfig(
                   Constants.Climber.maxVelocity,
                   Constants.Climber.maxAcceleration,
@@ -37,21 +37,23 @@ public class ClimberSubsystem extends SubsystemBase {
               .setReverseSoftLimit(Constants.Climber.minHeight)
               .setForwardSoftLimit(Constants.Climber.maxHeight));
 
-  // private final QuixTalonFX m_follower = new QuixTalonFX(
-  //     Constants.Climber.followerID,
-  //     m_motor,
-  //     Constants.Climber.followerInvert,
-  //     QuixTalonFX.makeDefaultConfig().setBrakeMode()
-  //     .setSupplyCurrentLimit(40.0)
-  //     .setStatorCurrentLimit(60.0)
-  //     .setInverted(Constants.Climber.motorInvert)
-  //     .setPIDConfig(Constants.Climber.motorPositionSlot, Constants.Climber.motorPIDConfig)
-  //     .setMotionMagicConfig(
-  //         Constants.Climber.maxVelocity,
-  //         Constants.Climber.maxAcceleration,
-  //         Constants.Climber.maxJerk)
-  //     .setReverseSoftLimit(Constants.Climber.minHeight)
-  //     .setForwardSoftLimit(Constants.Climber.maxHeight));
+  public class ClimberSubsystem extends SubsystemBase {
+  private final QuixTalonFX m_leftmotor =
+      new QuixTalonFX(
+          Constants.Climber.leftmotorID,
+          Constants.Climber.leftmotorRatio,
+          QuixTalonFX.makeDefaultConfig()
+              .setBrakeMode()
+              .setSupplyCurrentLimit(40.0)
+              .setStatorCurrentLimit(60.0)
+              .setInverted(Constants.Climber.leftmotorInvert)
+              .setPIDConfig(Constants.Climber.leftmotorPositionSlot, Constants.Climber.leftmotorPIDConfig)
+              .setMotionMagicConfig(
+                  Constants.Climber.maxVelocity,
+                  Constants.Climber.maxAcceleration,
+                  Constants.Climber.maxJerk)
+              .setReverseSoftLimit(Constants.Climber.minHeight)
+              .setForwardSoftLimit(Constants.Climber.maxHeight));
 
   private double m_setTargetHeight = Constants.Climber.stowHeight;
   private double m_targetHeight = Constants.Climber.stowHeight;
@@ -92,17 +94,15 @@ public class ClimberSubsystem extends SubsystemBase {
     return Math.abs(height - getHeight()) <= tolerance;
   }
   private double armAngle = 0;
-  private double wristAngle = 0;
 
   @Override
   public void periodic() {
     armAngle = RobotContainer.arm.getArmAngle();
-    wristAngle = RobotContainer.arm.getWristAngle();
-  //  if (armAngle < 92 && wristAngle < 92){
-  //     m_targetHeight = m_setTargetHeight;
-  //   } else {
-  //    // m_targetHeight = Constants.Climber.stowHeight;
-  //   }
+   if (armAngle < 30){
+      m_targetHeight = m_setTargetHeight;
+    } else {
+     m_targetHeight = Constants.Climber.stowHeight;
+    }
     // This method will be called once per scheduler run
     m_targetHeight = m_setTargetHeight;
     m_motor.setDynamicMotionMagicPositionSetpoint(
