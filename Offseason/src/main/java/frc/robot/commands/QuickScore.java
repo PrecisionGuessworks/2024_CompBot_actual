@@ -19,12 +19,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 
-public class CoralMoveScore extends Command {
+public class QuickScore extends Command {
   private final ElevatorSubsystem m_elevator;
   private final ArmSubsystem m_arm;
   //private Pose2d m_pose;
   public int pastscoreheight = 4;
-  public CoralMoveScore(
+  public QuickScore(
       ElevatorSubsystem elevatorSubsystem,
       ArmSubsystem armSubsystem) {
     

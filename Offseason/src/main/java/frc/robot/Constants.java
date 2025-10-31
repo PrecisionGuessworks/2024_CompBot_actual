@@ -116,20 +116,6 @@ public class Constants {
         new MechanismRatio(1, (1.0));
     public static final boolean armMotorInvert = true;
 
-    public static final CANDeviceID wristMotorID = new CANDeviceID(27, kSuperStructureCanivoreName);
-    public static final MechanismRatio wristMotorRatio =
-        isSim ? 
-        new MechanismRatio(
-            1, (4.0 / 1.0) * (32.0 / 14.0)) : // Sim
-        new MechanismRatio(
-            1, (27.0 / 1.0) * (32.0 / 14.0)); // Real
-    public static final boolean wristMotorInvert = true;
-
-    public static final CANDeviceID rollerMotorID = new CANDeviceID(28, kSuperStructureCanivoreName);
-    public static final MechanismRatio rollerMotorRatio = new MechanismRatio(12, 18);
-    public static final boolean rollerMotorInvert = false;
-
-
     //public static final ArmFeedforward armFeedForward = new ArmFeedforward(3.0, 0.3, 0.6);
     public static final Constraints ArmConstraints =
         new Constraints(3.5, 10.0); // rad/s and rad/s^2  8, 20.0
@@ -138,26 +124,60 @@ public class Constants {
     public static final PIDConfig armPositionPIDConfig = new PIDConfig(8, 0.0001, 0.03, 0, 0.25, 0.0008, 0.09, GravityTypeValue.Arm_Cosine);
     public static final double armExpo_kV = 0.25;    
     public static final double armExpo_kA = 0.01; // Use a slower kA of 0.1 V/(rps/s)
-  //  public static final int armCoralPositionPIDSlot = 1;
-  //  public static final PIDConfig armCoralPositionPIDConfig = new PIDConfig(2.0, 0, 0.1, 0, 0.12, 0.007, 0);
 
-    //public static final ArmFeedforward wristFeedForward = new ArmFeedforward(0.0, 0.3, 0.6);
-    public static final Constraints WristConstraints =
-        new Constraints(6.0, 20.0); // rad/s and rad/s^2   40.0, 80.0
-        public static final double WristMaxJerk = 2.0; // rad/s^3
-    public static final int wristPositionPIDSlot = 0;
-    public static final PIDConfig wristPositionPIDConfig = new PIDConfig(3.0, 0.0001, 0.1, 0, 0.1, 0.0008, 0.02,GravityTypeValue.Arm_Cosine);
-    public static final double wristExpo_kV = 0.1;   //                                                      ^ 1.22   
-    public static final double wristExpo_kA = 0.005; // Use a slower kA of 0.1 V/(rps/s)
-    // public static final int wristCoralPositionPIDSlot = 1;
-    //public static final PIDConfig wristCoralPositionPIDConfig = new PIDConfig(2.0, 0, 0.1, 0, 0.12, 0.007, 0);
+    public static final CANDeviceID armfollowerID = new CANDeviceID(25, kSuperStructureCanivoreName);
+    public static final MechanismRatio armfollowerRatio =
+        isSim ? 
+        new MechanismRatio(
+            1, (90.0 / 1.0) * (80.0 / 38.0)) : // Sim
+        new MechanismRatio(
+            1, (60.0 / 1.0) * (80.0 / 38.0)); // Real
+    public static final boolean armfollowerInvert = true;
 
-    public static final SimpleMotorFeedforward rollerFeedforward =
+  public static final CANDeviceID ampMotorID = new CANDeviceID(28, kSuperStructureCanivoreName);
+  public static final MechanismRatio ampMotorRatio = new MechanismRatio(12, 18);
+  public static final boolean ampMotorInvert = false;
+
+    public static final SimpleMotorFeedforward ampFeedforward =
         new SimpleMotorFeedforward(0.1, 0.028);
-    public static final int rollerVelocityPIDSlot = 1;
-    public static final PIDConfig rollerVelocityPIDConfig = new PIDConfig(0.1, 0.0, 0.0);
-    public static final int rollerPositionPIDSlot = 0;
-    public static final PIDConfig rollerPositionPIDConfig = new PIDConfig(30.0, 0.0, 0.0);
+    public static final int ampVelocityPIDSlot = 1;
+    public static final PIDConfig ampVelocityPIDConfig = new PIDConfig(0.1, 0.0, 0.0);
+    public static final int ampPositionPIDSlot = 0;
+    public static final PIDConfig ampPositionPIDConfig = new PIDConfig(30.0, 0.0, 0.0);
+
+    public static final CANDeviceID feederMotorID = new CANDeviceID(28, kSuperStructureCanivoreName);
+    public static final MechanismRatio feederMotorRatio = new MechanismRatio(12, 18);
+  public static final boolean feederMotorInvert = false;
+
+    public static final SimpleMotorFeedforward feederFeedforward =
+        new SimpleMotorFeedforward(0.1, 0.028);
+    public static final int feederVelocityPIDSlot = 1;
+    public static final PIDConfig feederVelocityPIDConfig = new PIDConfig(0.1, 0.0, 0.0);
+    public static final int feederPositionPIDSlot = 0;
+    public static final PIDConfig feederPositionPIDConfig = new PIDConfig(30.0, 0.0, 0.0);
+
+      
+  public static final CANDeviceID shooterUpperMotorID = new CANDeviceID(28, kSuperStructureCanivoreName);
+  public static final MechanismRatio shooterUpperMotorRatio = new MechanismRatio(12, 18);
+  public static final boolean shooterUpperMotorInvert = false;
+
+    public static final SimpleMotorFeedforward shooterUpperFeedforward =
+        new SimpleMotorFeedforward(0.1, 0.028);
+    public static final int shooterUpperVelocityPIDSlot = 1;
+    public static final PIDConfig shooterUpperVelocityPIDConfig = new PIDConfig(0.1, 0.0, 0.0);
+    public static final int shooterUpperPositionPIDSlot = 0;
+    public static final PIDConfig shooterUpperPositionPIDConfig = new PIDConfig(30.0, 0.0, 0.0);
+
+    public static final CANDeviceID shooterLowerMotorID = new CANDeviceID(28, kSuperStructureCanivoreName);
+    public static final MechanismRatio shooterLowerMotorRatio = new MechanismRatio(12, 18);
+    public static final boolean shooterLowerMotorInvert = false;
+  
+      public static final SimpleMotorFeedforward shooterLowerFeedforward =
+          new SimpleMotorFeedforward(0.1, 0.028);
+      public static final int shooterLowerVelocityPIDSlot = 1;
+      public static final PIDConfig shooterLowerVelocityPIDConfig = new PIDConfig(0.1, 0.0, 0.0);
+      public static final int shooterLowerPositionPIDSlot = 0;
+      public static final PIDConfig shooterLowerPositionPIDConfig = new PIDConfig(30.0, 0.0, 0.0);
 
     // TODO: Use real values
     public static final double armBootAbsPositionOffset = Units.degreesToRadians(0);
@@ -180,25 +200,12 @@ public class Constants {
     public static final double rollerStallVelocity = 40; // rads/s
     public static final double rollerStallCurrent = 30; // Amps
 
-
-    public static final double armIntakeAngle = Units.degreesToRadians(130);
-    public static final double wristIntakeAngle = Units.degreesToRadians(90);
-    public static final double armGroundIntakeAngle = Units.degreesToRadians(-5);
-    public static final double wristGroundIntakeAngle = Units.degreesToRadians(25);
-    public static final double armStowAngle = Units.degreesToRadians(89);
-    public static final double armStowIntakeAngle = Units.degreesToRadians(110);
-    public static final double wristStowAngle = Units.degreesToRadians(70);
-    public static final double armScoreAngle = Units.degreesToRadians(89);
-    public static final double wristScoreAngle = Units.degreesToRadians(-10);
-    public static final double armWackAngle = Units.degreesToRadians(0);
-    public static final double wristWackAngle = Units.degreesToRadians(80);
-    public static final double armWackAfterAngle = Units.degreesToRadians(35);
-    public static final double wristWackAfterAngle = Units.degreesToRadians(95);
-    public static final double wristTestAngle = Units.degreesToRadians(160);
-    public static final double wristL1Score = Units.degreesToRadians(80);
-    public static final double armL1Score = Units.degreesToRadians(65);
-    public static final double rollerL1Score = 400;
-    public static final double wristL4Score = Units.degreesToRadians(-14);
+    public static final double armIntakeAngle = Units.degreesToRadians(-10);
+    public static final double armShootAngle = Units.degreesToRadians(45);
+    public static final double armStowAngle = Units.degreesToRadians(-10);
+    public static final double armPreAmpAngle = Units.degreesToRadians(80);
+    public static final double armAmpAngle = Units.degreesToRadians(90);
+    public static final double armPostAmpAngle = Units.degreesToRadians(100);
     
     public static final Transform2d robotToArm =
         new Transform2d(Units.inchesToMeters(12.0), 0.0, new Rotation2d());
@@ -208,73 +215,11 @@ public class Constants {
     public static final double simArmMOI = 0.379; // kgMetersSquared
     public static final double simArmCGLength = Units.inchesToMeters(8.5); // m
     public static final double simRollerMOI = 0.003; // kgMetersSquared
+    public static final double simSHooterMOI = 0.003; // kgMetersSquared
 
-    public static final double wristArmMOI = 0.0374; // kgMetersSquared
-    public static final double simwristCGLength = Units.inchesToMeters(3.5); // m
     
   }
 
-
-
-
-  public static final class Pose {
-
-    // public static final PathConstraints constraints = new PathConstraints(
-    //         3, 2.5,
-    //         Units.degreesToRadians(400), Units.degreesToRadians(600));
-
-     public static final double XvelocityFactor = 0.1;
-     public static final double YvelocityFactor = 0.1;
-
-    public static final double SpeedReductionFactor = 0.15;
-
-    public static final double PTranslationSlow = 4;
-    public static final double ITranslationSlow = 1;
-    public static final double DTranslationSlow = 0.03;
-
-    public static final double PRotationSlow = 4;
-    public static final double IRotationSlow = 1;
-    public static final double DRotationSlow = 0.03;
-
-    public static final double Tolerance = 0.0001;
-
-    public static final Pose2d Error = new Pose2d(6, 6, Rotation2d.fromDegrees(0));
-
-    public static final Pose2d Ablue = new Pose2d(3.180, 4.175, Rotation2d.fromDegrees(0));
-    public static final Pose2d Bblue = new Pose2d(3.180, 3.850, Rotation2d.fromDegrees(0));
-    public static final Pose2d Cblue = new Pose2d(3.685, 2.975, Rotation2d.fromDegrees(60));
-    public static final Pose2d Dblue = new Pose2d(3.975, 2.825, Rotation2d.fromDegrees(60));
-    public static final Pose2d Eblue = new Pose2d(5.000, 2.825, Rotation2d.fromDegrees(120));
-    public static final Pose2d Fblue = new Pose2d(5.285, 2.975, Rotation2d.fromDegrees(120));
-    public static final Pose2d Gblue = new Pose2d(5.8, 3.850, Rotation2d.fromDegrees(180));
-    public static final Pose2d Hblue = new Pose2d(5.8, 4.175, Rotation2d.fromDegrees(180));
-    public static final Pose2d Iblue = new Pose2d(5.285, 5.075, Rotation2d.fromDegrees(240));
-    public static final Pose2d Jblue = new Pose2d(5.000, 5.230, Rotation2d.fromDegrees(240));
-    public static final Pose2d Kblue = new Pose2d(3.975, 5.230, Rotation2d.fromDegrees(300));
-    public static final Pose2d Lblue = new Pose2d(3.685, 5.075, Rotation2d.fromDegrees(300));
-
-    public static final double feildFlip = 17.5;
-    public static final double feildFlipy = 8;
-
-    public static final Pose2d Ared = new Pose2d(feildFlip - 3.180, feildFlipy - 4.175, Rotation2d.fromDegrees(180));
-    public static final Pose2d Bred = new Pose2d(feildFlip - 3.180, feildFlipy - 3.850, Rotation2d.fromDegrees(180));
-    public static final Pose2d Cred = new Pose2d(feildFlip - 3.685, feildFlipy - 2.975, Rotation2d.fromDegrees(-120));
-    public static final Pose2d Dred = new Pose2d(feildFlip - 3.975, feildFlipy - 2.825, Rotation2d.fromDegrees(-120));
-    public static final Pose2d Ered = new Pose2d(feildFlip - 5.000, feildFlipy - 2.825, Rotation2d.fromDegrees(-60));
-    public static final Pose2d Fred = new Pose2d(feildFlip - 5.285, feildFlipy - 2.975, Rotation2d.fromDegrees(-60));
-    public static final Pose2d Gred = new Pose2d(feildFlip - 5.8, feildFlipy - 3.850, Rotation2d.fromDegrees(0));
-    public static final Pose2d Hred = new Pose2d(feildFlip - 5.8, feildFlipy - 4.175, Rotation2d.fromDegrees(0));
-    public static final Pose2d Ired = new Pose2d(feildFlip - 5.285, feildFlipy - 5.075, Rotation2d.fromDegrees(-300));
-    public static final Pose2d Jred = new Pose2d(feildFlip - 5.000, feildFlipy - 5.230, Rotation2d.fromDegrees(-300));
-    public static final Pose2d Kred = new Pose2d(feildFlip - 3.975, feildFlipy - 5.230, Rotation2d.fromDegrees(-240));
-    public static final Pose2d Lred = new Pose2d(feildFlip - 3.685, feildFlipy - 5.075, Rotation2d.fromDegrees(-240));
-
-
-
-  }
-
-
-  
 
 
   public static final class Viz {

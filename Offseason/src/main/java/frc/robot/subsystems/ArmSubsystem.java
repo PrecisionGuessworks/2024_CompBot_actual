@@ -18,7 +18,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.units.measure.ImmutableAngle;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.RobotContamp;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
@@ -103,18 +104,22 @@ public class ArmSubsystem extends SubsystemBase {
               );
 
     private final QuixTalonFX m_armfollower = new QuixTalonFX(
-      Constants.Arm.followerID,
-      m_motor,
-      Constants.Arm.followerInvert,
-      QuixTalonFX.makeDefaultConfig().setBrakeMode()
+      Constants.Arm.armfollowerID,
+      m_armMotor,
+      Constants.Arm.armfollowerInvert,
+      QuixTalonFX.makeDefaultConfig()
+      .setBrakeMode()
       .setSupplyCurrentLimit(40.0)
       .setStatorCurrentLimit(80.0)
-      .setInverted(Constants.Arm.motorInvert)
-      .setPIDConfig(Constants.Arm.motorPositionSlot, Constants.Elevator.motorPIDConfig)
+      .setInverted(Constants.Arm.armfollowerInvert)
+      .setPIDConfig(Constants.Arm.armPositionPIDSlot, Constants.Arm.armPositionPIDConfig)
+      .setBootPositionOffset(ArmStartingAngle)
       .setMotionMagicConfig(
-          Constants.Arm.maxVelocity,
-          Constants.Arm.maxAcceleration,
-          Constants.Arm.maxJerk)
+                  Constants.Arm.ArmConstraints.maxVelocity,
+                  Constants.Arm.ArmConstraints.maxAcceleration,
+                  Constants.Arm.ArmMaxJerk,
+                  Constants.Arm.armExpo_kV,
+                  Constants.Arm.armExpo_kA)
       .setReverseSoftLimit(Constants.Arm.armMinAngle)
       .setForwardSoftLimit(Constants.Arm.armMaxAngle));
 
@@ -123,7 +128,7 @@ public class ArmSubsystem extends SubsystemBase {
   private boolean hasPiece = true;
   private Timer m_lastPieceTimer = new Timer();
 
-  public ArmSubsystem(Link2d ArmArmViz, Link2d ArmampViz) {
+  public ArmSubsystem(Link2d ArmViz, Link2d ampViz, Link2d feederViz, Link2d shooterUpperViz, Link2d shooterLowerViz) {
     m_lastPieceTimer.start();
     m_lastPieceTimer.reset();
 
@@ -131,8 +136,12 @@ public class ArmSubsystem extends SubsystemBase {
     SmartDashboard.putData(this);
 
     // Setup viz.
-    m_ArmArmViz = ArmArmViz;
-    m_ArmampViz = ArmampViz;
+    m_ArmArmViz = ArmViz;
+    m_ArmampViz = ampViz;
+    m_ArmfeederViz = feederViz;
+    m_ArmshooterUpperViz = shooterUpperViz;
+    m_ArmshooterLowerViz = shooterLowerViz;
+  
   }
 
   // public boolean hasPiece() {
@@ -220,10 +229,10 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
 
 
-    if (getArmAngle() <= 115 && getArmAngle() >= 92 && Units.radiansToDegrees(setm_armTargetAngle) < 92 && !RobotContainer.elevator.isAtHeight(Constants.Elevator.stowHeight, Units.inchesToMeters(.75))) { // might need check 
+    if (getArmAngle() <= 115 && getArmAngle() >= 92 ) {
       m_armTargetAngle = setm_armTargetAngle;
     }else {
-      m_armTargetAngle = stow;
+      m_armTargetAngle = Constants.Arm.armStowAngle;
     }
     
 
@@ -273,7 +282,7 @@ public class ArmSubsystem extends SubsystemBase {
   
   private static final SingleJointedArmSim m_armSim =
       new SingleJointedArmSim(
-          DCMotor.getKrakenX60Foc(1),
+          DCMotor.getKrakenX60Foc(2),
           Constants.Arm.armMotorRatio.reduction(),
           Constants.Arm.simArmMOI,
           Constants.Arm.simArmCGLength,
@@ -287,7 +296,7 @@ public class ArmSubsystem extends SubsystemBase {
       new FlywheelSim(
           LinearSystemId.createFlywheelSystem(
               m_simMotor,
-              Constants.Arm.simampMOI,
+              Constants.Arm.simRollerMOI,
               Constants.Arm.ampMotorRatio.reduction()),
           m_simMotor);
 
@@ -295,12 +304,14 @@ public class ArmSubsystem extends SubsystemBase {
   // Visualization
   private final Link2d m_ArmArmViz;
   private final Link2d m_ArmampViz;
-  private final Link2d m_ArmWristViz;
+  private final Link2d m_ArmfeederViz;
+  private final Link2d m_ArmshooterUpperViz;
+  private final Link2d m_ArmshooterLowerViz;
 
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-    m_armSim.setInput(m_armMotor.getPercentOutput() * RobotContamp.getBatteryVoltage());
+    m_armSim.setInput(m_armMotor.getPercentOutput() * RobotController.getBatteryVoltage());
     m_armSim.update(TimedRobot.kDefaultPeriod);
     m_armMotor.setSimSensorPositionAndVelocity(
         m_armSim.getAngleRads() - ArmStartingAngle,
@@ -310,7 +321,7 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.Arm.armMotorRatio);
     
 
-    m_ampSim.setInput(m_ampMotor.getPercentOutput() * RobotContamp.getBatteryVoltage());
+    m_ampSim.setInput(m_ampMotor.getPercentOutput() * RobotController.getBatteryVoltage());
     m_ampSim.update(TimedRobot.kDefaultPeriod);
     m_ampMotor.setSimSensorVelocity(
         m_ampSim.getAngularVelocityRadPerSec(),

@@ -1,6 +1,7 @@
 TODO:
 
-- Everything
+- Fix errors.
+- Beambreaks?
 
 
 

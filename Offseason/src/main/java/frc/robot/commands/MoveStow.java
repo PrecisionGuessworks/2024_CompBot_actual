@@ -13,7 +13,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 
 
-public class CoralMoveStow extends Command {
+public class MoveStow extends Command {
 //  private final IntakeSubsystem m_intake;
   private final ElevatorSubsystem m_elevator;
   private final ArmSubsystem m_arm;
@@ -21,7 +21,7 @@ public class CoralMoveStow extends Command {
   public boolean trueendtrigger = false;
   private Timer m_placeTimer = new Timer();
 
-  public CoralMoveStow(
+  public MoveStow(
  //     IntakeSubsystem intakeSubsystem,
       ElevatorSubsystem elevatorSubsystem,
       ArmSubsystem armSubsystem) {

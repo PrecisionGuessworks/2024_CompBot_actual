@@ -51,16 +51,14 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.quixlib.motorcontrol.PIDConfig;
 import frc.quixlib.viz.Link2d;
 import frc.quixlib.viz.Viz2d;
-import frc.robot.commands.IntakeAlgae;
-import frc.robot.commands.Moveup;
 import frc.robot.commands.MoveupArm;
 import frc.robot.commands.StowArm;
 import frc.robot.Constants.Climber;
 import frc.robot.commands.ClimbSet;
 import frc.robot.commands.ClimbZero;
-import frc.robot.commands.CoralMoveScore;
-import frc.robot.commands.CoralMoveStow;
-import frc.robot.commands.IntakeCoral;
+import frc.robot.commands.QuickScore;
+import frc.robot.commands.MoveStow;
+import frc.robot.commands.Intake;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -198,7 +196,7 @@ ArmWristViz.addLink(
 
 
         //public static final IntakeSubsystem intake = new IntakeSubsystem(intakeArmViz, intakeRollerViz);
-        public static final ArmSubsystem arm = new ArmSubsystem(ArmArmViz,ArmWristViz,ArmWheelViz);
+        public static final ArmSubsystem arm = new ArmSubsystem(ArmArmViz,ArmWheelViz);
 //        public static final ClimberSubsystem climber = new ClimberSubsystem(climberCarriageViz);
 
 
@@ -220,17 +218,12 @@ ArmWristViz.addLink(
 
 
         //robotCommands.put("IntakePiece", new IntakeAlgae(intake,1).withTimeout(2.5));
-        robotCommands.put("CoralMoveScore", new CoralMoveScore(elevator, arm));
-        robotCommands.put("CoralMoveStow", new CoralMoveStow(elevator, arm));
-        robotCommands.put("IntakeCoral", new IntakeCoral(elevator, arm));
+        robotCommands.put("CoralMoveScore", new QuickScore(elevator, arm));
         robotCommands.put("IntakeCoralRollerFast",Commands.runOnce(() -> RobotContainer.arm.setRollerVelocityandCurrent(Constants.Arm.intakeVelocity,55,90)));
-        robotCommands.put("IntakeCoralRollerSlow",Commands.runOnce(() -> RobotContainer.arm.setRollerVelocityandCurrent(-20,10,10)));
-        robotCommands.put("StowArm", new StowArm(elevator, arm));
+        robotCommands.put("StowArm", new StowArm(arm));
 
     
         NamedCommands.registerCommands(robotCommands);
-
-
 
 
         autoChooser = AutoBuilder.buildAutoChooser("Tests");
@@ -279,10 +272,10 @@ ArmWristViz.addLink(
         //     point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))
         // ));
 
-        driver.leftBumper().whileTrue(new ParallelCommandGroup(new CoralMoveScore(elevator, arm), pathfindingCommand(true)));
-        driver.rightBumper().whileTrue(new ParallelCommandGroup(new CoralMoveScore(elevator, arm), pathfindingCommand(false)));
-        driver.leftBumper().onFalse(new CoralMoveStow(elevator, arm));
-        driver.rightBumper().onFalse(new CoralMoveStow(elevator, arm));
+        driver.leftBumper().whileTrue(new ParallelCommandGroup(new QuickScore(elevator, arm), pathfindingCommand(true)));
+        driver.rightBumper().whileTrue(new ParallelCommandGroup(new QuickScore(elevator, arm), pathfindingCommand(false)));
+        driver.leftBumper().onFalse(new MoveStow(elevator, arm));
+        driver.rightBumper().onFalse(new MoveStow(elevator, arm));
 
         //driver.y().whileTrue(new ClimbSet(climber));
         //driver.x().whileTrue(pathfindingtofollowCommand());
@@ -301,32 +294,32 @@ ArmWristViz.addLink(
         //     .withRotationalRate(-driver.getRightX() * MaxAngularRate * Constants.Drive.SlowRotPercentage) // Drive counterclockwise with negative X (left)
         // ))));
 
-        driver.rightTrigger().whileTrue(new IntakeCoral(elevator, arm));
+        driver.rightTrigger().whileTrue(new Intake(elevator, arm));
        // driver.leftTrigger().whileTrue(new IntakeAlgae(intake, 0));
         driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         
         
 
-        // driver.y().whileTrue(drivetrain.applyRequest(() ->
-        //     angle.withVelocityX(-driver.getLeftY() * MaxSpeed)
-        //     .withVelocityY(-driver.getLeftX() * MaxSpeed)
-        //     .withTargetDirection(new Rotation2d(Math.toRadians(0))))
-        // );
-        // driver.b().whileTrue(drivetrain.applyRequest(() ->
-        //     angle.withVelocityX(-driver.getLeftY() * MaxSpeed)
-        //     .withVelocityY(-driver.getLeftX() * MaxSpeed)
-        //     .withTargetDirection(new Rotation2d(Math.toRadians(-90))))
-        // );
-        // driver.a().whileTrue(drivetrain.applyRequest(() ->
-        //     angle.withVelocityX(-driver.getLeftY() * MaxSpeed)
-        //     .withVelocityY(-driver.getLeftX() * MaxSpeed)
-        //     .withTargetDirection(new Rotation2d(Math.toRadians(-180))))
-        // );
-        // driver.x().whileTrue(drivetrain.applyRequest(() ->
-        //     angle.withVelocityX(-driver.getLeftY() * MaxSpeed)
-        //     .withVelocityY(-driver.getLeftX() * MaxSpeed)
-        //     .withTargetDirection(new Rotation2d(Math.toRadians(0))))
-        // );
+        driver.pov(90).whileTrue(drivetrain.applyRequest(() ->
+            angle.withVelocityX(-driver.getLeftY() * MaxSpeed)
+            .withVelocityY(-driver.getLeftX() * MaxSpeed)
+            .withTargetDirection(new Rotation2d(Math.toRadians(0))))
+        );
+        driver.pov(180).whileTrue(drivetrain.applyRequest(() ->
+            angle.withVelocityX(-driver.getLeftY() * MaxSpeed)
+            .withVelocityY(-driver.getLeftX() * MaxSpeed)
+            .withTargetDirection(new Rotation2d(Math.toRadians(-90))))
+        );
+        driver.pov(270).whileTrue(drivetrain.applyRequest(() ->
+            angle.withVelocityX(-driver.getLeftY() * MaxSpeed)
+            .withVelocityY(-driver.getLeftX() * MaxSpeed)
+            .withTargetDirection(new Rotation2d(Math.toRadians(-180))))
+        );
+        driver.pov(0).whileTrue(drivetrain.applyRequest(() ->
+            angle.withVelocityX(-driver.getLeftY() * MaxSpeed)
+            .withVelocityY(-driver.getLeftX() * MaxSpeed)
+            .withTargetDirection(new Rotation2d(Math.toRadians(-270))))
+        );
 
 
        // driver.a().whileTrue(new AlgeaWack(elevator, arm));
@@ -354,11 +347,7 @@ ArmWristViz.addLink(
             .withVelocityY(-driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
     ));
-    
-        // operator.leftBumper().and(operator.x()).onTrue(new ClimbSet(1, climber, elevator, arm));
-        // operator.leftBumper().and(operator.y()).onTrue(new ClimbSet(2, climber, elevator, arm));
-        // operator.leftBumper().and(operator.b()).onTrue(new ClimbSet(3, climber, elevator, arm));
-        // operator.leftBumper().and(operator.start()).onTrue(new ClimbZero(climber, elevator, arm));
+
         
         
 
@@ -397,192 +386,6 @@ ArmWristViz.addLink(
         
     }
 
-    double X;
-    double Y;
-    double VX;
-    double VY;
-    double intercpet = Math.tan(Units.degreesToRadians(30))*4.5;
-    double intercpetRed = Math.tan(Units.degreesToRadians(30))*13;
-    double slope = Math.tan(Units.degreesToRadians(30));
-    Pose2d targetPose = Constants.Pose.Error; // Example target pose
-    boolean zeroed = false;
-    boolean LineupCommand = false;
-    // Create the constraints to use while pathfinding
-    
-    private Command pathfindingCommand(boolean left) {
-        
-        PIDController xController = new PIDController(Constants.Pose.PTranslationSlow, Constants.Pose.ITranslationSlow, Constants.Pose.DTranslationSlow);
-        xController.setIntegratorRange(-Constants.Pose.SpeedReductionFactor, Constants.Pose.SpeedReductionFactor);
-        // xController.setTolerance(Constants.Pose.Tolerance);
-        PIDController yController = new PIDController(Constants.Pose.PTranslationSlow, Constants.Pose.ITranslationSlow, Constants.Pose.DTranslationSlow);
-        yController.setIntegratorRange(-Constants.Pose.SpeedReductionFactor, Constants.Pose.SpeedReductionFactor);
-        // yController.setTolerance(Constants.Pose.Tolerance);
-        PIDController thetaController = new PIDController(Constants.Pose.PRotationSlow, Constants.Pose.IRotationSlow, Constants.Pose.DRotationSlow);
-        thetaController.enableContinuousInput(Units.degreesToRadians(-180),Units.degreesToRadians(180));
-        // thetaController.setTolerance(Constants.Pose.Tolerance);
-
-        return new Command() {
-            @Override
-            public void initialize() {
-                m_ally = DriverStation.getAlliance();
-                targetPose = getTargetPose(left);
-                if (drivetrain.getLineup()||(elevator.m_HeightLocation == 1)){
-                    xController.reset();
-                    yController.reset();
-                    thetaController.reset();
-                    LineupCommand = true;
-                }
-            }
-    
-            @Override
-            public void execute() {
-                if (driver.axisLessThan(0, Constants.Drive.DriveDeadband).getAsBoolean()&&driver.axisLessThan(1, Constants.Drive.DriveDeadband).getAsBoolean()&&driver.axisLessThan(4, Constants.Drive.RotationDeadband).getAsBoolean()&&driver.axisLessThan(5, Constants.Drive.RotationDeadband).getAsBoolean()) {
-                    zeroed = true;
-                }
-                if (drivetrain.getLineup()){
-                    Pose2d currentPose = drivetrain.getState().Pose;
-                    ChassisSpeeds currentSpeeds = drivetrain.getState().Speeds;
-                    X = currentPose.getTranslation().getX();
-                    Y = currentPose.getTranslation().getY();
-                    VX = currentSpeeds.vxMetersPerSecond;
-                    VY = currentSpeeds.vyMetersPerSecond;
-                    double xOutput =Constants.Pose.SpeedReductionFactor* MaxSpeed * xController.calculate(X, targetPose.getX());
-                    double yOutput =Constants.Pose.SpeedReductionFactor* MaxSpeed * yController.calculate(Y, targetPose.getY());
-                    double thetaOutput =Constants.Pose.SpeedReductionFactor* MaxAngularRate * thetaController.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
-                    
-                    if (m_ally.get() == Alliance.Blue){
-                        drivetrain.applyRequest(() -> 
-                        driveAuto.withVelocityX(xOutput)
-                                 .withVelocityY(yOutput)
-                                 .withRotationalRate(thetaOutput)
-                        ).execute();
-                    } else {
-                        drivetrain.applyRequest(() -> 
-                        driveAuto.withVelocityX(-xOutput)
-                                 .withVelocityY(-yOutput)
-                                 .withRotationalRate(thetaOutput)   
-                        ).execute();
-                    }
-                }
-            }
-    
-            @Override
-            public void end(boolean interrupted) {
-                xController.close();
-                yController.close();
-                thetaController.close();
-                zeroed = false;
-                LineupCommand = false;
-            }
-    
-            @Override
-            public boolean isFinished() {
-                return !drivetrain.getLineup()||(elevator.m_HeightLocation == 1)||
-                (xController.atSetpoint() && yController.atSetpoint() && thetaController.atSetpoint()||
-                (zeroed&&driver.axisMagnitudeGreaterThan(0, Constants.Drive.DriveDeadband).getAsBoolean()||driver.axisMagnitudeGreaterThan(1, Constants.Drive.DriveDeadband).getAsBoolean()||driver.axisMagnitudeGreaterThan(4, Constants.Drive.RotationDeadband).getAsBoolean()||driver.axisMagnitudeGreaterThan(5, Constants.Drive.RotationDeadband).getAsBoolean()));
-            }
-        };
-    }
-
-    private Pose2d getTargetPose(boolean left) {
-        Pose2d currentPose = drivetrain.getState().Pose;
-        ChassisSpeeds currentSpeeds = drivetrain.getState().Speeds;
-        X = currentPose.getTranslation().getX() + currentSpeeds.vxMetersPerSecond * Constants.Pose.XvelocityFactor;
-        Y = currentPose.getTranslation().getY() + currentSpeeds.vyMetersPerSecond * Constants.Pose.YvelocityFactor;
-        System.out.println(X);
-        System.out.println(Y);
-        
-        if(m_ally.get() == Alliance.Blue){ 
-
-            if (Y <= -X*slope + intercpet+4 && Y >= X*slope - intercpet+4 && left && X <= 4.5) {
-            System.out.println("Ablue");
-            return Constants.Pose.Ablue;
-            } else if (Y <= -X*slope + intercpet+4 && Y >= X*slope - intercpet+4 && !left && X <= 4.5) {
-            System.out.println("Bblue");
-            return Constants.Pose.Bblue;
-            } else if (Y <= X*slope - intercpet+4 && X <= 4.5 && left) {
-            System.out.println("Cblue");
-            return Constants.Pose.Cblue;
-            } else if (Y <= X*slope - intercpet+4 && X <= 4.5 && !left) {
-            System.out.println("Dblue");
-            return Constants.Pose.Dblue;
-            } else if (Y <= -X*slope + intercpet+4 && X >= 4.5 && !left) {
-            System.out.println("Eblue");
-            return Constants.Pose.Eblue;
-            } else if (Y <= -X*slope + intercpet+4 && X >= 4.5 && left) {
-            System.out.println("Fblue");
-            return Constants.Pose.Fblue;
-            } else if (Y >= -X*slope + intercpet+4 && Y <= X*slope - intercpet+4 && !left && X >= 4.5) {
-            System.out.println("Gblue");
-            return Constants.Pose.Gblue;
-            } else if (Y >= -X*slope + intercpet+4 && Y <= X*slope - intercpet+4 && left && X >= 4.5) {
-            System.out.println("Hblue");
-            return Constants.Pose.Hblue;
-            } else if (Y >= X*slope - intercpet+4 && X >= 4.5 && !left) {
-            System.out.println("Iblue");
-            return Constants.Pose.Iblue;
-            } else if (Y >= X*slope - intercpet+4 &&  X >= 4.5 && left) {
-            System.out.println("Jblue");
-            return Constants.Pose.Jblue;
-            } else if (Y >= -X*slope + intercpet+4 && X <= 4.5 && left) {
-            System.out.println("Kblue");
-            return Constants.Pose.Kblue;
-            } else if (Y >= -X*slope + intercpet+4 && X <= 4.5 && !left) {
-            System.out.println("Lblue");
-            return Constants.Pose.Lblue;
-            } else {
-            System.out.println("error");
-            return Constants.Pose.Error;
-            }
-
-        } else {
-        if (Y <= -X*slope + intercpetRed+4 && Y >= X*slope - intercpetRed+4 && !left && X <= 13.0) {
-            System.out.println("Gred");
-            return Constants.Pose.Gred;
-            } else if (Y <= -X*slope + intercpetRed+4 && Y >= X*slope - intercpetRed+4 && left && X <= 13.0) {
-            System.out.println("Hred");
-            return Constants.Pose.Hred;
-            } else if (Y <= X*slope - intercpetRed+4 && X <= 13.0 && !left) {
-            System.out.println("Ired");
-            return Constants.Pose.Ired;
-            } else if (Y <= X*slope - intercpetRed+4 && X <= 13.0 && left) {
-            System.out.println("Jred");
-            return Constants.Pose.Jred;
-            } else if (Y <= -X*slope + intercpetRed+4 && X >= 13.0 && left) {
-            System.out.println("Kred");
-            return Constants.Pose.Kred;
-            } else if (Y <= -X*slope + intercpetRed+4 && X >= 13.0 && !left) {
-            System.out.println("Lred");
-            return Constants.Pose.Lred;
-            } else if (Y >= -X*slope + intercpetRed+4 && Y <= X*slope - intercpetRed+4 && left && X >= 13.0) {
-            System.out.println("Ared");
-            return Constants.Pose.Ared;
-            } else if (Y >= -X*slope + intercpetRed+4 && Y <= X*slope - intercpetRed+4 && !left && X >= 13.0) {
-            System.out.println("Bred");
-            return Constants.Pose.Bred;
-            } else if (Y >= X*slope - intercpetRed+4 && X >= 13.0 && left) {
-            System.out.println("Cred");
-            return Constants.Pose.Cred;
-            } else if (Y >= X*slope - intercpetRed+4 &&  X >= 13.0 && !left) {
-            System.out.println("Dred");
-            return Constants.Pose.Dred;
-            } else if (Y >= -X*slope + intercpetRed+4 && X <= 13.0 && !left) {
-            System.out.println("Ered");
-            return Constants.Pose.Ered;
-            } else if (Y >= -X*slope + intercpetRed+4 && X <= 13.0 && left) {
-            System.out.println("Fred");
-            return Constants.Pose.Fred;
-            } else {
-            System.out.println("error");
-            return Constants.Pose.Error;
-            }
-            
-            }
-
-     }  
-        
-
-        
 
         
      private Command pathfindingtofollowCommand() {
