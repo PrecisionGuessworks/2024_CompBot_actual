@@ -27,7 +27,6 @@ package frc.robot.generated;
 import static frc.robot.Constants.Vision.*;
 
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;

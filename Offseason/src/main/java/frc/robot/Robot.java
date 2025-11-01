@@ -101,8 +101,8 @@ public class Robot extends TimedRobot {
   StructPublisher<Pose3d> Wristpublisher = NetworkTableInstance.getDefault()
         .getStructTopic("WristViz", Pose3d.struct).publish();
 
-  StructPublisher<Pose3d> Coralpublisher = NetworkTableInstance.getDefault()
-        .getStructTopic("CoralViz", Pose3d.struct).publish();
+  StructPublisher<Pose3d> notepublisher = NetworkTableInstance.getDefault()
+        .getStructTopic("noteViz", Pose3d.struct).publish();
 
   public Robot() {
     m_robotContainer = new RobotContainer();
@@ -196,29 +196,21 @@ if (!isReal()){
   // 3d viz
   final double stage1Height = Constants.Viz3d.stage1Height;
   final double RightCimberHeight = RobotContainer.climber.getHeight();
-  final Pose3d stageOne =
-      Constants.Viz3d.elevatorBase.transformBy(
-          new Transform3d(0, 0, CarrageHeight >= stage1Height ? CarrageHeight-stage1Height : 0, new Rotation3d()));
-  final Pose3d armViz = elevatorCarriage.transformBy(
+  
+  final Pose3d armViz = Constants.Viz3d.ArmBase.transformBy(
     new Transform3d(0, 0, Units.inchesToMeters(7.7), new Rotation3d(0,Units.degreesToRadians( -RobotContainer.arm.getArmAngle()+90),0)));
-    final Pose3d wristViz = armViz.transformBy(
-    new Transform3d(0, 0, Units.inchesToMeters(11), new Rotation3d(0,Units.degreesToRadians( -RobotContainer.arm.getWristAngle()+90),0)));
-    Pose3d coralViz = new Pose3d(0,0,-1, new Rotation3d());
+    
+    Pose3d noteViz = new Pose3d(0,0,-1, new Rotation3d(0,0,0));
     if (RobotContainer.arm.getHasPiece()) {
     Pose3d drive3d = new Pose3d(RobotContainer.drivetrain.getState().Pose);
-    Pose3d temPose3d = wristViz.transformBy(
-      new Transform3d(Units.inchesToMeters(-3), Units.inchesToMeters(2.4), Units.inchesToMeters(8), new Rotation3d(0,Units.degreesToRadians( 90),0)));
-    coralViz = drive3d.transformBy(
-      new Transform3d(temPose3d.getTranslation(), temPose3d.getRotation()));
+    
     
     }
    
         
-        elevatorCarriagepublisher.set(elevatorCarriage);
         Zeropublisher.set(new Pose3d());
         Armpublisher.set(armViz);
-        Wristpublisher.set(wristViz);
-        Coralpublisher.set(coralViz);
+        notepublisher.set(noteViz);
 }
 
 }
@@ -263,7 +255,7 @@ if (!isReal()){
                         if (ally.isPresent()) {
                           if (ally.get() == Alliance.Red) {
                             poses.addAll(path.getAllPathPoints().stream()
-                            .map(point -> new Pose2d(Constants.Pose.feildFlip - point.position.getX(),Constants.Pose.feildFlipy - point.position.getY(), new Rotation2d()))
+                            .map(point -> new Pose2d(Constants.feildFlip - point.position.getX(),Constants.feildFlipy - point.position.getY(), new Rotation2d()))
                           .collect(Collectors.toList()));
                           Elastic.selectTab("RED");
                           }
@@ -329,7 +321,7 @@ if (!isReal()){
                   if (ally.isPresent()) {
                     if (ally.get() == Alliance.Red) {
                       poses.addAll(path.getAllPathPoints().stream()
-                      .map(point -> new Pose2d(Constants.Pose.feildFlip - point.position.getX(),Constants.Pose.feildFlipy - point.position.getY(), new Rotation2d()))
+                      .map(point -> new Pose2d(Constants.feildFlip - point.position.getX(),Constants.feildFlipy - point.position.getY(), new Rotation2d()))
                     .collect(Collectors.toList()));
                     Elastic.selectTab("RED");
                     }

@@ -67,7 +67,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
 
   public double getHeight() {
-    return  Constants.Climber.motorRatio.sensorRadiansToMechanismPosition(m_motor.getSensorPosition());
+    return  Constants.Climber.motorRatio.sensorRadiansToMechanismPosition(m_rightmotor.getSensorPosition());
   }
 
   public void setHeight(double targetHeight) {
@@ -81,11 +81,11 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void setZero() {
-    m_motor.setSensorPosition(0.0);
+    m_rightmotor.setSensorPosition(0.0);
   }
 
   public void setZero(double height) {
-    m_motor.setSensorPosition(height);
+    m_rightmotor.setSensorPosition(height);
   }
  
 
@@ -104,7 +104,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
     // This method will be called once per scheduler run
     m_targetHeight = m_setTargetHeight;
-    m_motor.setDynamicMotionMagicPositionSetpoint(
+    m_rightmotor.setDynamicMotionMagicPositionSetpoint(
         Constants.Climber.motorPositionSlot,
         m_targetHeight,
         Constants.Climber.maxVelocity,
@@ -116,11 +116,11 @@ public class ClimberSubsystem extends SubsystemBase {
     SmartDashboard.putNumber(
         "Climber: Current Height (in)", Units.metersToInches(getHeight()));
     SmartDashboard.putNumber(
-        "Climber: Target Height (in)", Units.metersToInches(Constants.Climber.motorRatio.sensorRadiansToMechanismPosition(m_motor.getClosedLoopReference())));
+        "Climber: Target Height (in)", Units.metersToInches(Constants.Climber.motorRatio.sensorRadiansToMechanismPosition(m_rightmotor.getClosedLoopReference())));
 
   
 
-    m_motor.logMotorState();
+        m_rightmotor.logMotorState();
     //m_follower.logMotorState();
   }
 
@@ -142,9 +142,9 @@ public class ClimberSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
-    m_climberSim.setInput(m_motor.getPercentOutput() * RobotController.getBatteryVoltage());
+    m_climberSim.setInput(m_rightmotor.getPercentOutput() * RobotController.getBatteryVoltage());
     m_climberSim.update(TimedRobot.kDefaultPeriod);
-    m_motor.setSimSensorPositionAndVelocity(
+    m_rightmotor.setSimSensorPositionAndVelocity(
         m_climberSim.getPositionMeters(),
         // m_climberSim.getVelocityMetersPerSecond(), // TODO: Figure out why this causes jitter
         0.0,

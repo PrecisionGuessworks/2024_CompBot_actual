@@ -4,33 +4,39 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static frc.robot.Constants.Drive.DRotation;
+import static frc.robot.Constants.Drive.DriveDeadband;
+import static frc.robot.Constants.Drive.IRotation;
+import static frc.robot.Constants.Drive.MaxAngularRatePercentage;
+import static frc.robot.Constants.Drive.MaxSpeedPercentage;
+import static frc.robot.Constants.Drive.PRotation;
+import static frc.robot.Constants.Drive.RotationDeadband;
+import static frc.robot.Constants.Drive.SnapDriveDeadband;
+import static frc.robot.Constants.Drive.SnapRotationDeadband;
 
-import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import org.json.simple.parser.ParseException;
 import org.photonvision.PhotonUtils;
 
+import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathfindingCommand;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.pathfinding.Pathfinding;
-import com.pathplanner.lib.trajectory.PathPlannerTrajectoryState;
 import com.pathplanner.lib.util.FileVersionException;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -42,39 +48,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.quixlib.motorcontrol.PIDConfig;
 import frc.quixlib.viz.Link2d;
 import frc.quixlib.viz.Viz2d;
-import frc.robot.commands.MoveupArm;
-import frc.robot.commands.StowArm;
-import frc.robot.Constants.Arm;
-import frc.robot.Constants.Climber;
-import frc.robot.commands.ClimbSet;
-import frc.robot.commands.ClimbZero;
-import frc.robot.commands.QuickScore;
 import frc.robot.commands.Intake;
+import frc.robot.commands.QuickAmpStow;
+import frc.robot.commands.QuickScore;
+import frc.robot.commands.StowArm;
 import frc.robot.generated.Telemetry;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.IntakeSubsystem;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-
-import static frc.robot.Constants.Drive.*;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 public class RobotContainer {
     private double MaxSpeed = MaxSpeedPercentage*(TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)); // kSpeedAt12Volts desired top speed
@@ -132,52 +121,6 @@ private static  final Link2d chassisViz =
               new Color("#FAB604"),
               new Transform2d(Constants.Viz.xOffset, Units.inchesToMeters(3.0), new Rotation2d())));
 
-  // Elevator viz
-  private  static final Link2d elevatorFrameViz =
-      robotViz.addLink(
-          new Link2d(
-              robotViz,
-              "Elevator Base",
-              Constants.Viz.elevatorBaseLength,
-              4.0,
-              Color.kGreen,
-              new Transform2d(
-                  Constants.Viz.elevatorBaseX,
-                  Constants.Viz.elevatorBaseY,
-                  Constants.Viz.elevatorAngle)));
-  private static  final Link2d elevatorCarriageViz =
-      elevatorFrameViz.addLink(
-          new Link2d(
-              robotViz,
-              "Elevator Carriage",
-              Constants.Viz.elevatorCarriageLength,
-              6.0,
-              Color.kLightGreen));
-// Intake viz
-private static final Link2d intakeRollerViz =
-robotViz.addLink(
-    new Link2d(robotViz, "Intake Roller", Units.inchesToMeters(1.0), 10.0, Color.kLightBlue));
-
-
-private static final Link2d ArmArmViz =
-robotViz.addLink(
-        new Link2d(robotViz, "Arm Arm", Constants.Viz.ArmArmLength, 10, Color.kRed));
-
-private static final Link2d ArmWheelViz =
-ArmArmViz.addLink(
-        new Link2d(robotViz, "Arm Wheel", Units.inchesToMeters(2.0), 10, Color.kCoral));
-private static final Link2d ArmFeederVoz =
-ArmArmViz.addLink(
-        new Link2d(robotViz, "Arm Feeder", Units.inchesToMeters(3.0), 10, Color.kCoral));
-private static final Link2d ArmShotUp =
-ArmArmViz.addLink(
-        new Link2d(robotViz, "Arm Shooter Up", Units.inchesToMeters(3.0), 10, Color.kYellow));
-private static final Link2d ArmShotLow =
-ArmArmViz.addLink(
-        new Link2d(robotViz, "Arm Shooter Low", Units.inchesToMeters(3.0), 10, Color.kYellow));
-
-
-    
 // Climber viz
 private static final Link2d climberFrameViz =
 robotViz.addLink(
@@ -199,6 +142,34 @@ climberFrameViz.addLink(
         Constants.Viz.climberCarriageLength,
         6.0,
         Color.kLightGreen));
+
+
+// Intake viz
+private static final Link2d intakeRollerViz =
+robotViz.addLink(
+    new Link2d(robotViz, "Intake Roller", Units.inchesToMeters(1.0), 10.0, Color.kLightBlue));
+
+
+private static final Link2d ArmArmViz =
+robotViz.addLink(
+        new Link2d(robotViz, "Arm Arm", Constants.Viz.ArmArmLength, 10, Color.kRed));
+
+private static final Link2d ArmWheelViz =
+ArmArmViz.addLink(
+        new Link2d(robotViz, "Arm Wheel", Units.inchesToMeters(2.0), 10, Color.kGreen));
+private static final Link2d ArmFeederVoz =
+ArmArmViz.addLink(
+        new Link2d(robotViz, "Arm Feeder", Units.inchesToMeters(2.0), 10, Color.kGreen));
+private static final Link2d ArmShotUp =
+ArmArmViz.addLink(
+        new Link2d(robotViz, "Arm Shooter Up", Units.inchesToMeters(3.0), 10, Color.kOrange));
+private static final Link2d ArmShotLow =
+ArmArmViz.addLink(
+        new Link2d(robotViz, "Arm Shooter Low", Units.inchesToMeters(3.0), 10, Color.kOrange));
+
+
+    
+
 
 
     public static final IntakeSubsystem intake = new IntakeSubsystem(intakeRollerViz);
@@ -269,6 +240,8 @@ climberFrameViz.addLink(
         );
 
         driver.rightTrigger().whileTrue(new Intake(intake, arm));
+        driver.rightBumper().whileTrue(new QuickScore(arm));
+        driver.rightTrigger().onFalse(new QuickAmpStow(arm));
        // driver.leftTrigger().whileTrue(new IntakeAlgae(intake, 0));
         driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         

@@ -1,34 +1,26 @@
 package frc.robot;
 
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.signals.GravityTypeValue;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
-import edu.wpi.first.wpilibj.DriverStation;
 import frc.quixlib.devices.CANDeviceID;
 import frc.quixlib.motorcontrol.MechanismRatio;
 import frc.quixlib.motorcontrol.PIDConfig;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 
 public class Constants {
     // CANID's:
@@ -53,6 +45,8 @@ public class Constants {
     public static boolean Lineup = false; // Auto Lineup to Reef to Scrore.
     public static boolean ExtraInfo = true; // Turn on Extra network info
     public static boolean Logging = false; // Turn on Logging
+    public static double feildFlip = 16.5;
+    public static double feildFlipy = 5.0;
 
 
     public static class Vision {
@@ -181,10 +175,10 @@ public class Constants {
 
     // TODO: Use real values
     public static final double armBootAbsPositionOffset = Units.degreesToRadians(0);
-    public static final double armMinAngle = Units.degreesToRadians(-1.0); // rads 
+    public static final double armMinAngle = Units.degreesToRadians(-10.0); // rads 
     public static final double armMaxAngle = Units.degreesToRadians(150.0); // rads 
-    public static final double armStartingAngle = Units.degreesToRadians(90);
-    public static final double armCgOffset = Units.degreesToRadians(0);
+    public static final double armStartingAngle = Units.degreesToRadians(-10);
+    public static final double armCgOffset = Units.degreesToRadians(2);
 
     public static final double wristBootAbsPositionOffset = Units.degreesToRadians(0);
     public static final double wristMinAngle = Units.degreesToRadians(-16.0); // rads 
@@ -193,6 +187,7 @@ public class Constants {
     public static final double wristCgOffset = Units.degreesToRadians(0);
 
     public static final double AngleTolerance = Units.degreesToRadians(1);
+    public static final double ShootTolerance = 100;
 
     public static final double intakeVelocity = -1500.0; // rads/s
     public static final double outtakeVelocity = 1300.0; // rads/s
@@ -236,21 +231,17 @@ public class Constants {
     public static final double intakePivotY = Units.inchesToMeters(11.25);
     public static final double intakeArmLength = Units.inchesToMeters(14.0);
 
-    public static final double elevatorBaseX = xOffset + Units.inchesToMeters(18.0);
-    public static final double elevatorBaseY = Units.inchesToMeters(3.0);
-    public static final Rotation2d elevatorAngle = Rotation2d.fromDegrees(90.0);
-    public static final double elevatorBaseLength = Units.inchesToMeters(35.0);
-    public static final double elevatorCarriageLength = Units.inchesToMeters(6.0);
+    public static final double ArmArmPivotX = xOffset + Units.inchesToMeters(4.0);
+    public static final double ArmArmPivotY = Units.inchesToMeters(12.0);
+    public static final double ArmArmLength = Units.inchesToMeters(20.0);
+    public static final double ArmRollerX = ArmArmLength - Units.inchesToMeters(1.0);
+    public static final double ArmRollerY = Units.inchesToMeters(2);
+    public static final double ArmShooterX = ArmArmLength - Units.inchesToMeters(4.0);
+    public static final double ArmShooterY = Units.inchesToMeters(2);
 
-    public static final double ArmArmPivotX = Units.inchesToMeters(4.0);
-    public static final double ArmArmLength = Units.inchesToMeters(12.0);
-    public static final double ArmWristLength = Units.inchesToMeters(6.0);
-    public static final double ArmRollerX = Units.inchesToMeters(8.0);
-    public static final double ArmRollerY = Units.inchesToMeters(0);
-
-    public static final double climberBaseX = xOffset + Units.inchesToMeters(10.0);
+    public static final double climberBaseX = xOffset + Units.inchesToMeters(14.0);
     public static final double climberBaseY = Units.inchesToMeters(3.0);
-    public static final Rotation2d climberAngle = Rotation2d.fromDegrees(130.0);
+    public static final Rotation2d climberAngle = Rotation2d.fromDegrees(90.0);
     public static final double climberBaseLength = Units.inchesToMeters(15.0);
     public static final double climberCarriageLength = Units.inchesToMeters(6.0);
     
@@ -262,7 +253,7 @@ public class Constants {
     public static double stage1Height = Units.inchesToMeters(26.0);
     public static final Pose3d intakePivotBase =
         new Pose3d(Units.inchesToMeters(-12.5), 0.0, Units.inchesToMeters(11.0), new Rotation3d());
-    public static final Pose3d elevatorBase =
+    public static final Pose3d ArmBase =
         new Pose3d(
             Units.inchesToMeters(3.5),
             0,

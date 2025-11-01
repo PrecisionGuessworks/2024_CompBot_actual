@@ -4,25 +4,22 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 
 public class MoveupArm extends Command {
 
-  private final ElevatorSubsystem m_elevator;
   private final ArmSubsystem m_arm;
   
   private int m_TestOption = 0;
   private Timer m_ejectTimer = new Timer();
 
-  public MoveupArm(int TestOption, ElevatorSubsystem elevator, ArmSubsystem arm) {
+  public MoveupArm(int TestOption, ArmSubsystem arm) {
     m_TestOption = TestOption;
-    m_elevator = elevator;
     m_arm = arm;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevator);
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
@@ -32,9 +29,8 @@ public class MoveupArm extends Command {
     // m_intake.setAngle(Constants.Intake.intakeDeployAngle);
     if (m_TestOption == 1) {
       m_arm.setArmAngle(Constants.Arm.armIntakeAngle);
-    } else if (m_TestOption == 2){
-      m_arm.setWristAngle(Constants.Arm.wristTestAngle);
     }
+    
     
   }
 
@@ -48,7 +44,6 @@ public class MoveupArm extends Command {
   @Override
   public void end(boolean interrupted) {
     m_arm.setArmAngle(Constants.Arm.armStowAngle);
-    m_arm.setWristAngle(Constants.Arm.wristStowAngle);
     
   }
 

@@ -4,10 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.io.Serial;
-
-import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,10 +11,6 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
-import edu.wpi.first.units.measure.ImmutableAngle;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -30,7 +22,6 @@ import frc.quixlib.devices.QuixCANCoder;
 import frc.quixlib.motorcontrol.QuixTalonFX;
 import frc.quixlib.viz.Link2d;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class ArmSubsystem extends SubsystemBase {
   //public final DigitalInput m_beamBreak = new DigitalInput(Constants.Arm.beamBreakPort);
@@ -126,6 +117,7 @@ public class ArmSubsystem extends SubsystemBase {
   private double m_armTargetAngle = ArmStartingAngle;
   private double setm_armTargetAngle = ArmStartingAngle;
   private boolean hasPiece = true;
+  public boolean Shoot = false;
   private Timer m_lastPieceTimer = new Timer();
 
   public ArmSubsystem(Link2d ArmViz, Link2d ampViz, Link2d feederViz, Link2d shooterUpperViz, Link2d shooterLowerViz) {
@@ -168,8 +160,16 @@ public class ArmSubsystem extends SubsystemBase {
   public void setArmAngle(double targetAngle) {
     setm_armTargetAngle = targetAngle;
   }
-  
 
+  public boolean armAtSetpoint (){
+    return Math.abs(m_armTargetAngle - getArmAngle()) < Constants.Arm.AngleTolerance;
+  }
+
+  public boolean shooterAtSpeed (double Velocity, double Tolerance){
+    return (Math.abs(Velocity - m_shooterUpperMotor.getSensorVelocity()) < Tolerance)||
+          (Math.abs(Velocity - m_shooterLowerMotor.getSensorVelocity()) < Tolerance);
+  }
+  
   public void setHasPiece(boolean thasPiece) {
     hasPiece = thasPiece;
   }
@@ -206,7 +206,21 @@ public class ArmSubsystem extends SubsystemBase {
           Constants.Arm.shooterLowerFeedforward.calculate(-Velocity));
     }
   }
-
+  public void setShooterVelocity(double Velocity,boolean invert) {
+    if (Velocity == 0.0) {
+      m_shooterUpperMotor.setPercentOutput(0.0);
+      m_shooterLowerMotor.setPercentOutput(0.0);
+    } else {
+      m_shooterUpperMotor.setVelocitySetpoint(
+          Constants.Arm.shooterUpperVelocityPIDSlot,
+          Velocity,
+          Constants.Arm.shooterUpperFeedforward.calculate(Velocity));
+      m_shooterLowerMotor.setVelocitySetpoint(
+          Constants.Arm.shooterLowerVelocityPIDSlot,
+          Velocity,
+          Constants.Arm.shooterLowerFeedforward.calculate(Velocity));
+    }
+  }
   public void setAmpFeederVelocity(double Amp, double Feeder) {
     if (Amp == 0.0) {
       m_ampMotor.setPercentOutput(0.0);
@@ -270,6 +284,10 @@ public class ArmSubsystem extends SubsystemBase {
 
  
    // }
+   SmartDashboard.putBoolean(
+    "Arm: Shoot", Shoot);
+
+
   if(Constants.ExtraInfo){
     SmartDashboard.putNumber(
         "Arm: Current Angle (deg)", Units.radiansToDegrees(m_armMotor.getSensorPosition()));
@@ -314,15 +332,41 @@ public class ArmSubsystem extends SubsystemBase {
           true, // Simulate gravity
           ArmStartingAngle);
 
-  static final DCMotor m_simMotor = DCMotor.getFalcon500Foc(1);
+  static final DCMotor m_simRoller = DCMotor.getFalcon500Foc(1);
   private static final FlywheelSim m_ampSim =
       new FlywheelSim(
           LinearSystemId.createFlywheelSystem(
-              m_simMotor,
+            m_simRoller,
               Constants.Arm.simRollerMOI,
               Constants.Arm.ampMotorRatio.reduction()),
-          m_simMotor);
+              m_simRoller);
 
+  static final DCMotor m_simFeeder = DCMotor.getFalcon500Foc(1);
+  private static final FlywheelSim m_feederSim =
+      new FlywheelSim(
+          LinearSystemId.createFlywheelSystem(
+            m_simFeeder,
+              Constants.Arm.simRollerMOI,
+              Constants.Arm.ampMotorRatio.reduction()),
+              m_simFeeder);
+
+  static final DCMotor m_simShooterU = DCMotor.getFalcon500Foc(1);
+  private static final FlywheelSim m_shooterUSim =
+      new FlywheelSim(
+          LinearSystemId.createFlywheelSystem(
+            m_simShooterU,
+              Constants.Arm.simRollerMOI,
+              Constants.Arm.ampMotorRatio.reduction()),
+              m_simShooterU);
+
+  static final DCMotor m_simShooterL = DCMotor.getFalcon500Foc(1);
+  private static final FlywheelSim m_shooterLSim =
+      new FlywheelSim(
+          LinearSystemId.createFlywheelSystem(
+            m_simShooterL,
+              Constants.Arm.simRollerMOI,
+              Constants.Arm.ampMotorRatio.reduction()),
+              m_simShooterL);
           
   // Visualization
   private final Link2d m_ArmArmViz;
@@ -351,22 +395,69 @@ public class ArmSubsystem extends SubsystemBase {
         TimedRobot.kDefaultPeriod,
         Constants.Arm.armMotorRatio);
 
+    m_feederSim.setInput(m_feederMotor.getPercentOutput() * RobotController.getBatteryVoltage());
+    m_feederSim.update(TimedRobot.kDefaultPeriod);
+    m_ampMotor.setSimSensorVelocity(
+      m_feederSim.getAngularVelocityRadPerSec(),
+        TimedRobot.kDefaultPeriod,
+        Constants.Arm.armMotorRatio);
+
+        m_shooterUSim.setInput(m_shooterUpperMotor.getPercentOutput() * RobotController.getBatteryVoltage());
+        m_shooterUSim.update(TimedRobot.kDefaultPeriod);
+    m_ampMotor.setSimSensorVelocity(
+      m_shooterUSim.getAngularVelocityRadPerSec(),
+        TimedRobot.kDefaultPeriod,
+        Constants.Arm.armMotorRatio);
+
+        m_shooterLSim.setInput(m_shooterLowerMotor.getPercentOutput() * RobotController.getBatteryVoltage());
+        m_shooterLSim.update(TimedRobot.kDefaultPeriod);
+    m_ampMotor.setSimSensorVelocity(
+      m_shooterLSim.getAngularVelocityRadPerSec(),
+        TimedRobot.kDefaultPeriod,
+        Constants.Arm.armMotorRatio);
     // Update arm viz.
     m_ArmArmViz.setRelativeTransform(
         new Transform2d(
             Constants.Viz.ArmArmPivotX,
-            0,
-            Rotation2d.fromRadians(m_armSim.getAngleRads() + Units.degreesToRadians(- Constants.Viz.elevatorAngle.getDegrees()))));
+            Constants.Viz.ArmArmPivotY,
+            Rotation2d.fromRadians(m_armSim.getAngleRads())));
 
 
     m_ArmampViz.setRelativeTransform(
         new Transform2d(
-            Constants.Viz.ArmWristLength,
-            0.0,
+            Constants.Viz.ArmRollerX,
+            Constants.Viz.ArmRollerY,
             Rotation2d.fromRadians(
                 m_ArmampViz.getRelativeTransform().getRotation().getRadians()
                     + m_ampSim.getAngularVelocityRadPerSec()
                         * Constants.Viz.angularVelocityScalar)));
+
+     m_ArmfeederViz.setRelativeTransform(
+        new Transform2d(
+            Constants.Viz.ArmRollerX,
+            -Constants.Viz.ArmRollerY,
+            Rotation2d.fromRadians(
+              m_ArmfeederViz.getRelativeTransform().getRotation().getRadians()
+                    + m_ampSim.getAngularVelocityRadPerSec()
+                        * Constants.Viz.angularVelocityScalar)));
+
+    m_ArmshooterUpperViz.setRelativeTransform(
+        new Transform2d(
+            Constants.Viz.ArmShooterX,
+            Constants.Viz.ArmShooterY,
+            Rotation2d.fromRadians(
+              m_ArmshooterUpperViz.getRelativeTransform().getRotation().getRadians()
+                    + m_ampSim.getAngularVelocityRadPerSec()
+                        * Constants.Viz.angularVelocityScalar)));
+   m_ArmshooterLowerViz.setRelativeTransform(
+        new Transform2d(
+            Constants.Viz.ArmShooterX,
+            -Constants.Viz.ArmShooterY,
+            Rotation2d.fromRadians(
+              m_ArmshooterLowerViz.getRelativeTransform().getRotation().getRadians()
+                    + m_ampSim.getAngularVelocityRadPerSec()
+                        * Constants.Viz.angularVelocityScalar)));
+    
   }
   // --- END STUFF FOR SIMULATION ---
 }

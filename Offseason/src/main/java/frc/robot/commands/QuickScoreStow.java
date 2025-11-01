@@ -4,25 +4,17 @@
 
 package frc.robot.commands;
 
-import org.photonvision.PhotonUtils;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.generated.Telemetry;
-import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
 
 
 public class QuickScoreStow extends Command {
   private final ArmSubsystem m_arm;
   //private Pose2d m_pose;
   private Timer m_Timer = new Timer();
+  private Boolean End = false;
   public QuickScoreStow(
       ArmSubsystem armSubsystem) {
     
@@ -36,9 +28,13 @@ public class QuickScoreStow extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (m_arm.getArmAngle() > 20 && m_arm.getSh) {
+    if (m_arm.isAtAngle(Constants.Arm.armShootAngle,Constants.Arm.AngleTolerance)
+    &&m_arm.shooterAtSpeed(Constants.Arm.quickShootVelocity,Constants.Arm.ShootTolerance)) {
+
       m_arm.setAmpFeederVelocity(Constants.Arm.ampShootVelocity,Constants.Arm.feederShootVelocity);
       m_Timer.restart();
+    } else {
+      End = true;
     }
     
   }
@@ -56,11 +52,12 @@ public class QuickScoreStow extends Command {
   m_arm.setArmAngle(Constants.Arm.armStowAngle);
   m_arm.setAmpFeederVelocity(0, 0);
   m_arm.setShooterVelocity(0);
+  m_arm.Shoot = false;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_Timer.get() > 0.35;
+    return m_Timer.get() > 0.35 || End;
   }
 }
