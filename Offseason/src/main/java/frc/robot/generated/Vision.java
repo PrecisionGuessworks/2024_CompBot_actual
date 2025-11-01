@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package frc.robot;
+package frc.robot.generated;
 
 import static frc.robot.Constants.Vision.*;
 
@@ -33,6 +33,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import frc.robot.Robot;
+
 import java.util.List;
 import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;

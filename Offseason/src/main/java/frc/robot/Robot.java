@@ -67,6 +67,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.generated.Elastic;
+import frc.robot.generated.Vision;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 
@@ -78,9 +80,6 @@ public class Robot extends TimedRobot {
   private final boolean kUseLimelight = false;
 
   private String autoName, newAutoName;
-
-  private boolean elevatorOn = false;
-  private boolean lineup = false;
 
   private final Field2d m_field = new Field2d();
   
@@ -179,22 +178,6 @@ public class Robot extends TimedRobot {
 
     double[] poseArray = {Math.round(avgX * 1000.0) / 1000.0, Math.round(avgY * 1000.0) / 1000.0, Math.round(avgRotation * 1000.0) / 1000.0};
     SmartDashboard.putNumberArray("Camera Current Pose Average", poseArray);
-
-
-  if(m_robotContainer.driver.back().getAsBoolean()) {
-    lineup = true;
-  }
-  if(!m_robotContainer.driver.back().getAsBoolean()&&lineup) {
-    RobotContainer.drivetrain.setLineup(!RobotContainer.drivetrain.getLineup());
-    lineup = false;
-  }
-  if(m_robotContainer.operator.back().getAsBoolean()) {
-    elevatorOn = true;
-  }
-  if(!m_robotContainer.operator.back().getAsBoolean()&&elevatorOn) {
-    RobotContainer.elevator.setElevatorOn(!RobotContainer.elevator.getElevatorOn());
-    elevatorOn = false;
-  }
   
   // double leftY = m_robotContainer.operator.getLeftY();
   // if (Math.abs(leftY) > 0.1) { // Deadband of 0.1
@@ -212,13 +195,10 @@ public class Robot extends TimedRobot {
 if (!isReal()){
   // 3d viz
   final double stage1Height = Constants.Viz3d.stage1Height;
-  final double CarrageHeight = RobotContainer.elevator.getHeight();
+  final double RightCimberHeight = RobotContainer.climber.getHeight();
   final Pose3d stageOne =
       Constants.Viz3d.elevatorBase.transformBy(
           new Transform3d(0, 0, CarrageHeight >= stage1Height ? CarrageHeight-stage1Height : 0, new Rotation3d()));
-  final Pose3d elevatorCarriage =
-        Constants.Viz3d.elevatorBase.transformBy(
-            new Transform3d(0, 0, CarrageHeight+ Units.inchesToMeters(0.5), new Rotation3d()));
   final Pose3d armViz = elevatorCarriage.transformBy(
     new Transform3d(0, 0, Units.inchesToMeters(7.7), new Rotation3d(0,Units.degreesToRadians( -RobotContainer.arm.getArmAngle()+90),0)));
     final Pose3d wristViz = armViz.transformBy(
@@ -236,7 +216,6 @@ if (!isReal()){
         
         elevatorCarriagepublisher.set(elevatorCarriage);
         Zeropublisher.set(new Pose3d());
-        Stage1publisher.set(stageOne);
         Armpublisher.set(armViz);
         Wristpublisher.set(wristViz);
         Coralpublisher.set(coralViz);

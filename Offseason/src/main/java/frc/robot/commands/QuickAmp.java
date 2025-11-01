@@ -18,11 +18,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 
-public class QuickScore extends Command {
+public class QuickAmp extends Command {
   private final ArmSubsystem m_arm;
   //private Pose2d m_pose;
 
-  public QuickScore(
+  public QuickAmp(
       ArmSubsystem armSubsystem) {
     
     //m_pose = currentPose;
@@ -36,14 +36,12 @@ public class QuickScore extends Command {
   @Override
   public void initialize() {
     m_arm.setArmAngle(Constants.Arm.armShootAngle);
-    m_arm.setShooterVelocity(Constants.Arm.quickShootVelocity);
     
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
     
   }
 

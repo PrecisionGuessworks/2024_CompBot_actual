@@ -31,18 +31,16 @@ private Timer m_placeTimer = new Timer();
   @Override
   public void initialize() {
     m_arm.setArmAngle(Constants.Arm.armIntakeAngle);
-
-    m_placeTimer.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     //System.out.println(m_arm.getArmAngle());
-    if (RobotContainer.arm.getArmAngle() > 110) {
-      m_elevator.setHeight(Constants.Elevator.intakeHeight);
-    } else {
-      m_elevator.setHeight(Constants.Elevator.stowHeight);
+    if (RobotContainer.arm.getArmAngle() > 20) {
+      m_arm.setAmpFeederVelocity(Constants.Arm.ampIntakeVelocity,Constants.Arm.feederIntakeVelocity);
+      m_arm.setShooterVelocity(Constants.Arm.intakeVelocity);
+      m_intake.setRollerVelocity(Constants.Intake.intakeRollerVelocity);
     }
     //m_elevator.setHeight(Constants.Elevator.stowHeight);
     
@@ -52,13 +50,15 @@ private Timer m_placeTimer = new Timer();
   @Override
   public void end(boolean interrupted) {
     m_arm.setArmAngle(Constants.Arm.armStowAngle);
-    m_arm.setRollerVelocity(0);
+    m_arm.setAmpFeederVelocity(0,0);
+    m_arm.setShooterVelocity(0);
+    m_intake.setRollerVelocity(0);
     RobotContainer.arm.setHasPiece(true);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_arm.isrollerStalled()&&m_placeTimer.hasElapsed(0.30);
+    return m_arm.isrollerStalled();
   }
 }

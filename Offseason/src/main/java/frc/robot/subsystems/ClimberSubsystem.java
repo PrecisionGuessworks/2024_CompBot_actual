@@ -22,14 +22,14 @@ import frc.robot.RobotContainer;
 public class ClimberSubsystem extends SubsystemBase {
   private final QuixTalonFX m_rightmotor =
       new QuixTalonFX(
-          Constants.Climber.rightmotorID,
-          Constants.Climber.rightmotorRatio,
+          Constants.Climber.rightID,
+          Constants.Climber.motorRatio,
           QuixTalonFX.makeDefaultConfig()
               .setBrakeMode()
               .setSupplyCurrentLimit(40.0)
               .setStatorCurrentLimit(60.0)
-              .setInverted(Constants.Climber.rightmotorInvert)
-              .setPIDConfig(Constants.Climber.rightmotorPositionSlot, Constants.Climber.rightmotorPIDConfig)
+              .setInverted(Constants.Climber.rightInvert)
+              .setPIDConfig(Constants.Climber.motorPositionSlot, Constants.Climber.motorPIDConfig)
               .setMotionMagicConfig(
                   Constants.Climber.maxVelocity,
                   Constants.Climber.maxAcceleration,
@@ -37,17 +37,16 @@ public class ClimberSubsystem extends SubsystemBase {
               .setReverseSoftLimit(Constants.Climber.minHeight)
               .setForwardSoftLimit(Constants.Climber.maxHeight));
 
-  public class ClimberSubsystem extends SubsystemBase {
-  private final QuixTalonFX m_leftmotor =
+  private final QuixTalonFX m_lefmotor =
       new QuixTalonFX(
-          Constants.Climber.leftmotorID,
-          Constants.Climber.leftmotorRatio,
+          Constants.Climber.leftID,
+          Constants.Climber.motorRatio,
           QuixTalonFX.makeDefaultConfig()
               .setBrakeMode()
               .setSupplyCurrentLimit(40.0)
               .setStatorCurrentLimit(60.0)
-              .setInverted(Constants.Climber.leftmotorInvert)
-              .setPIDConfig(Constants.Climber.leftmotorPositionSlot, Constants.Climber.leftmotorPIDConfig)
+              .setInverted(Constants.Climber.leftInvert)
+              .setPIDConfig(Constants.Climber.motorPositionSlot, Constants.Climber.motorPIDConfig)
               .setMotionMagicConfig(
                   Constants.Climber.maxVelocity,
                   Constants.Climber.maxAcceleration,
@@ -128,7 +127,7 @@ public class ClimberSubsystem extends SubsystemBase {
   // --- BEGIN STUFF FOR SIMULATION ---
   private static final ElevatorSim m_climberSim =
       new ElevatorSim(
-          DCMotor.getKrakenX60Foc(1),
+          DCMotor.getFalcon500Foc(1),
           Constants.Climber.motorRatio.reduction(),
           Constants.Climber.simCarriageMass,
           Constants.Climber.sprocketPitchDiameter * 0.5,

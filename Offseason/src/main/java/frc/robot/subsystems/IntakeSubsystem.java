@@ -75,7 +75,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   // --- BEGIN STUFF FOR SIMULATION ---
-  static final DCMotor m_simMotor = DCMotor.getKrakenX60Foc(1);
+  static final DCMotor m_simMotor = DCMotor.getFalcon500Foc(1);
   private static final FlywheelSim m_rollerSim =
       new FlywheelSim(
           LinearSystemId.createFlywheelSystem(
@@ -97,7 +97,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_rollerMotor.setSimSensorVelocity(
         m_rollerSim.getAngularVelocityRadPerSec(),
         TimedRobot.kDefaultPeriod,
-        Constants.Intake.deployMotorRatio);
+        Constants.Intake.rollerMotorRatio);
 
     m_intakeRollerViz.setRelativeTransform(
         new Transform2d(

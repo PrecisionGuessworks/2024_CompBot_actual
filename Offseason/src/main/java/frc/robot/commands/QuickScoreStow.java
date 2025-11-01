@@ -4,55 +4,63 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
+import org.photonvision.PhotonUtils;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.generated.Telemetry;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Timer;
 
-public class Intake extends Command {
+
+public class QuickScoreStow extends Command {
   private final ArmSubsystem m_arm;
-private Timer m_placeTimer = new Timer();
-
-  public Intake(
+  //private Pose2d m_pose;
+  private Timer m_Timer = new Timer();
+  public QuickScoreStow(
       ArmSubsystem armSubsystem) {
+    
+    //m_pose = currentPose;
     m_arm = armSubsystem;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(IntakeSubsystem, armSubsystem);
+    addRequirements(armSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_arm.setArmAngle(Constants.Arm.armIntakeAngle);
-    m_arm.setArmRollerCurrent(55, 90);  
-    m_arm.setRollerVelocity(Constants.Arm.intakeVelocity);
-    m_placeTimer.restart();
+    if (m_arm.getArmAngle() > 20 && m_arm.getSh) {
+      m_arm.setAmpFeederVelocity(Constants.Arm.ampShootVelocity,Constants.Arm.feederShootVelocity);
+      m_Timer.restart();
+    }
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //System.out.println(m_arm.getArmAngle());
-    //m_elevator.setHeight(Constants.Elevator.stowHeight);
+    
     
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.setArmAngle(Constants.Arm.armStowAngle);
-    m_arm.setArmRollerCurrent(10, 10); 
-    m_arm.setRollerVelocity(-20);
-    RobotContainer.arm.setHasPiece(true);
+  m_arm.setArmAngle(Constants.Arm.armStowAngle);
+  m_arm.setAmpFeederVelocity(0, 0);
+  m_arm.setShooterVelocity(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_arm.isrollerStalled()&&m_placeTimer.hasElapsed(0.30);
+    return m_Timer.get() > 0.35;
   }
 }

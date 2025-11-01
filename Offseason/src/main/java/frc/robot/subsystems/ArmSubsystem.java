@@ -186,34 +186,57 @@ public class ArmSubsystem extends SubsystemBase {
     return Math.abs(angle - m_armMotor.getSensorPosition()) <= tolerance;
   }
 
-  public boolean isampStalled() {
-    //return Math.abs(m_ampMotor.getSensorVelocity()) < Constants.Arm.ampStallVelocity;
-    //return m_ampMotor.getSupplyCurrent() > Constants.Arm.ampStallCurrent;
+  public boolean isrollerStalled() {
+    //return Math.abs(m_rollerMotor.getSensorVelocity()) < Constants.Arm.rollerStallVelocity;
+    //return m_rollerMotor.getSupplyCurrent() > Constants.Arm.rollerStallCurrent;
   return false;
   }
+  public void setShooterVelocity(double Velocity) {
+    if (Velocity == 0.0) {
+      m_shooterUpperMotor.setPercentOutput(0.0);
+      m_shooterLowerMotor.setPercentOutput(0.0);
+    } else {
+      m_shooterUpperMotor.setVelocitySetpoint(
+          Constants.Arm.shooterUpperVelocityPIDSlot,
+          Velocity,
+          Constants.Arm.shooterUpperFeedforward.calculate(Velocity));
+      m_shooterLowerMotor.setVelocitySetpoint(
+          Constants.Arm.shooterLowerVelocityPIDSlot,
+          -Velocity,
+          Constants.Arm.shooterLowerFeedforward.calculate(-Velocity));
+    }
+  }
 
-  public void setampVelocity(double velocity) {
-    if (velocity == 0.0) {
+  public void setAmpFeederVelocity(double Amp, double Feeder) {
+    if (Amp == 0.0) {
       m_ampMotor.setPercentOutput(0.0);
     } else {
       m_ampMotor.setVelocitySetpoint(
           Constants.Arm.ampVelocityPIDSlot,
-          velocity,
-          Constants.Arm.ampFeedforward.calculate(velocity));
+          Amp,
+          Constants.Arm.ampFeedforward.calculate(Amp));
+    }
+    if (Feeder == 0.0) {
+      m_feederMotor.setPercentOutput(0.0);
+    } else {
+      m_feederMotor.setVelocitySetpoint(
+          Constants.Arm.feederVelocityPIDSlot,
+          Feeder,
+          Constants.Arm.feederFeedforward.calculate(Feeder));
     }
   }
 
-  public void setampVelocityandCurrent(double velocity,double StatorCurrentLimit, double SupplyCurrentLimit) {
-    m_ampMotor.setStatorCurrentLimit(StatorCurrentLimit,SupplyCurrentLimit);
-    if (velocity == 0.0) {
-      m_ampMotor.setPercentOutput(0.0);
-    } else {
-      m_ampMotor.setVelocitySetpoint(
-          Constants.Arm.ampVelocityPIDSlot,
-          velocity,
-          Constants.Arm.ampFeedforward.calculate(velocity));
-    }
-  }
+  // public void setRollerVelocityandCurrent(double velocity,double StatorCurrentLimit, double SupplyCurrentLimit) {
+  //   m_rollerMotor.setStatorCurrentLimit(StatorCurrentLimit,SupplyCurrentLimit);
+  //   if (velocity == 0.0) {
+  //     m_rollerMotor.setPercentOutput(0.0);
+  //   } else {
+  //     m_rollerMotor.setVelocitySetpoint(
+  //         Constants.Arm.rollerVelocityPIDSlot,
+  //         velocity,
+  //         Constants.Arm.rollerFeedforward.calculate(velocity));
+  //   }
+  // }
 
   // public void disabledInit() {
   //   m_armMotor.setBrakeMode(true);
@@ -229,7 +252,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
 
 
-    if (getArmAngle() <= 115 && getArmAngle() >= 92 ) {
+    if (setm_armTargetAngle <= Constants.Arm.armMaxAngle && setm_armTargetAngle >= Constants.Arm.armMinAngle){ 
       m_armTargetAngle = setm_armTargetAngle;
     }else {
       m_armTargetAngle = Constants.Arm.armStowAngle;
@@ -282,7 +305,7 @@ public class ArmSubsystem extends SubsystemBase {
   
   private static final SingleJointedArmSim m_armSim =
       new SingleJointedArmSim(
-          DCMotor.getKrakenX60Foc(2),
+          DCMotor.getFalcon500Foc(2),
           Constants.Arm.armMotorRatio.reduction(),
           Constants.Arm.simArmMOI,
           Constants.Arm.simArmCGLength,
@@ -291,7 +314,7 @@ public class ArmSubsystem extends SubsystemBase {
           true, // Simulate gravity
           ArmStartingAngle);
 
-  static final DCMotor m_simMotor = DCMotor.getKrakenX60Foc(1);
+  static final DCMotor m_simMotor = DCMotor.getFalcon500Foc(1);
   private static final FlywheelSim m_ampSim =
       new FlywheelSim(
           LinearSystemId.createFlywheelSystem(
