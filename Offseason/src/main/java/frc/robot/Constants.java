@@ -39,6 +39,8 @@ public class Constants {
 
     public static final double g = 9.80148; // m/s/s
     public static final double defaultPeriodSecs = 0.02; // s
+    public static final double Drag = 0.04; // Drag Coefficient for Simulations
+    public static final double Friction = 4; // Friction Coefficient for Simulations
     public static boolean isSim =  edu.wpi.first.wpilibj.RobotBase.isSimulation(); // 
     public static boolean PoseSoring = !false; // Only move Scoring Stuff if close to reef
     public static boolean ElevatorOff = false; // Shut off Elevator
@@ -103,9 +105,9 @@ public class Constants {
     public static final MechanismRatio armMotorRatio =
         isSim ? 
         new MechanismRatio(
-            1, (90.0 / 1.0) * (80.0 / 38.0)) : // Sim
+            1, (30.0 / 1.0) * (80.0 / 38.0)) : // Sim
         new MechanismRatio(
-            1, (60.0 / 1.0) * (80.0 / 38.0)); // Real
+            1, (75.0 / 1.0)); // Real
     public static final MechanismRatio armSensorRatio =
         new MechanismRatio(1, (1.0));
     public static final boolean armMotorInvert = true;
@@ -218,6 +220,7 @@ public class Constants {
     public static final double simArmCGLength = Units.inchesToMeters(8.5); // m
     public static final double simRollerMOI = 0.003; // kgMetersSquared
     public static final double simSHooterMOI = 0.003; // kgMetersSquared
+    public static final double WheelDiameter = Units.inchesToMeters(4);
 
     
   }

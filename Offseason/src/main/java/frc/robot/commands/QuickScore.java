@@ -4,14 +4,19 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmSubsystem;
 
 
 public class QuickScore extends Command {
   private final ArmSubsystem m_arm;
   //private Pose2d m_pose;
+  private double ShotVelocity = 0;
 
   public QuickScore(
       ArmSubsystem armSubsystem) {
@@ -48,7 +53,8 @@ public class QuickScore extends Command {
   // m_arm.setArmAngle(Constants.Arm.armStowAngle);
   // m_arm.setShooterVelocity(0);
   // m_arm.setRollerVelocity(10);
-  }
+  
+}
 
   // Returns true when the command should end.
   // @Override

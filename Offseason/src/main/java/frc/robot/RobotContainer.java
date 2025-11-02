@@ -35,9 +35,12 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -54,6 +57,7 @@ import frc.quixlib.viz.Viz2d;
 import frc.robot.commands.Intake;
 import frc.robot.commands.QuickAmpStow;
 import frc.robot.commands.QuickScore;
+import frc.robot.commands.QuickScoreStow;
 import frc.robot.commands.StowArm;
 import frc.robot.generated.Telemetry;
 import frc.robot.generated.TunerConstants;
@@ -241,7 +245,7 @@ ArmArmViz.addLink(
 
         driver.rightTrigger().whileTrue(new Intake(intake, arm));
         driver.rightBumper().whileTrue(new QuickScore(arm));
-        driver.rightTrigger().onFalse(new QuickAmpStow(arm));
+        driver.rightBumper().onFalse(new QuickScoreStow(arm));
        // driver.leftTrigger().whileTrue(new IntakeAlgae(intake, 0));
         driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         
