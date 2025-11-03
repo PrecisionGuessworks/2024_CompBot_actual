@@ -101,8 +101,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     m_intakeRollerViz.setRelativeTransform(
         new Transform2d(
-            Constants.Viz.intakeArmLength,
-            0.0,
+            Constants.Viz.intakeX,
+            Constants.Viz.intakeY,
             Rotation2d.fromRadians(
                 m_intakeRollerViz.getRelativeTransform().getRotation().getRadians()
                     + m_rollerSim.getAngularVelocityRadPerSec()

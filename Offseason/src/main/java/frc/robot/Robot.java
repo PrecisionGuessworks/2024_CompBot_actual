@@ -219,7 +219,7 @@ if (!isReal()){
     }
     for (int i = 0; i < 10; i++) {
       if (noteViz[i].getZ() > 0.1 ){
-        noteVelocity[i][2] -= (9.81 * Constants.defaultPeriodSecs + Constants.Drag * (noteVelocity[i][2]) * (noteVelocity[i][2]) * Constants.defaultPeriodSecs);
+        noteVelocity[i][2] -= (9.81 * Constants.defaultPeriodSecs + (noteVelocity[i][2] > 0 ? 1 : -1) * Constants.Drag * (noteVelocity[i][2]) * (noteVelocity[i][2]) * Constants.defaultPeriodSecs);
         noteVelocity[i][0] -= (noteVelocity[i][0] > 0 ? 1 : -1) * Constants.Drag*(noteVelocity[i][0]) * (noteVelocity[i][0])* Constants.defaultPeriodSecs; 
         noteVelocity[i][1] -= (noteVelocity[i][1] > 0 ? 1 : -1) * Constants.Drag*(noteVelocity[i][1]) * (noteVelocity[i][1])* Constants.defaultPeriodSecs;  
       } else {

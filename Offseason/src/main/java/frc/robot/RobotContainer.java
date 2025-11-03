@@ -55,6 +55,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.quixlib.viz.Link2d;
 import frc.quixlib.viz.Viz2d;
 import frc.robot.commands.Intake;
+import frc.robot.commands.QuickAmp;
 import frc.robot.commands.QuickAmpStow;
 import frc.robot.commands.QuickScore;
 import frc.robot.commands.QuickScoreStow;
@@ -151,7 +152,7 @@ climberFrameViz.addLink(
 // Intake viz
 private static final Link2d intakeRollerViz =
 robotViz.addLink(
-    new Link2d(robotViz, "Intake Roller", Units.inchesToMeters(1.0), 10.0, Color.kLightBlue));
+    new Link2d(robotViz, "Intake Roller", Units.inchesToMeters(2.0), 10.0, Color.kLightBlue));
 
 
 private static final Link2d ArmArmViz =
@@ -246,6 +247,9 @@ ArmArmViz.addLink(
         driver.rightTrigger().whileTrue(new Intake(intake, arm));
         driver.rightBumper().whileTrue(new QuickScore(arm));
         driver.rightBumper().onFalse(new QuickScoreStow(arm));
+        driver.a().whileTrue(new QuickAmp(arm));
+        driver.a().onFalse(new QuickAmpStow(arm));
+
        // driver.leftTrigger().whileTrue(new IntakeAlgae(intake, 0));
         driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         

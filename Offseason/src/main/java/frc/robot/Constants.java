@@ -39,11 +39,10 @@ public class Constants {
 
     public static final double g = 9.80148; // m/s/s
     public static final double defaultPeriodSecs = 0.02; // s
-    public static final double Drag = 0.04; // Drag Coefficient for Simulations
+    public static final double Drag = 0.07; // Drag Coefficient for Simulations
     public static final double Friction = 4; // Friction Coefficient for Simulations
+    public static final double Shotefficiency = 0.85; 
     public static boolean isSim =  edu.wpi.first.wpilibj.RobotBase.isSimulation(); // 
-    public static boolean PoseSoring = !false; // Only move Scoring Stuff if close to reef
-    public static boolean ElevatorOff = false; // Shut off Elevator
     public static boolean Lineup = false; // Auto Lineup to Reef to Scrore.
     public static boolean ExtraInfo = true; // Turn on Extra network info
     public static boolean Logging = false; // Turn on Logging
@@ -191,15 +190,15 @@ public class Constants {
     public static final double AngleTolerance = Units.degreesToRadians(1);
     public static final double ShootTolerance = 100;
 
-    public static final double intakeVelocity = -1500.0; // rads/s
-    public static final double outtakeVelocity = 1300.0; // rads/s
-    public static final double quickShootVelocity = 4000.0; // rads/s
-    public static final double quickAmpVelocity = 2000.0; // rads/s
+    public static final double intakeVelocity = -150.0; // rads/s
+    public static final double outtakeVelocity = 130.0; // rads/s
+    public static final double quickShootVelocity = 300.0; // rads/s
+    public static final double quickAmpVelocity = 200.0; // rads/s
 
-    public static final double feederIntakeVelocity = 1000.0; // rads/s
-    public static final double ampIntakeVelocity = -1000.0; // rads/s
-    public static final double feederShootVelocity = 3000.0; // rads/s
-    public static final double ampShootVelocity = 3000.0; // rads/s
+    public static final double feederIntakeVelocity = 100.0; // rads/s
+    public static final double ampIntakeVelocity = -100.0; // rads/s
+    public static final double feederShootVelocity = 400.0; // rads/s
+    public static final double ampShootVelocity = 300.0; // rads/s
 
     public static final double rollerStallVelocity = 40; // rads/s
     public static final double rollerStallCurrent = 30; // Amps
@@ -220,7 +219,7 @@ public class Constants {
     public static final double simArmCGLength = Units.inchesToMeters(8.5); // m
     public static final double simRollerMOI = 0.003; // kgMetersSquared
     public static final double simSHooterMOI = 0.003; // kgMetersSquared
-    public static final double WheelDiameter = Units.inchesToMeters(4);
+    public static final double WheelRadius = Units.inchesToMeters(2);
 
     
   }
@@ -230,16 +229,15 @@ public class Constants {
   public static final class Viz {
     public static final double xOffset = Units.inchesToMeters(30.0);
 
-    public static final double intakePivotX = xOffset + Units.inchesToMeters(27.25);
-    public static final double intakePivotY = Units.inchesToMeters(11.25);
-    public static final double intakeArmLength = Units.inchesToMeters(14.0);
+    public static final double intakeX = xOffset + Units.inchesToMeters(28.25);
+    public static final double intakeY = Units.inchesToMeters(5);
 
     public static final double ArmArmPivotX = xOffset + Units.inchesToMeters(4.0);
     public static final double ArmArmPivotY = Units.inchesToMeters(12.0);
     public static final double ArmArmLength = Units.inchesToMeters(20.0);
-    public static final double ArmRollerX = ArmArmLength - Units.inchesToMeters(1.0);
+    public static final double ArmRollerX = ArmArmLength - Units.inchesToMeters(4.0);
     public static final double ArmRollerY = Units.inchesToMeters(2);
-    public static final double ArmShooterX = ArmArmLength - Units.inchesToMeters(4.0);
+    public static final double ArmShooterX = ArmArmLength - Units.inchesToMeters(1.0);
     public static final double ArmShooterY = Units.inchesToMeters(2);
 
     public static final double climberBaseX = xOffset + Units.inchesToMeters(14.0);

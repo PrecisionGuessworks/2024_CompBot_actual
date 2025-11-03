@@ -282,18 +282,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
-        SmartDashboard.putBoolean(
-          "Auto Lineup", m_Lineup);
         
-    }
-
-    public void setLineup(boolean lineup){
-        m_Lineup = lineup;
-        Constants.PoseSoring = !lineup;
-
-    }
-    public boolean getLineup(){
-        return m_Lineup;
     }
 
     private void startSimThread() {
