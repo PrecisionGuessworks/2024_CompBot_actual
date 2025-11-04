@@ -44,11 +44,11 @@ public class QuickAmpStow extends Command {
     m_ScoreTimer.reset();
     m_PostScoreTimer.reset();
     if(!Robot.isReal()){
-      double ShotVelocity = 100;
-            Robot.updateNoteViz(new Pose3d(RobotContainer.drivetrain.getState().Pose.getX(),RobotContainer.drivetrain.getState().Pose.getY(),0.4, new Rotation3d(0,-Constants.Arm.armAmpAngle + Units.degreesToRadians(150),RobotContainer.drivetrain.getState().Pose.getRotation().getRadians())), 
-            new double[] {RobotContainer.drivetrain.getState().Speeds.vxMetersPerSecond + ShotVelocity * Math.cos(Constants.Arm.armAmpAngle + Units.degreesToRadians(150))*Math.cos(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians()),
-              RobotContainer.drivetrain.getState().Speeds.vyMetersPerSecond + ShotVelocity * Math.cos(Constants.Arm.armAmpAngle + Units.degreesToRadians(150))*Math.sin(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians()), 
-              ShotVelocity * Math.sin(Constants.Arm.armAmpAngle + Units.degreesToRadians(150)) });
+      double ShotVelocity = 1;
+            Robot.updateNoteViz(new Pose3d(RobotContainer.drivetrain.getState().Pose.getX(),RobotContainer.drivetrain.getState().Pose.getY(),0.6, new Rotation3d(0,-Constants.Arm.armAmpAngle + Units.degreesToRadians(160),RobotContainer.drivetrain.getState().Pose.getRotation().getRadians())), 
+            new double[] {RobotContainer.drivetrain.getFieldSpeedsX() + ShotVelocity * Math.cos(Constants.Arm.armAmpAngle + Units.degreesToRadians(160))*Math.cos(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians()),
+              RobotContainer.drivetrain.getFieldSpeedsY() + ShotVelocity * Math.cos(Constants.Arm.armAmpAngle + Units.degreesToRadians(160))*Math.sin(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians()), 
+              ShotVelocity * Math.sin(Constants.Arm.armAmpAngle + Units.degreesToRadians(180)) });
         }
     
   }
@@ -58,7 +58,7 @@ public class QuickAmpStow extends Command {
   public void execute() {
     if (m_preScoreTimmer.get() < 0.2){
       m_arm.setAmpFeederVelocity(Constants.Arm.ampShootVelocity,Constants.Arm.feederShootVelocity);
-      m_arm.setShooterVelocity(Constants.Arm.ampShootVelocity);
+      m_arm.setShooterVelocity(Constants.Arm.ampShootVelocity,true);
       m_ScoreTimer.start();
     }
     if (m_ScoreTimer.get() > 0.2){

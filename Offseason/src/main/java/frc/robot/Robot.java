@@ -95,12 +95,9 @@ public class Robot extends TimedRobot {
         .getStructTopic("elevatorCarriage", Pose3d.struct).publish();
   StructPublisher<Pose3d> Zeropublisher = NetworkTableInstance.getDefault()
         .getStructTopic("Zeropublisher", Pose3d.struct).publish();
-  StructPublisher<Pose3d> Stage1publisher = NetworkTableInstance.getDefault()
-        .getStructTopic("Stage1", Pose3d.struct).publish();
   StructPublisher<Pose3d> Armpublisher = NetworkTableInstance.getDefault()
         .getStructTopic("ArmViz", Pose3d.struct).publish();
-  StructPublisher<Pose3d> Wristpublisher = NetworkTableInstance.getDefault()
-        .getStructTopic("WristViz", Pose3d.struct).publish();
+
 
   StructArrayPublisher<Pose3d> notepublisher = NetworkTableInstance.getDefault()
         .getStructArrayTopic("noteViz", Pose3d.struct).publish();
@@ -190,7 +187,7 @@ public class Robot extends TimedRobot {
 
     double[] poseArray = {Math.round(avgX * 1000.0) / 1000.0, Math.round(avgY * 1000.0) / 1000.0, Math.round(avgRotation * 1000.0) / 1000.0};
     SmartDashboard.putNumberArray("Camera Current Pose Average", poseArray);
-  
+    SmartDashboard.putNumberArray("Sield Speed", new double[] {RobotContainer.drivetrain.getFieldSpeedsX(),RobotContainer.drivetrain.getFieldSpeedsY()});
   // double leftY = m_robotContainer.operator.getLeftY();
   // if (Math.abs(leftY) > 0.1) { // Deadband of 0.1
   //   if (m_robotContainer.operator.leftBumper().getAsBoolean() == true) {

@@ -45,8 +45,8 @@ public class QuickScoreStow extends Command {
       if(!Robot.isReal()){
         ShotVelocity = Constants.Arm.quickShootVelocity * Constants.Arm.WheelRadius * Constants.Shotefficiency;  
             Robot.updateNoteViz(new Pose3d(RobotContainer.drivetrain.getState().Pose.getX(),RobotContainer.drivetrain.getState().Pose.getY(),0.4, new Rotation3d(0,-Constants.Arm.armShootAngle,RobotContainer.drivetrain.getState().Pose.getRotation().getRadians())), 
-            new double[] {RobotContainer.drivetrain.getState().Speeds.vxMetersPerSecond + ShotVelocity * Math.cos(Constants.Arm.armShootAngle)*Math.cos(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians()),
-              RobotContainer.drivetrain.getState().Speeds.vyMetersPerSecond + ShotVelocity * Math.cos(Constants.Arm.armShootAngle)*Math.sin(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians()), 
+            new double[] {RobotContainer.drivetrain.getFieldSpeedsX() + ShotVelocity * Math.cos(Constants.Arm.armShootAngle)*Math.cos(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians()),
+              RobotContainer.drivetrain.getFieldSpeedsY() + ShotVelocity * Math.cos(Constants.Arm.armShootAngle)*Math.sin(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians()), 
               ShotVelocity * Math.sin(Constants.Arm.armShootAngle) });
         }
     // } else {

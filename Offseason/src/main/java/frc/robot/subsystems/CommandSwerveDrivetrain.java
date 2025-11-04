@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
 /**
@@ -283,6 +284,12 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             });
         }
         
+    }
+    public double getFieldSpeedsY(){
+        return RobotContainer.drivetrain.getState().Speeds.vxMetersPerSecond * Math.sin(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians()) + RobotContainer.drivetrain.getState().Speeds.vyMetersPerSecond * Math.cos(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians());
+    }
+    public double getFieldSpeedsX(){
+        return RobotContainer.drivetrain.getState().Speeds.vxMetersPerSecond * Math.cos(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians()) - RobotContainer.drivetrain.getState().Speeds.vyMetersPerSecond * Math.sin(RobotContainer.drivetrain.getState().Pose.getRotation().getRadians());
     }
 
     private void startSimThread() {
