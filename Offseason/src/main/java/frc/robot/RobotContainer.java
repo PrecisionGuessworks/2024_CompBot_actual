@@ -233,8 +233,6 @@ ArmArmViz.addLink(
     
 
     private void configureBindings() {
-        // Note that X is defined as forward according to WPILib convention,
-        // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
@@ -276,8 +274,6 @@ ArmArmViz.addLink(
             .withTargetDirection(new Rotation2d(Math.toRadians(-270))))
         );
 
-       // driver.a().whileTrue(new AlgeaWack(elevator, arm));
-      //driver.x().whileTrue(new StowArm(elevator, arm));
 
         //drivetrain.registerTelemetry(logger::telemeterize);
     }
@@ -295,12 +291,12 @@ ArmArmViz.addLink(
         return autoChooser.getSelected();
     }
 
-    public Rotation2d targetangle() {
-        /* First put the drivetrain into auto run mode, then run the auto */
+    public Rotation2d targetangle(Pose2d targetpose) {
+        /* Returns angle to target from target pose */
         SwerveDriveState state = drivetrain.getState();
         Pose2d pose = state.Pose;
         pose = new Pose2d(pose.getTranslation(), new Rotation2d(0));
-        Pose2d targetpose = new Pose2d(16.7,5.5,new Rotation2d(0));
+        // Pose2d targetpose = new Pose2d(16.7,5.5,new Rotation2d(0));
         System.out.println(PhotonUtils.getYawToPose(pose,targetpose));
         return PhotonUtils.getYawToPose(pose,targetpose);
         
