@@ -45,7 +45,7 @@ import frc.robot.vision.Fiducials;
  */
 public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsystem {
 
-    private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
+    private final SwerveRequest.ApplyRobotSpeeds autoRequest = new SwerveRequest.ApplyRobotSpeeds();
 
     PhotonCamera aprilCam = new PhotonCamera("OV2311");
 
