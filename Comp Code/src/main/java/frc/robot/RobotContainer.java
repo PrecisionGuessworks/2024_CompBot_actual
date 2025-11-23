@@ -222,7 +222,7 @@ public class RobotContainer {
     
 
     // reset the field-centric heading on left bumper press
-    bumperLeft.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    bumperLeft.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
     //shoot da note
     operatorBumperLeft.whileTrue(new EjectPiece(shooter, arm, intake));
@@ -254,7 +254,7 @@ public class RobotContainer {
     
     
     if (Utils.isSimulation()) {
-      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+      drivetrain.resetPose(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);
   }
@@ -278,7 +278,7 @@ public class RobotContainer {
     Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(Units.degreesToRadians(180)));
     Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(Units.degreesToRadians(0)));
 
-    drivetrain.seedFieldRelative(waypoint1);
+    drivetrain.resetPose(waypoint1);
 
     return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(2.5),
      new MoveArmIntake(arm).withTimeout(3.5), 
@@ -295,7 +295,7 @@ public class RobotContainer {
     Pose2d waypoint1 = new Pose2d(1.34, 5.54, new Rotation2d(Units.degreesToRadians(0)));
     Pose2d waypoint2 = new Pose2d(3.0, 7, new Rotation2d(Units.degreesToRadians(180)));
 
-    drivetrain.seedFieldRelative(waypoint1);
+    drivetrain.resetPose(waypoint1);
 
     return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(2.5),
      new MoveArmIntake(arm).withTimeout(3.5), 
@@ -311,7 +311,7 @@ public class RobotContainer {
     Pose2d waypoint2 = new Pose2d(3, 5.54, new Rotation2d(0));
     Pose2d waypoint3 = new Pose2d(3.0, 5.54, new Rotation2d(0));
     Pose2d waypoint4 = new Pose2d(1.6, 5.54, new Rotation2d(0));
-    drivetrain.seedFieldRelative(waypoint1);
+    drivetrain.resetPose(waypoint1);
     
     return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
      new MoveArmIntake(arm).withTimeout(3), 
@@ -334,7 +334,7 @@ public class RobotContainer {
     Pose2d waypointIntake = new Pose2d(3.88, 2.35, new Rotation2d(0));
     Pose2d waypointRun = new Pose2d(6, 2.35, new Rotation2d(0));
     Pose2d waypoint4 = new Pose2d(2, 2.35, new Rotation2d(0));
-    drivetrain.seedFieldRelative(waypointStart);
+    drivetrain.resetPose(waypointStart);
     
     return new SequentialCommandGroup(new ShootNoteSpeakerTogether(shooter, arm,intake).withTimeout(1.5),
      new MoveArmIntake(arm).withTimeout(2.5), 
@@ -360,7 +360,7 @@ public class RobotContainer {
     Pose2d waypoint2 = new Pose2d(3.88, 2, new Rotation2d(0));
     Pose2d waypoint3 = new Pose2d(3.88, 2, new Rotation2d(0));
     Pose2d waypoint4 = new Pose2d(2, 2, new Rotation2d(0));
-    drivetrain.seedFieldRelative(waypoint1);
+    drivetrain.resetPose(waypoint1);
     
     return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
      new MoveArmIntake(arm).withTimeout(2.5), 
@@ -380,7 +380,7 @@ public class RobotContainer {
     Pose2d waypoint2 = new Pose2d(2.5, 5.54, new Rotation2d(0));
     Pose2d waypoint3 = new Pose2d(3.0, 5.54, new Rotation2d(0));
     Pose2d waypoint4 = new Pose2d(2, 5.54, new Rotation2d(0));
-    drivetrain.seedFieldRelative(waypoint1);
+    drivetrain.resetPose(waypoint1);
     
     return new SequentialCommandGroup(new ShootNoteSpeaker(shooter, arm).withTimeout(1.5),
      new MoveArmIntake(arm).withTimeout(3), 
