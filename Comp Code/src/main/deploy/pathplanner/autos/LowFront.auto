@@ -12,12 +12,6 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "ShootNoteSpeakerTogether"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Low Backup"
@@ -30,22 +24,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Low Lineup"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNoteSpeakerTogether"
-                }
-              }
-            ]
+            "pathName": "Low Lineup"
           }
         },
         {
@@ -61,22 +42,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Low Lineup"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShootNoteSpeakerTogether"
-                }
-              }
-            ]
+            "pathName": "Low Lineup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Low Run"
           }
         }
       ]

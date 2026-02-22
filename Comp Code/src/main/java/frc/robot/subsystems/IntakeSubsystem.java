@@ -8,14 +8,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.Intake;
 import frc.robot.motorcontrol.TalonFx;
 import frc.robot.motorcontrol.configurations.TalonFxConfiguration;
-import frc.robot.subsystems.Blinkin.BlinkinSubsystem;
-import frc.robot.subsystems.Blinkin.Colors;
 
 public class IntakeSubsystem  extends SubsystemBase{
-    private BlinkinSubsystem blinkin = new BlinkinSubsystem();
 
     private final TalonFx m_rollerMotor = new TalonFx(
       Constants.Intake.Roller.rollerMotorID, 
@@ -26,8 +22,6 @@ public class IntakeSubsystem  extends SubsystemBase{
     private final DigitalInput m_intakeBeamBreakInput =
       new DigitalInput(Constants.Intake.Roller.intakeBeamBreakInputChannel);
   //private final MedianFilter m_intakeDistanceFilter = new MedianFilter(3);
-    private final DigitalInput m_lowerIntakeBeamBreakInpt = 
-      new DigitalInput(Constants.Intake.Roller.lowerIntakeBeamBreakInpt);
 
     private final Timer m_rollerTimer = new Timer();
 
@@ -73,34 +67,16 @@ public class IntakeSubsystem  extends SubsystemBase{
           return m_rollerTimer.get() > Constants.Intake.Roller.rollerStallTime;
     }
 
-    public boolean isBeamBreakTriggered() {
+    public boolean isBeakBreakTriggered() {
       boolean beamBreakInput = m_intakeBeamBreakInput.get();
 
       return !beamBreakInput;
 
     }
 
-    public boolean isLowerBeamBreakTriggered() {
-      boolean beamBreakInput = m_lowerIntakeBeamBreakInpt.get();
-
-      return !beamBreakInput;
-
-    }
-
-    public void runIntakeLEDs(){
-      if(isBeamBreakTriggered()) {
-        blinkin.setColor(Colors.ORANGE);
-      } else if (isLowerBeamBreakTriggered()){
-        blinkin.setColor(Colors.GREEN);
-      } else {
-        blinkin.setBlinkinToAllianceColor();
-      }
-    }
-
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Intake Roller: Current", m_rollerMotor.getStatorCurrent());
-        runIntakeLEDs();
       // This method will be called once per scheduler run
     }
   

@@ -41,6 +41,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -51,6 +52,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.quixlib.viz.Link2d;
 import frc.quixlib.viz.Viz2d;
@@ -60,6 +62,8 @@ import frc.robot.commands.QuickAmpStow;
 import frc.robot.commands.QuickScore;
 import frc.robot.commands.QuickScoreStow;
 import frc.robot.commands.StowArm;
+import frc.robot.commands.AimScore;
+import frc.robot.commands.AimScoreStow;
 import frc.robot.generated.Telemetry;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
@@ -248,6 +252,15 @@ ArmArmViz.addLink(
         driver.a().whileTrue(new QuickAmp(arm));
         driver.a().onFalse(new QuickAmpStow(arm));
 
+        driver.leftBumper().whileTrue(new ParallelCommandGroup(new AimScore(arm),drivetrain.applyRequest(() ->
+        angle.withVelocityX(-driver.getLeftY() * MaxSpeed)
+        .withVelocityY(-driver.getLeftX() * MaxSpeed)
+        .withTargetDirection(targetangle())
+        .withTargetRateFeedforward(targetAngleFeeds())
+        )));
+
+        driver.leftBumper().onFalse(new AimScoreStow(arm));
+
        // driver.leftTrigger().whileTrue(new IntakeAlgae(intake, 0));
         driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
         
@@ -291,15 +304,38 @@ ArmArmViz.addLink(
         return autoChooser.getSelected();
     }
 
-    public Rotation2d targetangle(Pose2d targetpose) {
+    public static Rotation2d targetangle() {
         /* Returns angle to target from target pose */
         SwerveDriveState state = drivetrain.getState();
         Pose2d pose = state.Pose;
         pose = new Pose2d(pose.getTranslation(), new Rotation2d(0));
         // Pose2d targetpose = new Pose2d(16.7,5.5,new Rotation2d(0));
+        Pose2d targetpose = Constants.ShotCalc.targetpose;
         System.out.println(PhotonUtils.getYawToPose(pose,targetpose));
         return PhotonUtils.getYawToPose(pose,targetpose);
-        
+    }
+
+    public static AngularVelocity targetAngleFeeds(){
+        SwerveDriveState state = drivetrain.getState();
+        Pose2d pose = state.Pose;
+        pose = new Pose2d(pose.getTranslation(), new Rotation2d(0));
+        // Pose2d targetpose = new Pose2d(16.7,5.5,new Rotation2d(0));
+        Pose2d targetpose = Constants.ShotCalc.targetpose;
+        double vx = RobotContainer.drivetrain.getFieldSpeedsX();
+        double vy = RobotContainer.drivetrain.getFieldSpeedsY();
+        double deltaX = targetpose.getX() - pose.getX();
+        double deltaY = targetpose.getY() - pose.getY();
+        double omega = -(vy * deltaX - vx * deltaY) / (deltaX * deltaX + deltaY * deltaY);
+        return RadiansPerSecond.of(omega);
+    }
+
+    public static double targetDistance() {
+        /* Returns distance to target from target pose */
+        SwerveDriveState state = drivetrain.getState();
+        Pose2d pose = state.Pose;
+        // Pose2d targetpose = new Pose2d(16.7,5.5,new Rotation2d(0));
+        Pose2d targetpose = Constants.ShotCalc.targetpose;
+        return pose.getTranslation().getDistance(targetpose.getTranslation());
     }
 
 

@@ -8,12 +8,14 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -21,6 +23,7 @@ import edu.wpi.first.math.util.Units;
 import frc.quixlib.devices.CANDeviceID;
 import frc.quixlib.motorcontrol.MechanismRatio;
 import frc.quixlib.motorcontrol.PIDConfig;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 
 public class Constants {
     // CANID's:
@@ -55,11 +58,13 @@ public class Constants {
         
         // Cam mounted facing forward, half a meter forward of center, half a meter up from center, up 15 degs.
         public static final Transform3d kRobotToCam =
-                new Transform3d(new Translation3d(Units.inchesToMeters(13.311564), 0.0, Units.inchesToMeters(7.332072)), new Rotation3d(0, Math.toRadians(-20), 0));
+                new Transform3d(new Translation3d(Units.inchesToMeters(13.311564), 0.0, Units.inchesToMeters(7.332072)), new Rotation3d(0, Math.toRadians(-25), 0));
 
         // The layout of the AprilTags on the field
         public static final AprilTagFieldLayout kTagLayout =
                 AprilTagFields.kDefaultField.loadAprilTagLayoutField();
+        // public static final AprilTagFieldLayout kTagLayout =
+        //         AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
 
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8); // m, m, rad
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
@@ -74,7 +79,7 @@ public class Constants {
         public static final double ITranslation = 0.001;
         public static final double DTranslation = 0.1;
 
-        public static final double PRotation = 3;
+        public static final double PRotation = 5;
         public static final double IRotation = 0.001;
         public static final double DRotation = 0.03;
         
@@ -224,6 +229,30 @@ public class Constants {
     
   }
 
+  public static final class ShotCalc {
+
+    public static final Pose2d targetpose = new Pose2d(16.5,5.5,new Rotation2d(0));
+
+    public static final InterpolatingDoubleTreeMap Velocity;
+    static {
+        Velocity = new InterpolatingDoubleTreeMap();
+        Velocity.put(0.0, 200.0);
+        Velocity.put(2.0, 250.0);
+        Velocity.put(3.0, 300.0);
+        Velocity.put(4.0, 350.0);
+    }
+    public static final InterpolatingDoubleTreeMap Angle;
+    static {
+        Angle = new InterpolatingDoubleTreeMap();
+        Angle.put(0.0, Units.degreesToRadians(70));
+
+        Angle.put(1.0, Units.degreesToRadians(55));
+        Angle.put(2.0, Units.degreesToRadians(45));
+        Angle.put(3.0, Units.degreesToRadians(35));
+        Angle.put(4.0, Units.degreesToRadians(30));
+        Angle.put(5.0, Units.degreesToRadians(26));
+    }
+  }
 
 
   public static final class Viz {
