@@ -102,8 +102,6 @@ public class ClimberSubsystem extends SubsystemBase {
     } else {
      m_targetHeight = Constants.Climber.stowHeight;
     }
-    // This method will be called once per scheduler run
-    m_targetHeight = m_setTargetHeight;
     m_rightmotor.setDynamicMotionMagicPositionSetpoint(
         Constants.Climber.motorPositionSlot,
         m_targetHeight,

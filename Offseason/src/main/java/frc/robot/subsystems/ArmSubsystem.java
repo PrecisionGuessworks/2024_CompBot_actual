@@ -393,28 +393,28 @@ public class ArmSubsystem extends SubsystemBase {
     m_ampMotor.setSimSensorVelocity(
         m_ampSim.getAngularVelocityRadPerSec(),
         TimedRobot.kDefaultPeriod,
-        Constants.Arm.armMotorRatio);
+        Constants.Arm.ampMotorRatio);
 
     m_feederSim.setInput(m_feederMotor.getPercentOutput() * RobotController.getBatteryVoltage());
     m_feederSim.update(TimedRobot.kDefaultPeriod);
-    m_ampMotor.setSimSensorVelocity(
+    m_feederMotor.setSimSensorVelocity(
       m_feederSim.getAngularVelocityRadPerSec(),
         TimedRobot.kDefaultPeriod,
-        Constants.Arm.armMotorRatio);
+        Constants.Arm.feederMotorRatio);
 
         m_shooterUSim.setInput(m_shooterUpperMotor.getPercentOutput() * RobotController.getBatteryVoltage());
         m_shooterUSim.update(TimedRobot.kDefaultPeriod);
-    m_ampMotor.setSimSensorVelocity(
+    m_shooterUpperMotor.setSimSensorVelocity(
       m_shooterUSim.getAngularVelocityRadPerSec(),
         TimedRobot.kDefaultPeriod,
-        Constants.Arm.armMotorRatio);
+        Constants.Arm.shooterUpperMotorRatio);
 
         m_shooterLSim.setInput(m_shooterLowerMotor.getPercentOutput() * RobotController.getBatteryVoltage());
         m_shooterLSim.update(TimedRobot.kDefaultPeriod);
-    m_ampMotor.setSimSensorVelocity(
+    m_shooterLowerMotor.setSimSensorVelocity(
       m_shooterLSim.getAngularVelocityRadPerSec(),
         TimedRobot.kDefaultPeriod,
-        Constants.Arm.armMotorRatio);
+        Constants.Arm.shooterLowerMotorRatio);
     // Update arm viz.
     m_ArmArmViz.setRelativeTransform(
         new Transform2d(
