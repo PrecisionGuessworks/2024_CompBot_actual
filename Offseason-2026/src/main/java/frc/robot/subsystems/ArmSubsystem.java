@@ -292,14 +292,14 @@ public class ArmSubsystem extends SubsystemBase {
   //       "Arm: Current Angle (deg)", Units.radiansToDegrees(m_armMotor.getSensorPosition()));
   //       SmartDashboard.putNumber(
   //       "Arm: Current CANcoder Angle (deg)", getArmCoder());
-  //   SmartDashboard.putNumber(
-  //       "Arm: Real Current Angle (deg)", getArmAngle());
-  //   SmartDashboard.putNumber(
-  //       "Arm: Target Angle (deg)",
-  //       Units.radiansToDegrees(m_armMotor.getClosedLoopReference()));
-  //   SmartDashboard.putNumber(
-  //       "Arm: Target set Angle (deg)",
-  //       Units.radiansToDegrees(m_armTargetAngle));
+    SmartDashboard.putNumber(
+        "Arm: Real Current Angle (deg)", getArmAngle());
+    SmartDashboard.putNumber(
+        "Arm: Target Angle (deg)",
+        Units.radiansToDegrees(m_armMotor.getClosedLoopReference()));
+    SmartDashboard.putNumber(
+        "Arm: Target set Angle (deg)",
+        Units.radiansToDegrees(m_armTargetAngle));
   //   SmartDashboard.putNumber(
   //       "Arm: Current Velocity (deg per sec)",
   //       Units.radiansToDegrees(m_armMotor.getSensorVelocity()));

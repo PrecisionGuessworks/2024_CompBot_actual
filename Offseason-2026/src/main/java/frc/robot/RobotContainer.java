@@ -14,13 +14,11 @@ import static frc.robot.Constants.Drive.MaxAngularRatePercentage;
 import static frc.robot.Constants.Drive.MaxSpeedPercentage;
 import static frc.robot.Constants.Drive.PRotation;
 import static frc.robot.Constants.Drive.RotationDeadband;
-import static frc.robot.Constants.Drive.SnapDriveDeadband;
 import static frc.robot.Constants.Drive.SnapRotationDeadband;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 import org.json.simple.parser.ParseException;
 import org.photonvision.PhotonUtils;
@@ -34,6 +32,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -41,7 +40,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -61,7 +59,6 @@ import frc.robot.commands.QuickAmpStow;
 import frc.robot.commands.QuickScore;
 import frc.robot.commands.QuickScoreStow;
 import frc.robot.commands.StowArm;
-import frc.robot.generated.Telemetry;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -205,9 +202,6 @@ ArmArmViz.addLink(
         SmartDashboard.putData("Auto", autoChooser);
         angle.HeadingController.setPID( PRotation,  IRotation , DRotation);
         configureBindings();
-
-    
-
 
         SmartDashboard.putData(
         "Gyro",

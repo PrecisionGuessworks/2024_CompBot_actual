@@ -17,6 +17,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import dev.doglog.DogLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -157,7 +158,7 @@ public class Robot extends TimedRobot {
   //     RobotContainer.climber.setTargetAdjust(leftY);
   //   }
   // }
-
+    SmartDashboard.putNumberArray("Pose", new double[] {RobotContainer.drivetrain.getState().Pose.getX(),RobotContainer.drivetrain.getState().Pose.getY(),RobotContainer.drivetrain.getState().Pose.getRotation().getDegrees()});
     
   
   
@@ -170,7 +171,7 @@ if (!isReal()){
   final double RightCimberHeight = RobotContainer.climber.getHeight();
   
   final Pose3d armViz = Constants.Viz3d.ArmBase.transformBy(
-    new Transform3d(0, 0, Units.inchesToMeters(7.7), new Rotation3d(0,Units.degreesToRadians( -RobotContainer.arm.getArmAngle()+90),0)));
+    new Transform3d(-Units.inchesToMeters(14.7), 0, Units.inchesToMeters(17.2), new Rotation3d(0,Units.degreesToRadians( -RobotContainer.arm.getArmAngle()),0)));
     
     
     if (RobotContainer.arm.getHasPiece()) {

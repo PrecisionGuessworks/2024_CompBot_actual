@@ -35,9 +35,10 @@ public class Constants {
     // Intake 30-39
     // Climber 40-49
 
-    // "rio" for rio bus
-    public static final String kDriveTrainCanivoreName = "driveTrain"; // need to update after new tuner
-    public static final String kSuperStructureCanivoreName = "superStructure";
+    public static final String kCanivoreName = "canivore";
+    public static final String kDriveTrainCanivoreName = kCanivoreName;
+    public static final String kSuperStructureCanivoreName = kCanivoreName;
+    public static final String kRioName = "rio";
 
     public static final double g = 9.80148; // m/s/s
     public static final double defaultPeriodSecs = 0.02; // s
@@ -109,114 +110,101 @@ public class Constants {
     public static final class Arm {
         public static final int beamBreakPort = 0;
 
-        public static final CANDeviceID armMotorID = new CANDeviceID(25, kSuperStructureCanivoreName);
-        public static final CANDeviceID armCoderID = new CANDeviceID(26, kSuperStructureCanivoreName);
-        public static final MechanismRatio armMotorRatio = isSim ? new MechanismRatio(
-                1, (30.0 / 1.0) * (80.0 / 38.0)) : // Sim
-                new MechanismRatio(
-                        1, (75.0 / 1.0)); // Real
-        public static final MechanismRatio armSensorRatio = new MechanismRatio(1, (1.0));
-        public static final boolean armMotorInvert = true;
+        public static final CANDeviceID armMotorID = new CANDeviceID(16, kRioName);
+        public static final CANDeviceID armCoderID = new CANDeviceID(24, kRioName);
+        public static final MechanismRatio armMotorRatio = new MechanismRatio(1, 75);
+        public static final MechanismRatio armSensorRatio = new MechanismRatio(1, 1);
+        public static final boolean armMotorInvert = false;
 
         // public static final ArmFeedforward armFeedForward = new ArmFeedforward(3.0,
         // 0.3, 0.6);
-        public static final Constraints ArmConstraints = new Constraints(3.5, 10.0); // rad/s and rad/s^2 8, 20.0
+        public static final Constraints ArmConstraints = new Constraints(1.5, 0.5); // rad/s and rad/s^2
         public static final double ArmMaxJerk = 1.0; // rad/s^3
         public static final int armPositionPIDSlot = 0;
-        public static final PIDConfig armPositionPIDConfig = new PIDConfig(8, 0.0001, 0.03, 0, 0.25, 0.0008, 0.09,
-                GravityTypeValue.Arm_Cosine);
-        public static final double armExpo_kV = 0.25;
-        public static final double armExpo_kA = 0.01; // Use a slower kA of 0.1 V/(rps/s)
+        public static final PIDConfig armPositionPIDConfig = new PIDConfig(12, 0.00, 0.00);
+        public static final double armExpo_kV = 0.0;
+        public static final double armExpo_kA = 0.0;
 
-        public static final CANDeviceID armfollowerID = new CANDeviceID(25, kSuperStructureCanivoreName);
-        public static final MechanismRatio armfollowerRatio = isSim ? new MechanismRatio(
-                1, (90.0 / 1.0) * (80.0 / 38.0)) : // Sim
-                new MechanismRatio(
-                        1, (60.0 / 1.0) * (80.0 / 38.0)); // Real
+        public static final CANDeviceID armfollowerID = new CANDeviceID(15, kRioName);
+        public static final MechanismRatio armfollowerRatio = new MechanismRatio(1, 75);
         public static final MotorAlignmentValue armfollowerInvert = MotorAlignmentValue.Opposed;
 
-        public static final CANDeviceID ampMotorID = new CANDeviceID(28, kSuperStructureCanivoreName);
-        public static final MechanismRatio ampMotorRatio = new MechanismRatio(12, 18);
+        public static final CANDeviceID ampMotorID = new CANDeviceID(18, kRioName);
+        public static final MechanismRatio ampMotorRatio = new MechanismRatio(1, 4);
         public static final boolean ampMotorInvert = false;
 
-        public static final SimpleMotorFeedforward ampFeedforward = new SimpleMotorFeedforward(0.1, 0.028);
-        public static final int ampVelocityPIDSlot = 1;
-        public static final PIDConfig ampVelocityPIDConfig = new PIDConfig(0.1, 0.0, 0.0);
+        public static final SimpleMotorFeedforward ampFeedforward = new SimpleMotorFeedforward(0, 0.019);
+        public static final int ampVelocityPIDSlot = 0;
+        public static final PIDConfig ampVelocityPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
         public static final int ampPositionPIDSlot = 0;
-        public static final PIDConfig ampPositionPIDConfig = new PIDConfig(30.0, 0.0, 0.0);
+        public static final PIDConfig ampPositionPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
 
-        public static final CANDeviceID feederMotorID = new CANDeviceID(28, kSuperStructureCanivoreName);
-        public static final MechanismRatio feederMotorRatio = new MechanismRatio(12, 18);
-        public static final boolean feederMotorInvert = false;
+        public static final CANDeviceID feederMotorID = new CANDeviceID(17, kRioName);
+        public static final MechanismRatio feederMotorRatio = new MechanismRatio(1, 4);
+        public static final boolean feederMotorInvert = true;
 
-        public static final SimpleMotorFeedforward feederFeedforward = new SimpleMotorFeedforward(0.1, 0.028);
-        public static final int feederVelocityPIDSlot = 1;
-        public static final PIDConfig feederVelocityPIDConfig = new PIDConfig(0.1, 0.0, 0.0);
+        public static final SimpleMotorFeedforward feederFeedforward = new SimpleMotorFeedforward(0, 0.019);
+        public static final int feederVelocityPIDSlot = 0;
+        public static final PIDConfig feederVelocityPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
         public static final int feederPositionPIDSlot = 0;
-        public static final PIDConfig feederPositionPIDConfig = new PIDConfig(30.0, 0.0, 0.0);
+        public static final PIDConfig feederPositionPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
 
-        public static final CANDeviceID shooterUpperMotorID = new CANDeviceID(28, kSuperStructureCanivoreName);
-        public static final MechanismRatio shooterUpperMotorRatio = new MechanismRatio(12, 18);
-        public static final boolean shooterUpperMotorInvert = false;
+        public static final CANDeviceID shooterUpperMotorID = new CANDeviceID(19, kRioName);
+        public static final MechanismRatio shooterUpperMotorRatio = new MechanismRatio(1, 1);
+        public static final boolean shooterUpperMotorInvert = true;
 
-        public static final SimpleMotorFeedforward shooterUpperFeedforward = new SimpleMotorFeedforward(0.1, 0.028);
-        public static final int shooterUpperVelocityPIDSlot = 1;
-        public static final PIDConfig shooterUpperVelocityPIDConfig = new PIDConfig(0.1, 0.0, 0.0);
+        public static final SimpleMotorFeedforward shooterUpperFeedforward = new SimpleMotorFeedforward(0, 0.019);
+        public static final int shooterUpperVelocityPIDSlot = 0;
+        public static final PIDConfig shooterUpperVelocityPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
         public static final int shooterUpperPositionPIDSlot = 0;
-        public static final PIDConfig shooterUpperPositionPIDConfig = new PIDConfig(30.0, 0.0, 0.0);
+        public static final PIDConfig shooterUpperPositionPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
 
-        public static final CANDeviceID shooterLowerMotorID = new CANDeviceID(28, kSuperStructureCanivoreName);
-        public static final MechanismRatio shooterLowerMotorRatio = new MechanismRatio(12, 18);
-        public static final boolean shooterLowerMotorInvert = false;
+        public static final CANDeviceID shooterLowerMotorID = new CANDeviceID(20, kRioName);
+        public static final MechanismRatio shooterLowerMotorRatio = new MechanismRatio(1, 1);
+        public static final boolean shooterLowerMotorInvert = true;
 
-        public static final SimpleMotorFeedforward shooterLowerFeedforward = new SimpleMotorFeedforward(0.1, 0.028);
-        public static final int shooterLowerVelocityPIDSlot = 1;
-        public static final PIDConfig shooterLowerVelocityPIDConfig = new PIDConfig(0.1, 0.0, 0.0);
+        public static final SimpleMotorFeedforward shooterLowerFeedforward = new SimpleMotorFeedforward(0, 0.019);
+        public static final int shooterLowerVelocityPIDSlot = 0;
+        public static final PIDConfig shooterLowerVelocityPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
         public static final int shooterLowerPositionPIDSlot = 0;
-        public static final PIDConfig shooterLowerPositionPIDConfig = new PIDConfig(30.0, 0.0, 0.0);
+        public static final PIDConfig shooterLowerPositionPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
 
         // TODO: Use real values
         public static final double armBootAbsPositionOffset = Units.degreesToRadians(0);
-        public static final double armMinAngle = Units.degreesToRadians(-10.0); // rads
-        public static final double armMaxAngle = Units.degreesToRadians(150.0); // rads
-        public static final double armStartingAngle = Units.degreesToRadians(-10);
+        public static final double armMinAngle = Units.degreesToRadians(-25.0); // rads
+        public static final double armMaxAngle = Units.degreesToRadians(110.0); // rads
+        public static final double armStartingAngle = armMinAngle;
         public static final double armCgOffset = Units.degreesToRadians(2);
 
-        public static final double wristBootAbsPositionOffset = Units.degreesToRadians(0);
-        public static final double wristMinAngle = Units.degreesToRadians(-16.0); // rads
-        public static final double wristMaxAngle = Units.degreesToRadians(181.0); // rads
-        public static final double wristStartingAngle = Units.degreesToRadians(181); // + armStartingAngle;
-        public static final double wristCgOffset = Units.degreesToRadians(0);
+        public static final double AngleTolerance = Units.degreesToRadians(3);
+        public static final double ShootTolerance = 20;
 
-        public static final double AngleTolerance = Units.degreesToRadians(1);
-        public static final double ShootTolerance = 100;
+        public static final double intakeVelocity = 80.0; // rads/s
+        public static final double outtakeVelocity = -40.0; // rads/s
+        public static final double quickShootVelocity = 400.0; // rads/s
+        public static final double quickAmpVelocity = 80.0; // rads/s
 
-        public static final double intakeVelocity = -150.0; // rads/s
-        public static final double outtakeVelocity = 130.0; // rads/s
-        public static final double quickShootVelocity = 300.0; // rads/s
-        public static final double quickAmpVelocity = 200.0; // rads/s
+        public static final double feederIntakeVelocity = 80.0; // rads/s
+        public static final double ampIntakeVelocity = -80.0; // rads/s
+        public static final double feederShootVelocity = 160.0; // rads/s
+        public static final double ampShootVelocity = 80.0; // rads/s
 
-        public static final double feederIntakeVelocity = 100.0; // rads/s
-        public static final double ampIntakeVelocity = -100.0; // rads/s
-        public static final double feederShootVelocity = 400.0; // rads/s
-        public static final double ampShootVelocity = 300.0; // rads/s
-
-        public static final double rollerStallVelocity = 40; // rads/s
+        public static final double rollerStallVelocity = Math.PI * Math.PI * (1.0 / 32.0); // rads/s
         public static final double rollerStallCurrent = 30; // Amps
 
-        public static final double armIntakeAngle = Units.degreesToRadians(-10);
-        public static final double armShootAngle = Units.degreesToRadians(45);
-        public static final double armStowAngle = Units.degreesToRadians(-10);
+        public static final double armIntakeAngle = Units.degreesToRadians(-20);
+        public static final double armShootAngle = Units.degreesToRadians(74);
+        public static final double armStowAngle = Units.degreesToRadians(-21);
         public static final double armPreAmpAngle = Units.degreesToRadians(80);
-        public static final double armAmpAngle = Units.degreesToRadians(90);
-        public static final double armPostAmpAngle = Units.degreesToRadians(100);
+        public static final double armAmpAngle = Units.degreesToRadians(110);
+        public static final double armPostAmpAngle = Units.degreesToRadians(65);
 
         public static final Transform2d robotToArm = new Transform2d(Units.inchesToMeters(12.0), 0.0, new Rotation2d());
         public static final double ArmHeight = Units.inchesToMeters(12);
 
         // For simulation.
         public static final double simArmMOI = 0.379; // kgMetersSquared
-        public static final double simArmCGLength = Units.inchesToMeters(8.5); // m
+        public static final double simArmCGLength = Units.inchesToMeters(6.5); // m
         public static final double simRollerMOI = 0.003; // kgMetersSquared
         public static final double simSHooterMOI = 0.003; // kgMetersSquared
         public static final double WheelRadius = Units.inchesToMeters(2);
@@ -226,7 +214,7 @@ public class Constants {
     public static final class ShotCalc {
 
         public static final Pose2d targetpose = new Pose2d(16.5, 5.5, new Rotation2d(0));
-
+        public static final double kAccelCompFactor = 0.01; // Factor for Compensating for Robot Acceleration when Shooting on the Move
         public static final InterpolatingDoubleTreeMap Velocity;
         static {
             Velocity = new InterpolatingDoubleTreeMap();
@@ -285,40 +273,44 @@ public class Constants {
     }
 
     public static final class Intake {
-        public static final int beamBreakPort = 1;
+        public static final int beamBreakPort = 0;
 
-        public static final CANDeviceID rollerMotorID = new CANDeviceID(33, kSuperStructureCanivoreName);
+        public static final double rollerIntakePower = 1.0;
+        public static final double reverseRollerIntakePower = -0.50;
+        public static final double rollerSlowPower = 0.25;
+        public static final double rollerStallSpeed = Math.PI * Math.PI * (1.0 / 32.0);
+        public static final double rollerStallTime = 0.1;
+        public static final int intakeBeamBreakInputChannel = 0;
 
-        public static final MechanismRatio rollerMotorRatio = new MechanismRatio(1, (1.0 / 3.0));
+        public static final CANDeviceID rollerMotorID = new CANDeviceID(21, kRioName);
+
+        public static final MechanismRatio rollerMotorRatio = new MechanismRatio(1, 3);
         public static final boolean rollerMotorInvert = false;
-        public static final SimpleMotorFeedforward rollerFeedforward = new SimpleMotorFeedforward(0.3, 0.12, 0);
-        public static final PIDConfig rollerPIDConfig = new PIDConfig(0.1, 0, 0);
+        public static final SimpleMotorFeedforward rollerFeedforward = new SimpleMotorFeedforward(0, 0.019);
+        public static final PIDConfig rollerPIDConfig = new PIDConfig(2.0, 0, 0);
         public static final int rollerVelocitySlot = 0;
 
-        public static final double intakeRollerVelocity = 100; // rad/s
-        public static final double outtakeRollerVelocity = -100; // rad/s
-        public static final double holdRollerVelocity = 10; // rad/s
+        public static final double intakeRollerVelocity = 80; // rad/s
+        public static final double outtakeRollerVelocity = -40; // rad/s
+        public static final double holdRollerVelocity = 20; // rad/s
 
         // For simulation.
         public static final double simRollerMOI = 0.01; // kgMetersSquared
     }
 
     public static final class Climber {
-        public static final CANDeviceID rightID = new CANDeviceID(40, kSuperStructureCanivoreName);
-        public static final CANDeviceID leftID = new CANDeviceID(41, kSuperStructureCanivoreName);
+        public static final CANDeviceID rightID = new CANDeviceID(23, kRioName);
+        public static final CANDeviceID leftID = new CANDeviceID(22, kRioName);
         public static final double StatorLimit = 80.0;
         public static final double SupplyLimit = 40.0;
         public static final double sprocketPitchDiameter = Units.inchesToMeters(2);
         public static final MechanismRatio motorRatio = new MechanismRatio(
-                1, (200.0 / 1.0), Math.PI * sprocketPitchDiameter); // Sim
-        // new MechanismRatio(
-        // 1, (135.0 / 1.0), Math.PI * sprocketPitchDiameter); // Real
+            1, 20, Math.PI * sprocketPitchDiameter);
         public static final boolean rightInvert = false;
         public static final boolean leftInvert = true;
         public static final int motorPositionSlot = 0;
-        public static final PIDConfig motorPIDConfig = new PIDConfig(3, 0, 0.1, 0, 0.12, 0, 0.4,
-                GravityTypeValue.Elevator_Static);
-        public static final double maxVelocity = 0.04; // m/s
+        public static final PIDConfig motorPIDConfig = new PIDConfig(2.0, 0.0, 0.0);
+        public static final double maxVelocity = 0.4; // m/s
         public static final double maxAcceleration = 30.0; // m/s^2
         public static final double maxJerk = 0.0; // m/s^3 (0 disables jerk limit)
 
