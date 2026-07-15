@@ -1,0 +1,87 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7856743713487427,
+      "y": 6.730454660909323
+    },
+    "rotation": -120.67728002179645
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootNoteSpeakerTogether"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Backup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Pickup Close"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top Front Lineup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNoteSpeakerTogether"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Backup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top Front Far Mid"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Top Front Lineup"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootNoteSpeakerTogether"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

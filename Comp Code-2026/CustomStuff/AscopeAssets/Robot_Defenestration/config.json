@@ -1,0 +1,114 @@
+{
+    "name": "Defenestration",
+    "sourceUrl": "",
+    "rotations": [
+      {
+        "axis": "x",
+        "degrees": 180
+      }
+    ],
+    "position": [0.335, -0.335, 0],
+    "cameras": [
+      {
+        "name": "front",
+        "rotations": [
+          {
+            "axis": "z",
+            "degrees": 20.0
+          }
+        ],
+        "position": [0.3381137256, 0, 0.1862346288],
+        "resolution": [1600, 1200],
+        "fov": 75
+      }
+    ],
+    "components": [
+    {
+      "zeroedRotations": [
+       
+        {
+          "axis": "y",
+          "degrees": 180
+        },
+        {
+          "axis": "z",
+          "degrees": 90
+        }
+
+              
+      ],
+      "zeroedPosition": [
+        0.55,
+        -0.185,
+        -0.025
+      ]
+    },
+    {
+      "zeroedRotations": [
+        {
+          "axis": "x",
+          "degrees": 90
+        },
+        {
+          "axis": "z",
+          "degrees": 90
+        },
+        {
+            "axis": "z",
+            "degrees": 180
+          }
+        
+      ],
+      "zeroedPosition": [
+        0.105,
+        0.00,
+        -0.488
+      ]
+    },
+    {
+        "zeroedRotations": [
+          {
+            "axis": "x",
+            "degrees": 90
+          },
+          {
+            "axis": "z",
+            "degrees": 90
+          },
+          {
+              "axis": "z",
+              "degrees": 180
+            }
+          
+        ],
+        "zeroedPosition": [
+          0,
+          0.1155,
+          0.28
+        ]
+      },
+      {
+        "zeroedRotations": [
+          {
+            "axis": "x",
+            "degrees": 90
+          },
+          {
+            "axis": "z",
+            "degrees": 90
+          },
+          {
+              "axis": "z",
+              "degrees": 180
+            }
+          
+        ],
+        "zeroedPosition": [
+          -0.075,
+          0.13,
+          0
+        ]
+      }
+  ]
+  }
+  
